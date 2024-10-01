@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background-color: #f5f5f5;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 80%; /* Adjust width for better ratio */
+    max-width: 1200px; /* Set a maximum width */
+    padding: 20px;
+    z-index: 1; /* Ensures content is above the background */
+}
+
+/* Blurred background effect */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../Image/hand-book-wood-photography-vintage-guitar-old-reading-finger-arm-musical-instrument-old-book-close-up-pages-encyclopedia-macro-photography-knowledge-book-pages-plucked-string-instruments-1006792.jpg') no-repeat center center fixed;
+    background-size: cover;
+    filter: blur(10px); /* Apply blur to the background image */
+    opacity: 0.7; /* Adjust opacity for more subtle background */
+    z-index: -1; /* Keeps the background behind other content */
+}
+
+.form-box {
+    background-color: rgba(185, 138, 101, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    width: 50%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.button-box {
+    display: flex; /* Flex để dễ căn giữa */
+    justify-content: center; /* Căn giữa nút theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    margin-bottom: 20px;
+    background-color: rgba(239, 224, 184, 0.9);
+    padding: 0px;
+    border-radius: 35px;
+    width: 50%; /* Giảm kích thước khung xuống còn 50% */
+    max-width: 400px; /* Đặt chiều rộng tối đa */
+    min-width: 200px; /* Đặt chiều rộng tối thiểu */
+    margin: 0 auto; /* Đảm bảo khung được căn giữa */
+}
+
+.button-box button {
+    padding: 10px 25px; /* Điều chỉnh padding của nút để phù hợp với khung nhỏ hơn */
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s;
+    border-radius: 35px;
+}
+
+.button-box button.active {
+    background-color: rgba(255, 255, 224, 1);
+}
+
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    margin: 10px 0 5px;
+    color: #4c3329;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(228, 196, 161, 0.8);
+    color: #4c3329;
+}
+
+.submit-btn {
+    display: block; /* Ensures the button behaves like a block element */
+    margin: 0 auto; /* Centers the button horizontally */
+    padding: 12px;
+    background-color: orange;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.submit-btn:hover {
+    background-color: darkorange;
+}
+
+
+.welcome-text {
+    color: white;
+    font-size: 40px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    padding: 25px;
+    border-radius: 10px;
+    width: 300px; /* Reduce width to match proportions */
+    text-align: center;
+}
