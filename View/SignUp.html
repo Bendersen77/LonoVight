@@ -18,11 +18,15 @@
             <!-- Login Form -->
             <form id="loginForm" class="input-group">
                 <table>
-                <div><label for="login-username">Tên đăng nhập:</label></div>
-                <div><input type="text" id="login-username" placeholder="Tên đăng nhập" required></div>
+                <div><label for="login-username">Email đăng nhập:</label></div>
+                <div><input type="text" id="login-email" placeholder="Email đăng nhập" required></div>
                 
                 <div><label for="login-password">Nhập mật khẩu:</label></div>
                 <div><input type="password" id="login-password" placeholder="Nhập mật khẩu" required></div>
+                <!-- Nút quên mật khẩu -->
+                <div>
+                      <a href="ForgetPassword.html" class="forgot-password-btn">Quên mật khẩu?</a>
+                </div>
                 
                 <div><button type="submit" class="submit-btn">Đăng nhập</button></div>
             </table>
@@ -30,8 +34,6 @@
 
             <!-- Registration Form -->
             <form id="registerForm" class="input-group" style="display:none;">
-                <label for="register-username">Tên đăng nhập:</label>
-                <input type="text" id="register-username" placeholder="Tên đăng nhập" required>
                 
                 <label for="register-email">Nhập email:</label>
                 <input type="email" id="register-email" placeholder="Nhập email" required>
@@ -53,5 +55,6 @@
     </div>
 
     <script src="../Js/SignUp.js"></script>
+    <script type = "module" src="../Js/firebase_auth.js"></script>
 </body>
 </html>

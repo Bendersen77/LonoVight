@@ -1,7 +1,3 @@
-
-
-
-
 /* Reset mặc định */
 * {
     margin: 0;
@@ -415,4 +411,45 @@ footer .social-links img.social-icon {
     width: 30px; /* Điều chỉnh kích thước logo */
     height: auto;
     vertical-align: middle;
+}
+
+/* Container cho thông tin người dùng */
+.user-info {
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: flex-end; /* Căn phải */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    background-color: #f0f0f0; /* Màu nền nhẹ */
+    border-radius: 8px; /* Bo góc */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    margin-right: 20px; /* Khoảng cách bên phải */
+}
+
+/* Phong cách cho email người dùng */
+#userEmail {
+    font-size: 16px; /* Kích thước chữ */
+    color: #333; /* Màu chữ */
+    margin-right: 15px; /* Khoảng cách bên phải */
+}
+
+/* Phong cách cho nút đăng xuất */
+#logoutBtn {
+    background-color: #007bff; /* Màu nền xanh */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Không viền */
+    border-radius: 5px; /* Bo góc */
+    padding: 8px 12px; /* Khoảng cách bên trong */
+    cursor: pointer; /* Con trỏ chuột thành tay khi di chuột vào */
+    transition: background-color 0.3s, transform 0.2s; /* Hiệu ứng chuyển màu và hiệu ứng phóng to */
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+#logoutBtn:hover {
+    background-color: #0056b3; /* Màu nền xanh đậm khi di chuột */
+    transform: scale(1.05); /* Phóng to một chút */
+}
+
+/* Hiệu ứng khi nút được nhấn */
+#logoutBtn:active {
+    transform: scale(0.95); /* Giảm kích thước một chút khi nhấn */
 }

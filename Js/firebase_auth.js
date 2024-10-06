@@ -1,0 +1,166 @@
+// Import Firebase Authentication và Firebase App
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signOut,
+} from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
+
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
+// Cấu hình Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCDbH--EpZjimx-cc_HToTYyc69fOALCuA",
+    authDomain: "novolight-7dbfa.firebaseapp.com",
+    databaseURL: "https://novolight-7dbfa-default-rtdb.firebaseio.com",
+    projectId: "novolight-7dbfa",
+    storageBucket: "novolight-7dbfa.appspot.com",
+    messagingSenderId: "500138366341",
+    appId: "1:500138366341:web:21f3dd63f2b7a70f9aa0ec",
+    measurementId: "G-7PQF6N9T85"
+  };
+
+// Khởi tạo Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
+
+// Xử lý đăng ký
+const registerForm = document.getElementById("registerForm");
+if (registerForm) {
+    registerForm.addEventListener("submit", (e) => {
+        e.preventDefault(); // Ngăn việc submit form truyền thống
+
+        const email = document.getElementById("register-email").value;
+        const password = document.getElementById("register-password").value;
+        const confirmPassword = document.getElementById("register-password-confirm").value;
+
+        // Kiểm tra xem mật khẩu và xác nhận mật khẩu có khớp hay không
+        if (password !== confirmPassword) {
+            alert("Mật khẩu không khớp!");
+            return;
+        }
+
+        // Đăng ký người dùng bằng email và password
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log("User registered:", user);
+
+                // Gửi email xác thực
+                sendEmailVerification(user)
+                    .then(() => {
+                        alert("Đăng ký thành công! Vui lòng kiểm tra email của bạn để xác thực.");
+
+                        const userId = user.uid; // Lấy ID người dùng
+                        set(ref(database, 'Users/' + userId), {
+                            email: email,
+                            uid: userId,
+                            role : 'Customer',
+                        })
+                    })
+                    .catch((error) => {
+                        console.error("Lỗi khi gửi email xác thực:", error);
+                        alert("Có lỗi xảy ra khi gửi email xác thực: " + error.message);
+                    });
+            })
+            .catch((error) => {
+                console.error("Lỗi trong quá trình đăng ký:", error);
+                alert("Đăng ký thất bại: " + error.message);
+            });
+    });
+}
+
+// Xử lý đăng nhập
+const loginForm = document.getElementById("loginForm");
+if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+        e.preventDefault(); // Ngăn việc submit form truyền thống
+
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+
+        // Đăng nhập người dùng
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log("User logged in:", user);
+                
+                // Kiểm tra xác thực email
+                if (!user.emailVerified) {
+                    alert("Vui lòng xác thực email trước khi đăng nhập.");
+                } else {
+                    // Lưu email vào localStorage
+                    localStorage.setItem("userEmail", user.email);
+                    // Chuyển sang trang chủ
+                    window.location.href = "Home.html"; // Thay "index.html" bằng trang chủ của bạn
+                }
+            })
+            .catch((error) => {
+                console.error("Lỗi trong quá trình đăng nhập:", error);
+                alert("Đăng nhập thất bại: " + error.message);
+            });
+    });
+}
+
+function checkUser() {
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            // Người dùng đã đăng nhập
+            document.getElementById('userEmail').textContent = user.email; // Hiện email người dùng
+            document.getElementById('userInfo').style.display = 'flex'; // Hiện thông tin người dùng
+            document.getElementById('authLinks').style.display = 'none'; // Ẩn liên kết đăng nhập
+        } else {
+            // Người dùng chưa đăng nhập
+            document.getElementById('authLinks').style.display = 'flex'; // Hiện liên kết đăng nhập
+            document.getElementById('userInfo').style.display = 'none'; // Ẩn thông tin người dùng
+        }
+    });
+}
+
+// Gọi hàm kiểm tra khi trang được tải
+window.onload = checkUser;
+
+// Xử lý quên mật khẩu
+const resetPasswordForm = document.getElementById("resetPasswordForm");
+if (resetPasswordForm) {
+    resetPasswordForm.addEventListener("submit", (e) => {
+        e.preventDefault(); // Ngăn việc submit form truyền thống
+
+        const email = document.getElementById("reset-email").value;
+
+        // Gửi email đặt lại mật khẩu
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                alert("Email đặt lại mật khẩu đã được gửi! Vui lòng kiểm tra hộp thư của bạn.");
+            })
+            .catch((error) => {
+                console.error("Lỗi trong quá trình gửi email đặt lại mật khẩu:", error);
+                alert("Có lỗi xảy ra: " + error.message);
+            });
+    });
+}
+
+// Xử lý đăng xuất
+const logoutButton = document.getElementById("logoutBtn");
+if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+        signOut(auth)
+            .then(() => {
+                // Đăng xuất thành công
+                console.log("User logged out successfully.");
+                // Chuyển hướng về trang đăng nhập
+                window.location.href = "Home.html";
+            })
+            .catch((error) => {
+                // Xử lý lỗi nếu có
+                console.error("Lỗi khi đăng xuất:", error);
+                alert("Có lỗi xảy ra khi đăng xuất: " + error.message);
+            });
+    });
+}
+
