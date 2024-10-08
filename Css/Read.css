@@ -1,0 +1,184 @@
+/* styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7; /* Màu nền nhẹ nhàng */
+    color: #333;
+    line-height: 1.8;
+}
+
+header {
+    background-color: white;
+    padding:20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    flex-grow: 1; /* Cho nav chiếm không gian còn lại */
+}
+
+nav ul {
+    display: flex;
+    justify-content: flex-start; /* Canh trái các mục trong nav */
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #FF5C5C; /* Màu đỏ cam giống Wattpad */
+    font-weight: bold;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Đẩy user-actions sang bên phải */
+}
+
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 40px; /* Kích thước hình đại diện */
+    height: 40px;
+    border-radius: 50%; /* Để tạo hình tròn */
+    margin-right: 10px; /* Khoảng cách giữa hình đại diện và tên */
+}
+
+.user-name {
+    color: #333; /* Màu sắc cho tên người dùng */
+    font-weight: bold; /* Làm cho tên nổi bật hơn */
+    margin-right: 15px; /* Khoảng cách giữa tên và nút */
+}
+
+
+main {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chapter-info h1 {
+    font-size: 36px;
+    text-align: center;
+    color: #FF5C5C; /* Màu đỏ cam cho tiêu đề chương */
+}
+
+.stats {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.stats span {
+    margin-right: 15px;
+    font-size: 18px;
+    color: #666;
+}
+
+article h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: black /* Màu đỏ cam cho tiêu đề chương */
+}
+
+article p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.social-share {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.social-share a {
+    margin-right: 15px;
+    color: #ecab72; /* Màu chia sẻ giống Wattpad */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f7f7f7;
+    color: #999;
+    font-size: 14px;
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+}
+/* Bình luận */
+#comment-section {
+    margin-top: 40px;
+}
+
+#comment-section h3 {
+    font-size: 24px;
+    color: #FF5C5C; /* Màu tiêu đề của phần bình luận */
+}
+
+.comments {
+    margin-bottom: 20px;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#name-input, #comment-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+#submit-comment {
+    background-color: #FF5C5C;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#submit-comment:hover {
+    background-color: #e54b4b; /* Màu tối hơn khi hover */
+}
+
+.comment {
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    border-left: 4px solid #FF5C5C;
+}
+
+.comment p {
+    margin-bottom: 0;
+    color: #333;
+}
+
+.comment .author {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
