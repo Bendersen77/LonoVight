@@ -1,0 +1,287 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding-top: 20px;
+    display: flexpx;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.book-details {
+    display: flex;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.book-cover img {
+    width: 400px;
+    height: 600px;
+    border-radius: 10px;
+}
+
+.book-info {
+    margin-left: 20px;
+}
+
+.book-info h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #333;
+}
+
+.book-info p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+#read-now-btn {
+    padding: 10px 20px;
+    background-color: #ff6f61;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#read-now-btn:hover {
+    background-color: #ff5a50;
+}
+.chapter-list {
+    width: 80%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    
+}
+
+.chapter-list h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#chapter-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#chapter-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+#chapter-list li:last-child {
+    border-bottom: none;
+}
+
+#chapter-list a {
+    text-decoration: none;
+    color: #ff6f61;
+    font-size: 16px;
+}
+
+#chapter-list a:hover {
+    text-decoration: underline;
+}
+.comment-section {
+    width: 80%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.comment-section h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#comment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#comment-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+#comment-form button {
+    padding: 10px;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#comment-form button:hover {
+    background-color: #ff5a50;
+}
+
+#comment-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#comment-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+#comment-list li:last-child {
+    border-bottom: none;
+}
+header {
+    background-color: #ffffff;
+    color: white;
+    padding:0.1vw 1vw;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0.1vw 1vw rgb(46, 45, 45);
+    z-index: 999;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    flex: 1; 
+    /* Chiếm không gian còn lại khi có */
+}
+
+header .logo a {
+    text-decoration: none;
+    color: #ff6419;
+    display: flex;
+}
+
+
+header nav ul {
+    list-style-type: none;
+    display: flex;
+    gap: 15px;
+    margin-left: 20px;
+}
+
+header nav ul li {
+    display: flex;
+    align-items: center;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 5px;
+    font-weight: bold;
+    padding: 1px 10px;
+    transition: background-color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+/* Điều chỉnh search bar nằm giữa */
+/* Định dạng search bar */
+header .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 2; /* Chiếm không gian giữa header */
+    justify-content: flex-start; /* Căn trái thanh tìm kiếm */
+}
+
+header .search-bar input {
+    padding: 8px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 300px;
+    padding-left: 15px;
+    transition: border 0.3s ease;
+}
+
+header .search-bar input:focus {
+    border: 1px solid #ff6419;
+}
+
+/* Nút kính lúp */
+header .search-bar button {
+    background-color: transparent;
+    border: none; /* Không có viền */
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0.1vw;
+}
+
+
+header .search-bar button i {
+    color: rgb(0, 0, 0); /* Màu mặc định của kính lúp */
+    transition: color 0.3s ease;
+}
+
+
+
+
+
+/* Định dạng cho Sign Up và Sign In */
+header .auth-links {
+    display: flex;
+    gap: 15px;
+    flex: 1; /* Chiếm không gian góc phải */
+    justify-content: flex-end; /* Đưa Sign In/Sign Up về phía bên phải */
+}
+
+header .auth-links a {
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    font-size: 18px;
+    text-decoration: none;
+    padding: 1px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+header .auth-links a:hover {
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+}
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+footer .social-links {
+    margin-top: 10px;
+}
+
+footer .social-links a {
+    margin: 0 10px;
+}
+
+footer .social-links img.social-icon {
+    width: 30px; /* Điều chỉnh kích thước logo */
+    height: auto;
+    vertical-align: middle;
+}
+
