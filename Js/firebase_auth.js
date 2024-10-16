@@ -10,7 +10,7 @@ import {
     signOut,
 } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
 
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+import { getDatabase, ref, set, get} from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
 
 // Cấu hình Firebase
 const firebaseConfig = {
@@ -97,7 +97,25 @@ if (loginForm) {
                     // Lưu email vào localStorage
                     localStorage.setItem("userEmail", user.email);
                     // Chuyển sang trang chủ
-                    window.location.href = "Home.html"; // Thay "index.html" bằng trang chủ của bạn
+
+                    const roleRef = ref(database, 'Users/' + user.uid + '/role');
+                        get(roleRef).then((snapshot) => {
+                            if (snapshot.exists()) { // Sửa thành exists()
+                                const role = snapshot.val();
+                                console.log("User Role: ", role);
+
+                                if (role === 'Admin') {
+                                    window.location.href = "QuanLyTruyen.html";
+                                } else {
+                                    window.location.href = "Home.html";
+                                }
+                            } else {
+                                console.error("Không tìm thấy vai trò người dùng.");
+                            }
+                        }).catch((error) => {
+                            console.error("Lỗi khi lấy vai trò người dùng:", error);
+                        });
+                    // window.location.href = "Home.html"; // Thay "index.html" bằng trang chủ của bạn
                 }
             })
             .catch((error) => {
@@ -109,15 +127,17 @@ if (loginForm) {
 
 function checkUser() {
     auth.onAuthStateChanged(user => {
+        const userEmailElement = document.getElementById('userEmail');
+        const userInfoElement = document.getElementById('userInfo');
+        const authLinksElement = document.getElementById('authLinks');
+
         if (user) {
-            // Người dùng đã đăng nhập
-            document.getElementById('userEmail').textContent = user.email; // Hiện email người dùng
-            document.getElementById('userInfo').style.display = 'flex'; // Hiện thông tin người dùng
-            document.getElementById('authLinks').style.display = 'none'; // Ẩn liên kết đăng nhập
+            if (userEmailElement) userEmailElement.textContent = user.email; // Hiện email người dùng
+            if (userInfoElement) userInfoElement.style.display = 'flex'; // Hiện thông tin người dùng
+            if (authLinksElement) authLinksElement.style.display = 'none'; // Ẩn liên kết đăng nhập
         } else {
-            // Người dùng chưa đăng nhập
-            document.getElementById('authLinks').style.display = 'flex'; // Hiện liên kết đăng nhập
-            document.getElementById('userInfo').style.display = 'none'; // Ẩn thông tin người dùng
+            if (authLinksElement) authLinksElement.style.display = 'flex'; // Hiện liên kết đăng nhập
+            if (userInfoElement) userInfoElement.style.display = 'none'; // Ẩn thông tin người dùng
         }
     });
 }

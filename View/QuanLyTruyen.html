@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Css/QuanLyTruyen.css">
+    <title>Quản Lý Truyện</title>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="Home.html"><h2>LonoVight</h2></a>
+        </div>
+        <div class="auth-links">
+            <div id="authLinks">
+                <a href="SignUp.html" class="signup">Sign Up</a>
+                <a href="SignIn.html" class="signin">Sign In</a>
+            </div> 
+        </div>
+        <div class="user-info" id="userInfo" style="display: none;">
+          <span id="userEmail"></span>
+          <button id="logoutBtn">Đăng xuất</button>
+      </div>
+    </header>
+
+    <div class="container">
+        <h1>Quản Lý Truyện</h1>
+        <form id="storyForm">
+            <div class="form-group">
+                <label for="storyName">Tên:</label>
+                <input type="text" id="storyName" required>
+            </div>
+            <div class="form-group">
+                <label for="storyCategory">Thể loại:</label>
+                <select id="storyCategory"></select>
+            </div>
+            <div class="form-group">
+                <label for="storyImage">Hình ảnh:</label>
+                <input type="file" id="storyImage" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="storyDescription">Mô tả:</label>
+                <textarea id="storyDescription" rows="4" required></textarea>
+            </div>
+            <button type="submit">Thêm Truyện</button>
+        </form>
+        
+        <h2>Danh Sách Truyện</h2>
+        <div class="search-group">
+            <label for="searchInput">Tìm kiếm:</label>
+            <input type="text" id="searchInput" placeholder="Nhập tên truyện...">
+        </div>        
+        <div id="storyList"></div>
+    </div>    
+    
+    <div id="pagination">
+        <button id="prevPage">Trang trước</button>
+        <div id="pageNumbers"></div>
+        <button id="nextPage">Trang sau</button>
+    </div>
+    
+
+    <script type="module" src="../Js/QuanLyTruyen.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>    
+</body>
+
+<!-- Modal Dialog -->
+<div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5);">
+    <div style="background: white; margin: auto; padding: 20px; width: 300px; position: relative; top: 50%; transform: translateY(-50%);">
+        <h3>Sửa thông tin truyện</h3>
+        
+        <label for="editStoryName">Tên truyện:</label>
+        <input type="text" id="editStoryName" /><br/><br/>
+
+        <label for="editStoryCategory">Thể loại:</label>
+        <select id="editStoryCategory"></select><br/><br/>
+
+        <label for="editStoryDescription">Mô tả:</label>
+        <textarea id="editStoryDescription"></textarea><br/><br/>
+
+        <label for="editStoryImage">Chọn hình ảnh:</label>
+        <input type="file" id="editStoryImage" accept="image/*"/><br/><br/>
+
+        <button id="saveChangesButton">Lưu thay đổi</button>
+        <button id="closeModalButton">Đóng</button>
+    </div>
+</div>
+
+</html>
