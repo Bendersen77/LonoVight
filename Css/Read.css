@@ -104,26 +104,27 @@ article p {
     margin-bottom: 20px;
 }
 
-.social-share {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.social-share a {
-    margin-right: 15px;
-    color: #ecab72; /* Màu chia sẻ giống Wattpad */
-    text-decoration: none;
-    font-weight: bold;
-}
 
 footer {
+    background-color: #333;
+    color: white;
     text-align: center;
     padding: 20px;
-    background-color: #f7f7f7;
-    color: #999;
-    font-size: 14px;
-    margin-top: 40px;
-    border-top: 1px solid #eee;
+    margin-top: 50px;
+}
+
+footer .social-links {
+    margin-top: 10px;
+}
+
+footer .social-links a {
+    margin: 0 10px;
+}
+
+footer .social-links img.social-icon {
+    width: 30px; /* Điều chỉnh kích thước logo */
+    height: auto;
+    vertical-align: middle;
 }
 /* Bình luận */
 #comment-section {
