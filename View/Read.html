@@ -32,10 +32,14 @@
     <!-- Main Content -->
     <main>
         <div id="chapter-container">
+            <h1><strong >Bút ký phản công của nữ phụ pháo hôi</strong></h1>
+            <div class="nav-buttons">
+                <button id="prev-chapter1" disabled>Previous Chapter</button>
+                <button id="next-chapter1">Next Chapter</button>
+            </div>
             <!-- Chapter 1 -->
-            <div class="chapter-info" id="chapter-1">
-                <h1><strong>Bút ký phản công của nữ phụ pháo hôi</strong></h1>
-                <h1 id="C1">Chương 1</h1>
+            <div class="chapter-info" id="chapter-1" style="display: block;">
+                <h1>Chương 1</h1>
                 <div class="stats">
                     <span>👁️ 1.7K</span>
                     <span>⭐ 31</span>
@@ -167,8 +171,8 @@
 
         <!-- Navigation Buttons -->
         <div class="nav-buttons">
-            <button id="prev-btn" onclick="navigateChapter(-1)">Previous</button>
-            <button id="next-btn" onclick="navigateChapter(1)">Next</button>
+            <button id="prev-chapter" disabled>Previous Chapter</button>
+            <button id="next-chapter">Next Chapter</button>
         </div>
 
     </main>
@@ -199,29 +203,6 @@
     </footer>
     <script src="../Js/user.js"></script>
     <script src="../Js/comments.js"></script>
-    <script>
-        let currentChapter = 1;
-        const totalChapters = 3; // Update this as you add more chapters
-
-        function navigateChapter(direction) {
-            // Hide the current chapter
-            document.getElementById(`chapter-${currentChapter}`).style.display = 'none';
-            document.querySelector(`article:nth-of-type(${currentChapter})`).style.display = 'none';
-
-            // Update current chapter
-            currentChapter += direction;
-
-            // Ensure current chapter stays within bounds
-            if (currentChapter < 1) {
-                currentChapter = 1; // Stay at the first chapter
-            } else if (currentChapter > totalChapters) {
-                currentChapter = totalChapters; // Stay at the last chapter
-            }
-
-            // Show the new chapter
-            document.getElementById(`chapter-${currentChapter}`).style.display = 'block';
-            document.querySelector(`article:nth-of-type(${currentChapter})`).style.display = 'block';
-        }
-    </script>
+    <script src="../Js/Read.js"></script>
 </body>
 </html>
