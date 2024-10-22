@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>NovoLight</title>
     <link rel="stylesheet" href="../Css/Home.css">
-    <script type = "module" src="../Js/firebase_auth.js"></script>
+    <script type="module" src="../Js/firebase_auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-        
-
     <!-- Header Section -->
     <header>
         <div class="logo">
             <a href="Home.html"><h2>LonoVight</h2></a>
         </div>
         <div class="search-bar">
-            <button>
+            <button id="searchBtn">
                 <i class="fas fa-search"></i>
             </button>
-            <input class="field" type="text" placeholder="Search..."/>
+            <input class="field" id="searchInput" type="text" placeholder="Search..." />
         </div>
         <div class="auth-links">
             <div id="authLinks">
@@ -28,9 +26,9 @@
             </div> 
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
-          <span id="userEmail"></span>
-          <button id="logoutBtn">Đăng xuất</button>
-      </div>
+            <span id="userEmail"></span>
+            <button id="logoutBtn">Đăng xuất</button>
+        </div>
     </header>
 
     <!-- Banner Section -->
@@ -39,98 +37,16 @@
         <h2>Latest novels to read at your fingertips!</h2>
         <button>READ TODAY !</button>
     </section>
+    
     <section id="product1" class="section-p1">
         <h2>Featured Stories</h2>
-        <p>New Summer Collection</p>
-        <div class="wrapper">
-            <div class="single-card">
-              <div class="img-area">
-                <img src="img/1.jpg" alt="">
-                <div class="overlay">
-                  <button class="view-details">Start reading</button>
-                </div>
-              </div>
-            </div>
-            <div class="single-card">
-                <div class="img-area">
-                  <img src="img/1.jpg" alt="">
-                  <div class="overlay">
-                    <button class="view-details">Start reading</button>
-                  </div>
-                </div>
-              </div>
-              <div class="single-card">
-                <div class="img-area">
-                  <img src="img/1.jpg" alt="">
-                  <div class="overlay">
-                    <button class="view-details">Start reading</button>
-                  </div>
-                </div>
-              </div>
-              <div class="single-card">
-                <div class="img-area">
-                  <img src="img/1.jpg" alt="">
-                  <div class="overlay">
-                    <button class="view-details">Start reading</button>
-                  </div>
-                </div>
-              </div>
-              
+        <div class="wrapper" id="storyWrapper">
+            <!-- Story cards will be injected here -->
         </div>
         
     </section>
 
-<!--action banner Section-->
-<div class="actionbanner">
-    <h3>ACTION FAN?</h3>
-    <em>Click Here!</em>
-  </div>
-  
-  <!--new arrivals product Section-->
-  <section id="product1" class="section-p1">
-    <h2>New arrivals!</h2>
-    <div class="wrapper">
-        <div class="single-card">
-          <div class="img-area">
-            <img src="img/1.jpg" alt="">
-            <div class="overlay">
-              <button class="view-details">Start reading</button>
-            </div>
-          </div>
-        </div>
-        <div class="single-card">
-            <div class="img-area">
-              <img src="img/1.jpg" alt="">
-              <div class="overlay">
-                <button class="view-details">Start reading</button>
-              </div>
-            </div>
-          </div>
-          <div class="single-card">
-            <div class="img-area">
-              <img src="img/1.jpg" alt="">
-              <div class="overlay">
-                <button class="view-details">Start reading</button>
-              </div>
-            </div>
-          </div>
-          <div class="single-card">
-            <div class="img-area">
-              <img src="img/1.jpg" alt="">
-              <div class="overlay">
-                <button class="view-details">Start reading</button>
-              </div>
-            </div>
-          </div>
-          
-    </div>
-    
-</section>
-<!--action banner Section-->
-    <div class="actionbanner2">
-    <h3>HAVE A LOVE ONE?</h3>
-    <p>We have Romance!<em> Click Here!</em></p>
-  </div>
+
     <!--  Footer Section -->
     <footer>
         <p>&copy; 2024 LonoVight - All Rights Reserved.</p>
@@ -141,5 +57,70 @@
         </div>
     </footer>
 
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+      import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+          apiKey: "AIzaSyCDbH--EpZjimx-cc_HToTYyc69fOALCuA",
+          authDomain: "novolight-7dbfa.firebaseapp.com",
+          databaseURL: "https://novolight-7dbfa-default-rtdb.firebaseio.com",
+          projectId: "novolight-7dbfa",
+          storageBucket: "novolight-7dbfa.appspot.com",
+          messagingSenderId: "500138366341",
+          appId: "1:500138366341:web:21f3dd63f2b7a70f9aa0ec",
+          measurementId: "G-7PQF6N9T85"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+
+      let stories = []; // Array to hold all stories
+
+      // Function to load stories from Firebase
+      async function loadStories() {
+          const storiesRef = ref(database, 'Truyen');
+          const snapshot = await get(storiesRef);
+          stories = snapshot.val() ? Object.values(snapshot.val()) : []; // Store all stories
+
+          displayStories(stories); // Initially display all stories
+      }
+
+      // Function to display stories
+      function displayStories(storyList) {
+          const wrapper = document.getElementById('storyWrapper');
+          wrapper.innerHTML = ''; // Clear existing stories
+
+          storyList.forEach((story, index) => {
+              const storyCard = `
+                  <div class="single-card">
+                <div class="img-area">
+                    <img src="${story.imageUrl}" alt="${story.name}">
+                    <div class="overlay">
+                        <button class="view-details" onclick="location.href='chi-tiet-truyen.html?id=${index}'">Start reading</button>
+                    </div>
+                </div>
+                <h3 class="story-name">${story.name}</h3> <!-- Display the story name here -->
+            </div>
+              `;
+              wrapper.innerHTML += storyCard; // Append story card
+          });
+      }
+
+      // Function to search stories by name
+      function searchStories() {
+          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+          const filteredStories = stories.filter(story => story.name.toLowerCase().includes(searchTerm));
+          displayStories(filteredStories); // Display filtered stories
+      }
+
+      // Event listener for search button
+      document.getElementById('searchBtn').addEventListener('click', searchStories);
+
+      // Call the function to load stories when the page loads
+      window.onload = loadStories;
+    </script>
 </body>
 </html>
