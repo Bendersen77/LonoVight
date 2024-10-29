@@ -27,8 +27,16 @@
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
             <span id="userEmail"></span>
-            <button id="logoutBtn">Đăng xuất</button>
+            <div class="dropdown">
+                <button class="dropdown-btn">Account <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="profile.html">Profile</a>
+                    <a href="user-management.html" id="userManagementLink" style="display: none;">User Management</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
         </div>
+        
     </header>
 
     <!-- Banner Section -->
