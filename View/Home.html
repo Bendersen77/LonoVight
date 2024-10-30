@@ -104,14 +104,16 @@
           storyList.forEach((story, index) => {
               const storyCard = `
                   <div class="single-card">
-                <div class="img-area">
-                    <img src="${story.imageUrl}" alt="${story.name}">
-                    <div class="overlay">
-                        <button class="view-details" onclick="location.href='chi-tiet-truyen.html?id=${index}'">Start reading</button>
+                    <div class="img-area">
+                        <img src="${story.imageUrl}" alt="${story.name}">
+                        <div class="overlay">
+                            <button class="view-details" onclick="location.href='chi-tiet-truyen.html?id=${index}'">Start reading</button>
+                            <button class="read-later" onclick="addToReadLater('${story.id}')">Read Later</button> <!-- Read Later Button -->
+                        </div>
                     </div>
+                    <h3 class="story-name">${story.name}</h3>
                 </div>
-                <h3 class="story-name">${story.name}</h3> <!-- Display the story name here -->
-            </div>
+
               `;
               wrapper.innerHTML += storyCard; // Append story card
           });

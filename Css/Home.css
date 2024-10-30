@@ -495,3 +495,16 @@ footer .social-links img.social-icon {
 #logoutBtn:active {
     transform: scale(0.95); /* Giảm kích thước một chút khi nhấn */
 }
+.read-later {
+    background-color: #ff6363;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.read-later:hover {
+    background-color: #ff4040;
+}
