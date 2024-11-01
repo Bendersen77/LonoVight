@@ -61,6 +61,10 @@ if (registerForm) {
                             email: email,
                             uid: userId,
                             role : 'Customer',
+                            avatar: '',
+                            password: password,
+                            phoneno: '',
+                            username: '',
                         })
                     })
                     .catch((error) => {
@@ -94,6 +98,7 @@ if (loginForm) {
                 if (!user.emailVerified) {
                     alert("Vui lòng xác thực email trước khi đăng nhập.");
                 } else {
+                    checkUser();
                     // Lưu email vào localStorage
                     localStorage.setItem("userEmail", user.email);
                     // Chuyển sang trang chủ
@@ -126,24 +131,25 @@ if (loginForm) {
 }
 
 function checkUser() {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
         const userEmailElement = document.getElementById('userEmail');
         const userInfoElement = document.getElementById('userInfo');
         const authLinksElement = document.getElementById('authLinks');
 
         if (user) {
-            if (userEmailElement) userEmailElement.textContent = user.email; // Hiện email người dùng
+            // Người dùng đã đăng nhập
+            console.log("User logged in:", user.email); // Thêm log để kiểm tra user
+            if (userEmailElement) userEmailElement.textContent = user.email;
             if (userInfoElement) userInfoElement.style.display = 'flex'; // Hiện thông tin người dùng
             if (authLinksElement) authLinksElement.style.display = 'none'; // Ẩn liên kết đăng nhập
         } else {
+            // Người dùng chưa đăng nhập
+            console.log("User is not logged in"); // Log để kiểm tra user không tồn tại
             if (authLinksElement) authLinksElement.style.display = 'flex'; // Hiện liên kết đăng nhập
             if (userInfoElement) userInfoElement.style.display = 'none'; // Ẩn thông tin người dùng
         }
     });
 }
-
-// Gọi hàm kiểm tra khi trang được tải
-window.onload = checkUser;
 
 // Xử lý quên mật khẩu
 const resetPasswordForm = document.getElementById("resetPasswordForm");
@@ -183,4 +189,54 @@ if (logoutButton) {
             });
     });
 }
+      let stories = []; // Array to hold all stories
 
+      // Function to load stories from Firebase
+      async function loadStories() {
+          const storiesRef = ref(database, 'Truyen');
+          const snapshot = await get(storiesRef);
+          stories = snapshot.val() ? Object.values(snapshot.val()) : []; // Store all stories
+
+          displayStories(stories); // Initially display all stories
+      }
+
+      // Function to display stories
+      function displayStories(storyList) {
+          const wrapper = document.getElementById('storyWrapper');
+          wrapper.innerHTML = ''; // Clear existing stories
+
+          storyList.forEach((story, index) => {
+              const storyCard = `
+                  <div class="single-card">
+                    <div class="img-area">
+                        <img src="${story.imageUrl}" alt="${story.name}">
+                        <div class="overlay">
+                            <button class="view-details" onclick="location.href='chi-tiet-truyen.html?id=${index}'">Start reading</button>
+                            <button class="read-later" onclick="addToReadLater('${story.id}')">Read Later</button> <!-- Read Later Button -->
+                        </div>
+                    </div>
+                    <h3 class="story-name">${story.name}</h3>
+                </div>
+
+              `;
+              wrapper.innerHTML += storyCard; // Append story card
+          });
+      }
+
+      // Function to search stories by name
+      function searchStories() {
+          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+          const filteredStories = stories.filter(story => story.name.toLowerCase().includes(searchTerm));
+          displayStories(filteredStories); // Display filtered stories
+      }
+
+      // Event listener for search button
+      document.getElementById('searchBtn').addEventListener('click', searchStories);
+
+      // Call the function to load stories when the page loads
+      window.onload = loadStories;
+
+      window.onload = function() {
+        checkUser();
+    };
+    

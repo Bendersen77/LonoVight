@@ -30,7 +30,7 @@
             <div class="dropdown">
                 <button class="dropdown-btn">Account <i class="fas fa-caret-down"></i></button>
                 <div class="dropdown-content">
-                    <a href="profile.html">Profile</a>
+                    <a href="UpdateProfile.html">Profile</a>
                     <a href="user-management.html" id="userManagementLink" style="display: none;">User Management</a>
                     <a href="#" id="logoutBtn">Logout</a>
                 </div>
@@ -64,73 +64,5 @@
             <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
     </footer>
-
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-      import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
-
-      // Firebase configuration
-      const firebaseConfig = {
-          apiKey: "AIzaSyCDbH--EpZjimx-cc_HToTYyc69fOALCuA",
-          authDomain: "novolight-7dbfa.firebaseapp.com",
-          databaseURL: "https://novolight-7dbfa-default-rtdb.firebaseio.com",
-          projectId: "novolight-7dbfa",
-          storageBucket: "novolight-7dbfa.appspot.com",
-          messagingSenderId: "500138366341",
-          appId: "1:500138366341:web:21f3dd63f2b7a70f9aa0ec",
-          measurementId: "G-7PQF6N9T85"
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const database = getDatabase(app);
-
-      let stories = []; // Array to hold all stories
-
-      // Function to load stories from Firebase
-      async function loadStories() {
-          const storiesRef = ref(database, 'Truyen');
-          const snapshot = await get(storiesRef);
-          stories = snapshot.val() ? Object.values(snapshot.val()) : []; // Store all stories
-
-          displayStories(stories); // Initially display all stories
-      }
-
-      // Function to display stories
-      function displayStories(storyList) {
-          const wrapper = document.getElementById('storyWrapper');
-          wrapper.innerHTML = ''; // Clear existing stories
-
-          storyList.forEach((story, index) => {
-              const storyCard = `
-                  <div class="single-card">
-                    <div class="img-area">
-                        <img src="${story.imageUrl}" alt="${story.name}">
-                        <div class="overlay">
-                            <button class="view-details" onclick="location.href='chi-tiet-truyen.html?id=${index}'">Start reading</button>
-                            <button class="read-later" onclick="addToReadLater('${story.id}')">Read Later</button> <!-- Read Later Button -->
-                        </div>
-                    </div>
-                    <h3 class="story-name">${story.name}</h3>
-                </div>
-
-              `;
-              wrapper.innerHTML += storyCard; // Append story card
-          });
-      }
-
-      // Function to search stories by name
-      function searchStories() {
-          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-          const filteredStories = stories.filter(story => story.name.toLowerCase().includes(searchTerm));
-          displayStories(filteredStories); // Display filtered stories
-      }
-
-      // Event listener for search button
-      document.getElementById('searchBtn').addEventListener('click', searchStories);
-
-      // Call the function to load stories when the page loads
-      window.onload = loadStories;
-    </script>
 </body>
 </html>
