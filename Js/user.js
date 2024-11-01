@@ -20,7 +20,7 @@ if (user.isLoggedIn) {
     });
 } else {
     userNameElement.textContent = "Đăng nhập";
-    userAvatarElement.src = "default-avatar.png"; // Hình đại diện mặc định
+    userAvatarElement.src = "../Image/logo.png"; // Hình đại diện mặc định
 
     // Thêm sự kiện click vào hình đại diện để chuyển đến trang đăng nhập
     userAvatarElement.parentElement.addEventListener('click', function () {

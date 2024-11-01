@@ -7,18 +7,27 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7; /* Màu nền nhẹ nhàng */
-    color: #333;
-    line-height: 1.8;
+    background-color: #f0f0f0; /* Màu nền nhẹ nhàng hơn */
+    color: #444; /* Màu chữ tối hơn cho độ tương phản */
+    line-height: 1.6;
+}
+#chapter-container {
+     /* Căn giữa nội dung bên trong khung */
+    margin: 20px; /* Khoảng cách xung quanh khung */
+}
+
+#chapter-container h1 {
+    text-align: center;
+    margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
 }
 
 header {
     background-color: white;
-    padding:20px 20px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 nav {
@@ -39,6 +48,11 @@ nav ul li a {
     text-decoration: none;
     color: #FF5C5C; /* Màu đỏ cam giống Wattpad */
     font-weight: bold;
+    transition: color 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+}
+
+nav ul li a:hover {
+    color: #e54b4b; /* Màu khi hover */
 }
 
 .user-actions {
@@ -47,15 +61,14 @@ nav ul li a {
     margin-left: auto; /* Đẩy user-actions sang bên phải */
 }
 
-
 .user-profile {
     display: flex;
     align-items: center;
 }
 
 .user-avatar {
-    width: 40px; /* Kích thước hình đại diện */
-    height: 40px;
+    width: 50px; /* Tăng kích thước hình đại diện */
+    height: 50px;
     border-radius: 50%; /* Để tạo hình tròn */
     margin-right: 10px; /* Khoảng cách giữa hình đại diện và tên */
 }
@@ -66,20 +79,20 @@ nav ul li a {
     margin-right: 15px; /* Khoảng cách giữa tên và nút */
 }
 
-
 main {
     max-width: 800px;
     margin: 40px auto;
-    padding: 20px;
+    padding: 30px; /* Tăng padding cho nội dung */
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .chapter-info h1 {
     font-size: 36px;
     text-align: center;
     color: #FF5C5C; /* Màu đỏ cam cho tiêu đề chương */
+    margin-bottom: 15px;
 }
 
 .stats {
@@ -88,47 +101,64 @@ main {
 }
 
 .stats span {
-    margin-right: 15px;
-    font-size: 18px;
+    margin-right: 20px;
+    font-size: 20px; /* Tăng kích thước chữ */
     color: #666;
 }
 
 article h2 {
-    font-size: 20px;
+    font-size: 24px; /* Tăng kích thước tiêu đề chương */
     margin-bottom: 20px;
-    color: black /* Màu đỏ cam cho tiêu đề chương */
+    color: black; /* Màu tiêu đề chương */
 }
 
 article p {
     font-size: 18px;
     margin-bottom: 20px;
+    line-height: 1.8; /* Tăng khoảng cách giữa các dòng */
 }
 
-
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    margin-top: 50px;
+/* Simple styles for chapter navigation buttons */
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
 }
 
-footer .social-links {
-    margin-top: 10px;
+.nav-buttons button {
+    padding: 12px 25px; /* Increased padding for better size */
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 25px; /* Rounded corners */
+    background-color: #FF5C5C; /* Primary color */
+    color: white; /* Text color */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
 }
 
-footer .social-links a {
-    margin: 0 10px;
+.nav-buttons button:hover {
+    background-color: #e54b4b; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight upward movement on hover */
 }
 
-footer .social-links img.social-icon {
-    width: 30px; /* Điều chỉnh kích thước logo */
-    height: auto;
-    vertical-align: middle;
+.nav-buttons button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 5px rgba(255, 92, 92, 0.5); /* Add focus shadow */
 }
+
+/* Optional: Style for disabled buttons */
+.nav-buttons button:disabled {
+    background-color: #ccc; /* Light grey for disabled state */
+    cursor: not-allowed; /* Change cursor to indicate disabled */
+}
+
 /* Bình luận */
 #comment-section {
     margin-top: 40px;
+    padding: 20px;
+    background-color: #f9f9f9; /* Nền bình luận nhẹ nhàng */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #comment-section h3 {
@@ -148,30 +178,40 @@ footer .social-links img.social-icon {
 
 #name-input, #comment-input {
     width: 100%;
-    padding: 10px;
+    padding: 12px; /* Tăng padding */
     border-radius: 5px;
     border: 1px solid #ddd;
+    font-size: 16px; /* Tăng kích thước chữ */
 }
 
 #submit-comment {
     background-color: #FF5C5C;
     color: white;
-    padding: 10px;
+    padding: 12px; /* Tăng padding cho nút */
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+    font-size: 16px; /* Tăng kích thước chữ */
 }
 
 #submit-comment:hover {
     background-color: #e54b4b; /* Màu tối hơn khi hover */
 }
 
+#submit-comment:focus {
+    outline: none; /* Ẩn viền khi focus */
+    box-shadow: 0 0 5px rgba(255, 92, 92, 0.5); /* Hiệu ứng focus */
+}
+
 .comment {
-    padding: 10px;
+    padding: 12px; /* Tăng padding cho bình luận */
     margin-bottom: 15px;
-    background-color: #f9f9f9;
+    background-color: #fff; /* Nền trắng cho bình luận */
     border-left: 4px solid #FF5C5C;
+    border-radius: 5px; /* Bo góc cho bình luận */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Thêm bóng cho bình luận */
 }
 
 .comment p {
@@ -182,4 +222,42 @@ footer .social-links img.social-icon {
 .comment .author {
     font-weight: bold;
     margin-bottom: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 10px;
+    }
+
+    nav ul li {
+        margin: 5px 0;
+    }
+
+    main {
+        padding: 15px;
+    }
+
+    article p {
+        font-size: 16px;
+    }
+
+    #comment-section h3 {
+        font-size: 20px;
+    }
+
+    #name-input, #comment-input {
+        padding: 10px;
+    }
+
+    #submit-comment {
+        padding: 10px;
+    }
 }

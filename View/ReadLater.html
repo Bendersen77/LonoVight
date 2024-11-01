@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read Later</title>
+    <link rel="stylesheet" href="../Css/Home.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="Home.html"><h2>LonoVight</h2></a>
+        </div>
+        <div class="user-info" id="userInfo">
+            <span id="userEmail"></span>
+        </div>
+    </header>
+
+    <section id="readLaterList" class="section-p1">
+        <h2>Your Read Later List</h2>
+        <div class="wrapper" id="readLaterWrapper">
+            <!-- Stories will be injected here -->
+        </div>
+    </section>
+
+    <script type="module" src="../Js/Home.js"></script>
+    <script type="module">
+        window.onload = loadReadLaterStories; // Load read later stories when the page loads
+    </script>
+</body>
+</html>
