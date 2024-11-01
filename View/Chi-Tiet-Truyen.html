@@ -8,13 +8,13 @@
 </head>
 <body>
     <div class="container">
-        <h1 id="storyNameDetail" style="text-align: center;"></h1>
-        <p id="storyCategoryDetail" style="text-align: center;"></p>
-        <img id="storyImageDetail" src="" alt="Hình ảnh truyện" style="width:400px">
-        <p id="storyDescriptionDetail" style="text-align: center;"></p>
+        <h1 id="storyNameDetail" class="story-title"></h1>
+        <p id="storyCategoryDetail" class="story-category"></p>
+        <img id="storyImageDetail" src="" alt="Hình ảnh truyện" class="story-image">
+        <p id="storyDescriptionDetail" class="story-description"></p>
 
-        <h2>Thêm Chương Mới</h2>
-        <form id="chapterForm">
+        <h2 class="section-title">Thêm Chương Mới</h2>
+        <form id="chapterForm" class="chapter-form">
             <div class="form-group">
                 <label for="chapterNumber">Chương Thứ:</label>
                 <input type="number" id="chapterNumber" min="0" required>
@@ -27,35 +27,47 @@
                 <label for="chapterContent">Nội dung:</label>
                 <textarea id="chapterContent" rows="4" required></textarea>
             </div>
-            <button type="submit">Thêm Chương</button>
+            <button type="submit" class="submit-button">Thêm Chương</button>
         </form>
 
-        <h2>Danh Sách Chương</h2>
-        <div id="chapterList"></div>
+        <h2 class="section-title">Danh Sách Chương</h2>
+        <div id="chapterList">
+            <div class="chapter-item">
+                <h4>Tiêu đề chương</h4>
+                <p class="chapter-content" style="display: block;">Nội dung giới hạn (100 chữ đầu tiên)...</p>
+                <div class="full-content" style="display: none;">
+                    <div class="content-box">
+                        Nội dung đầy đủ của chương sẽ được hiển thị ở đây.
+                    </div>
+                </div>
+                <button onclick="toggleContent(this)">Xem thêm...</button>
+            </div>
+        </div>
     </div>
-    
+
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
-    <script type="module" src="../Js/Chi-Tiet-Truyen.js"></script>
+    <script type="module" src="../Js/Chi-Tiet-Truyen.js" defer></script>
+
+    <div id="editChapterModal" style="display:none;">
+        <div class="modal-content">
+            <h2>Sửa Chương</h2>
+            <form id="editChapterForm">
+                <label for="editChapterNumber">Số Chương:</label>
+                <input type="number" id="editChapterNumber" required>
+                
+                <label for="editChapterTitle">Tiêu Đề:</label>
+                <input type="text" id="editChapterTitle" required>
+                
+                <label for="editChapterContent">Nội Dung:</label>
+                <textarea id="editChapterContent" rows="4" required></textarea>
+                
+                <div class="modal-buttons">
+                    <button type="submit">Lưu</button>
+                    <button type="button" id="closeEditChapterModal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>       
 </body>
-
-<!-- Modal Dialog -->
-<div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5);">
-    <div style="background: white; margin: auto; padding: 20px; width: 300px; position: relative; top: 50%; transform: translateY(-50%);">
-        <h3>Sửa thông tin truyện</h3>
-        
-        <label for="editNumberChapter">Chương thứ:</label>
-        <input type="text" id="editNumberChapter" /><br/><br/>
-
-        <label for="editTitle">Tiêu đề:</label>
-        <input type="text" id="editTitle" /><br/><br/>
-
-        <label for="editContent">Nội dung:</label>
-        <textarea id="editContent"></textarea><br/><br/>
-
-        <button id="saveChangesButton">Lưu thay đổi</button>
-        <button id="closeModalButton">Đóng</button>
-    </div>
-</div>
-
 </html>

@@ -28,7 +28,7 @@ async function loadStoryDetails() {
     if (story) {
         document.getElementById('storyNameDetail').textContent = story.name;
         document.getElementById('storyCategoryDetail').textContent = `Thể loại: ${story.category}`;
-        document.getElementById('storyImageDetail').src = story.imageUrl;
+        document.getElementById('storyImageDetail').src = story.imageUrl; // Đảm bảo story.imageUrl là một URL hợp lệ
         document.getElementById('storyDescriptionDetail').textContent = story.description;
         loadChapters(); // Load chapters if they exist
     } else {
@@ -48,17 +48,47 @@ async function loadChapters() {
     for (const chapterId in chapters) {
         const chapter = chapters[chapterId];
         const chapterDiv = document.createElement('div');
-chapterDiv.innerHTML = `
-    <h4>${chapter.title}</h4>
-    <p style ="text-align: left">Chương ${chapter.chapter}</p>
-    <p style="word-wrap: break-word; max-width: 800px; text-align: left">Nội dung: ${chapter.content}</p>
-    <button onclick="editChapter('${chapterId}', '${chapter.title}', '${chapter.content}')">Sửa</button>
-    <button onclick="deleteChapter('${chapterId}')">Xóa</button>
-`;
+        
+        // Giới hạn nội dung ở 100 ký tự
+        const contentPreview = chapter.content.length > 100 ? chapter.content.substring(0, 100) + '...' : chapter.content;
+
+        // Thay thế các ký tự xuống dòng bằng <br> để hiển thị đúng
+        const formattedContent = chapter.content.replace(/\n/g, '<br>');
+
+        chapterDiv.innerHTML = `
+            <p style="text-align: left">Chương ${chapter.chapter} - ${chapter.title}</p>
+            <p class="chapter-content" style="word-wrap: break-word; max-width: 800px; text-align: left">${contentPreview}</p>
+            <p class="full-content" style="display: none;">${formattedContent}</p>
+            <button class="toggle-button" onclick="toggleContent(this)">Xem thêm</button>
+            <button class="edit-button" onclick="editChapter('${chapterId}')">Sửa</button>
+            <button class="delete-button" onclick="deleteChapter('${chapterId}')">Xóa</button>
+            <hr style="border: 1px solid #ccc; margin: 10px 0;"> <!-- Đường gạch ngang -->
+        `;
 
         chapterList.appendChild(chapterDiv);
     }
 }
+
+
+
+// Định nghĩa toggleContent để có thể sử dụng trong HTML
+window.toggleContent = function(button) {
+    const chapterDiv = button.parentElement;
+    const chapterContent = chapterDiv.querySelector('.chapter-content');
+    const fullContent = chapterDiv.querySelector('.full-content');
+
+    if (fullContent.style.display === 'none' || !fullContent.style.display) {
+        fullContent.style.display = 'block'; // Hiển thị nội dung đầy đủ
+        chapterContent.style.display = 'none'; // Ẩn nội dung giới hạn
+        button.textContent = 'Thu gọn'; // Đổi văn bản nút
+    } else {
+        fullContent.style.display = 'none'; // Ẩn nội dung đầy đủ
+        chapterContent.style.display = 'block'; // Hiển thị nội dung giới hạn
+        button.textContent = 'Xem thêm'; // Đổi văn bản nút
+    }
+};
+
+
 
 
 // Xử lý thêm chương mới
@@ -83,38 +113,55 @@ document.getElementById('chapterForm').addEventListener('submit', async (event) 
     loadChapters(); // Reload chapters after adding
 });
 
-// Hàm sửa chương
-// Hiển thị modal để sửa thông tin truyện
-function showEditModal(story) {
-    document.getElementById('editStoryName').value = story.name;
-    document.getElementById('editStoryCategory').value = story.category; // Cần load thể loại từ DB
-    document.getElementById('editStoryDescription').value = story.description;
-    
-    // Hiển thị modal
-    document.getElementById('editModal').style.display = 'block';
+window.editChapter = async (chapterId) => {
+    const chapterRef = ref(database, `Truyen/${storyId}/Chuong/${chapterId}`);
+    const snapshot = await get(chapterRef);
+    const chapter = snapshot.val();
 
-    // Xử lý lưu thay đổi
-    document.getElementById('saveChangesButton').onclick = async () => {
-        const updatedStory = {
-            name: document.getElementById('editStoryName').value,
-            category: document.getElementById('editStoryCategory').value,
-            description: document.getElementById('editStoryDescription').value,
-            // Cần xử lý upload hình ảnh nếu có
-        };
+    if (chapter) {
+        const chapterNumberInput = document.getElementById('editChapterNumber');
+        const chapterTitleInput = document.getElementById('editChapterTitle');
+        const chapterContentInput = document.getElementById('editChapterContent');
 
-        await set(ref(database, `Truyen/${storyId}`), updatedStory);
-        alert('Cập nhật thành công!');
-        document.getElementById('editModal').style.display = 'none'; // Đóng modal
-        loadStoryDetails(); // Cập nhật lại thông tin truyện
-    };
+        // Kiểm tra nếu các phần tử tồn tại
+        if (chapterNumberInput && chapterTitleInput && chapterContentInput) {
+            // Cập nhật giá trị
+            chapterNumberInput.value = chapter.chapter;
+            chapterTitleInput.value = chapter.title;
+            chapterContentInput.value = chapter.content;
 
-    // Xử lý đóng modal
-    document.getElementById('closeModalButton').onclick = () => {
-        document.getElementById('editModal').style.display = 'none'; // Đóng modal
-    };
-}
+            // Hiển thị modal sửa chương
+            document.getElementById('editChapterModal').style.display = 'block';
 
-// Hàm xóa chương
+            // Xử lý lưu thay đổi
+            document.getElementById('editChapterForm').onsubmit = async (event) => {
+                event.preventDefault();
+
+                const updatedChapter = {
+                    chapter: chapterNumberInput.value,
+                    title: chapterTitleInput.value,
+                    content: chapterContentInput.value,
+                };
+
+                await set(ref(database, `Truyen/${storyId}/Chuong/${chapterId}`), updatedChapter);
+                alert('Cập nhật chương thành công!');
+                document.getElementById('editChapterModal').style.display = 'none'; // Đóng modal
+                loadChapters(); // Tải lại danh sách chương
+            };
+
+            // Xử lý đóng modal
+            document.getElementById('closeEditChapterModal').onclick = () => {
+                document.getElementById('editChapterModal').style.display = 'none'; // Đóng modal
+            };
+        } else {
+            console.error("Một hoặc nhiều phần tử không tìm thấy.");
+        }
+    } else {
+        console.error("Chương không tồn tại.");
+    }
+};
+
+
 // Hàm xóa chương
 window.deleteChapter = async (chapterId) => {
     const confirmDelete = confirm("Bạn có chắc chắn muốn xóa chương này không?");

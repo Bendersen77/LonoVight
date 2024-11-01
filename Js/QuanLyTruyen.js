@@ -52,7 +52,7 @@ function generateRandomId() {
 }
 
 let currentPage = 1;
-const storiesPerPage = 5;
+const storiesPerPage = 3;
 let stories = {};
 let filteredStories = {}; // Khai báo biến cho truyện đã lọc
 
@@ -75,36 +75,46 @@ function filterStories(searchTerm) {
     currentPage = 1; // Đặt lại trang hiện tại về 1 khi tìm kiếm
     loadFilteredStories(); // Gọi hàm để load truyện đã lọc
 }
+
 function loadFilteredStories() {
     const totalPages = Math.ceil(Object.keys(filteredStories).length / storiesPerPage);
     const startIndex = (currentPage - 1) * storiesPerPage;
     const endIndex = Math.min(startIndex + storiesPerPage, Object.keys(filteredStories).length);
-    
+
     const storyList = document.getElementById('storyList');
     storyList.innerHTML = ''; // Xóa danh sách hiện tại
 
-    // Cập nhật phần hiển thị truyện trong loadFilteredStories
-for (let i = startIndex; i < endIndex; i++) {
-    const storyId = Object.keys(filteredStories)[i];
-    const story = filteredStories[storyId];
-
-    if (story) {
-        const storyDiv = document.createElement('div');
-        storyDiv.innerHTML = `
-    <hr width="80%" align="center" />
-    <h3><a href="chi-tiet-truyen.html?id=${storyId}">${story.name}</a></h3>
-    <p>Thể loại: ${story.category}</p>
-    <p style="word-wrap: break-word; max-width: 600px">Mô tả: ${story.description}</p>
-    <img src="${story.imageUrl}" alt="${story.name}" style="width:400px">
-    <div style="display: flex; gap: 10px;">
-        <button class="edit-button" data-id="${storyId}">Sửa</button>
-        <button class="delete-button" data-id="${storyId}">Xóa</button>
-    </div>
-`;
-        storyList.appendChild(storyDiv);
+    for (let i = startIndex; i < endIndex; i++) {
+        const storyId = Object.keys(filteredStories)[i];
+        const story = filteredStories[storyId];
+        if (story) {
+            const storyRow = document.createElement('tr');
+            storyRow.innerHTML = `
+                <td>${storyId}</td>
+                <td><img src="${story.imageUrl}" alt="${story.name}"></td>
+                <td>${story.name}</td>
+                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${story.description}</td>
+                <td>${story.chapterCount || 0}</td>
+                <td>
+                    <button class="edit-button" data-id="${storyId}">Sửa</button>
+                    <button class="delete-button" data-id="${storyId}">Xóa</button>
+                </td>
+            `;
+        
+            // Thêm sự kiện click cho hàng `tr`
+            storyRow.addEventListener('click', (event) => {
+                // Kiểm tra nếu người dùng nhấn vào nút "Sửa" hoặc "Xóa" thì không chuyển trang
+                if (!event.target.classList.contains('edit-button') && !event.target.classList.contains('delete-button')) {
+                    window.location.href = `chi-tiet-truyen.html?id=${storyId}`;
+                }
+            });
+                // Thay đổi con trỏ chuột thành pointer khi trỏ vào hàng
+    storyRow.style.cursor = 'pointer';
+        
+            storyList.appendChild(storyRow);
+        }
+        
     }
-}
-
 
     createPageNumbers(totalPages);
     setupPagination(totalPages);
@@ -123,8 +133,9 @@ for (let i = startIndex; i < endIndex; i++) {
             const id = button.getAttribute('data-id');
             deleteStory(id);
         });
-    }); // Thiết lập lại các nút Sửa và Xóa
+    });
 }
+
 
 
 function setupPagination(totalPages) {
@@ -155,31 +166,60 @@ async function loadStories() {
     // Khởi tạo filteredStories với tất cả dữ liệu
     filteredStories = { ...stories };
     
+    // Đếm số chương cho mỗi truyện
+    for (const id in filteredStories) {
+        const chaptersRef = ref(database, `Truyen/${id}/Chuong`);
+        const chaptersSnapshot = await get(chaptersRef);
+        const chapters = chaptersSnapshot.val() || {};
+        filteredStories[id].chapterCount = Object.keys(chapters).length; // Lưu số chương vào truyện
+    }
+    
     // Hiển thị truyện ngay khi load
     loadFilteredStories();
 }
-
 
 function createPageNumbers(totalPages) {
     const pageNumbersContainer = document.getElementById('pageNumbers');
     pageNumbersContainer.innerHTML = ''; // Clear existing buttons
 
-    for (let i = 1; i <= totalPages; i++) {
+    let startPage, endPage;
+
+    if (totalPages <= 3) {
+        // Nếu tổng số trang <= 3, hiển thị tất cả các trang
+        startPage = 1;
+        endPage = totalPages;
+    } else {
+        // Nếu tổng số trang > 3, tính toán các trang gần nhất
+        if (currentPage === 1) {
+            startPage = 1;
+            endPage = 3;
+        } else if (currentPage === totalPages) {
+            startPage = totalPages - 2;
+            endPage = totalPages;
+        } else {
+            startPage = currentPage - 1;
+            endPage = currentPage + 1;
+        }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
         const button = document.createElement('button');
         button.textContent = i;
         button.classList.add('page-number');
+
         if (i === currentPage) {
             button.classList.add('active'); // Đánh dấu trang hiện tại
         }
 
         button.onclick = () => {
             currentPage = i; // Cập nhật trang hiện tại
-            loadStories(); // Tải lại truyện
+            loadFilteredStories(); // Tải lại truyện đã lọc
         };
 
         pageNumbersContainer.appendChild(button);
     }
 }
+
 
 let currentStoryId = null;
 // Function to load categories from Firebase

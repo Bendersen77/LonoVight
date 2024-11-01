@@ -1,263 +1,243 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+* {
+    box-sizing: border-box;
+}
+
+body, html {
     margin: 0;
-    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
+/* Container layout */
 .container {
-    max-width: 600px;
-    margin: auto;
-    background: #fff;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar styles */
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    background-color: #444; /* Màu nền tối hơn */
+    color: white;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3); /* Thêm bóng cho sidebar */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
 }
 
-h1 {
-    text-align: center;
+.sidebar h2 {
+    color: #ff6600; /* Đổi màu cho tiêu đề */
+    text-align: center; /* Căn giữa tiêu đề */
+    margin-bottom: 20px; /* Thêm khoảng cách dưới tiêu đề */
+    font-size: 24px; /* Đặt kích thước chữ cho tiêu đề */
 }
 
-.form-group {
-    margin-bottom: 15px;
+.sidebar .user-profile {
+    margin-bottom: 20px;
+    text-align: center; /* Căn giữa nội dung người dùng */
 }
 
-label {
+.sidebar .user-profile p {
+    margin: 10px 0;
+    font-weight: bold; /* Làm đậm chữ người dùng */
+}
+
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    margin: 15px 0;
+}
+
+.sidebar nav ul li a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 10px 15px; /* Thêm khoảng cách xung quanh liên kết */
+    display: block; /* Để liên kết chiếm toàn bộ chiều rộng */
+    border-radius: 5px; /* Bo góc cho liên kết */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+.sidebar nav ul li a:hover {
+    color: #fff; /* Màu chữ khi hover */
+    background-color: rgba(255, 102, 0, 0.8); /* Nền khi hover */
+}
+
+
+/* Main Content styles */
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.management-section h2, .main-content header h1 {
+    color: #333;
+}
+
+.form-group label {
     display: block;
     margin-bottom: 5px;
+    color: #333;
 }
 
-input, select, textarea {
+.form-group input, .form-group select, .form-group textarea {
     width: 100%;
-    padding: 10px; /* Giữ nguyên padding để có không gian bên trong */
-    border: 1px solid #ddd; /* Đường viền */
-    border-radius: 4px; /* Bo góc */
-    box-sizing: border-box; /* Đảm bảo padding và border không làm tăng kích thước tổng thể */
-}
-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box; /* Đảm bảo padding và border không làm tăng kích thước tổng thể */
-    resize: none; /* Ngăn người dùng thay đổi kích thước */
-    overflow: auto; /* Đảm bảo cuộn nếu nội dung vượt quá chiều cao */
+    padding: 8px;
+    margin-bottom: 10px;
+    resize: none;
 }
 
 button {
-    width: 100%;
-    padding: 10px;
-    background: #5cb85c;
-    color: white;
+    padding: 10px 15px;
+    background-color: #007bff;
     border: none;
-    border-radius: 4px;
+    color: white;
     cursor: pointer;
-    margin-top: 5px;
 }
 
 button:hover {
-    background: #4cae4c;
+    background-color: #0056b3;
 }
 
+/* Modal Dialog */
+#editModal {
+    position: fixed; /* Giữ modal ở vị trí cố định */
+    top: 0;
+    left: 0;
+    width: 100%; /* Chiều rộng 100% để bao phủ toàn bộ màn hình */
+    height: 100%; /* Chiều cao 100% để bao phủ toàn bộ màn hình */
+    background: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+    display: none; /* Sử dụng flexbox để căn giữa */
+    z-index: 1000; /* Đảm bảo modal nằm trên các phần tử khác */
+    overflow: auto;
+}
 
+.modal-content {
+    background: white; /* Màu nền cho modal */
+    padding: 20px; /* Khoảng cách bên trong modal */
+    width: 90%; /* Chiều rộng 90% cho tính phản hồi */
+    max-width: 500px; /* Chiều rộng tối đa cho modal */
+    border-radius: 10px; /* Bo góc cho modal */
+    margin: 10% auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Bóng đổ cho modal */
+}
 
-#pagination {
+/* Nút trong modal */
+.modal-content button {
+    background-color: #ff5722; /* Màu nền của nút */
+    color: white; /* Màu chữ */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    border: none;
+    border-radius: 5px; /* Bo góc cho nút */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.modal-content button:hover {
+    background-color: #e64a19; /* Thay đổi màu khi hover */
+}
+
+/* Đường viền cho các label và input */
+.modal-content label {
+    font-weight: bold; /* Đậm chữ */
+}
+
+.modal-content input, .modal-content textarea, .modal-content select {
+    width: 100%; /* Chiều rộng 100% */
+    padding: 10px; /* Khoảng cách bên trong */
+    margin: 10px 0; /* Khoảng cách trên và dưới */
+    border: 1px solid #ccc; /* Đường viền */
+    border-radius: 5px; /* Bo góc */
+    box-sizing: border-box; /* Để padding không ảnh hưởng đến tổng chiều rộng */
+    resize: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Hiệu ứng hover cho hàng bảng */
+}
+
+img {
+    max-width: 100px; /* Đặt chiều rộng tối đa cho hình ảnh */
+    height: auto; /* Đảm bảo chiều cao tự động */
+}
+
+button {
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+}
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Center the pagination elements */
+    margin-top: 20px; /* Add space above the pagination */
+}
+
+#pagination button {
+    margin: 0 10px; /* Add some space between buttons */
+}
+.page-number.active {
+    font-weight: bold;
+    background-color: #0056b3; /* hoặc màu mà bạn muốn */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Kiểu dáng cho thanh tìm kiếm */
+.search-group {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px; /* Khoảng cách giữa các phần tử */
-    margin-top: 20px;
-    max-width: 600px; /* Đặt độ dài tối đa */
-    margin-left: auto; /* Căn giữa */
-    margin-right: auto; /* Căn giữa */
+    gap: 15px; /* Khoảng cách giữa label và ô tìm kiếm */
+    margin: 25px 0;
+    max-width: 450px;
 }
 
-#pageNumbers {
-    display: flex;
-    gap: 5px; /* Khoảng cách giữa các nút số */
-}
-
-.page-number {
-    cursor: pointer;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    background-color: #f0f0f0;
-    transition: background-color 0.3s;
-}
-
-.page-number:hover {
-    background-color: #d0d0d0; /* Hiệu ứng hover */
-}
-
-.page-number.active {
-    background-color: #007bff;
-    color: white;
-}
-
-.search-group {
-    margin-bottom: 20px;
+.search-group label {
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+    white-space: nowrap; /* Giữ label trên một dòng */
 }
 
 #searchInput {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
+    padding: 12px 20px;
+    padding-left: 45px; /* Dành chỗ cho icon tìm kiếm */
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    font-size: 16px;
+    background-color: #f9f9f9;
 }
 
-/* CSS cho tên truyện */
-a {
-    color: black; /* Tô đen tên truyện */
-    text-decoration: none; /* Không gạch chân */
+#searchInput:focus {
+    border-color: #ff6600;
+    box-shadow: 0 4px 8px rgba(255, 102, 0, 0.3);
+    background-color: #fff;
 }
 
-a:hover {
-    text-decoration: underline; /* Gạch chân khi di chuột qua (tuỳ chọn) */
+#searchInput::placeholder {
+    color: #bbb;
+    font-style: italic;
 }
 
-.user-info {
-    display: flex;
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: flex-end; /* Căn phải */
-    padding: 10px 20px; /* Khoảng cách bên trong */
-    background-color: #f0f0f0; /* Màu nền nhẹ */
-    border-radius: 8px; /* Bo góc */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-    margin-right: 20px; /* Khoảng cách bên phải */
-}
-
-/* Phong cách cho email người dùng */
-#userEmail {
-    font-size: 16px; /* Kích thước chữ */
-    color: #333; /* Màu chữ */
-    margin-right: 15px; /* Khoảng cách bên phải */
-}
-
-/* Phong cách cho nút đăng xuất */
-#logoutBtn {
-    background-color: #007bff; /* Màu nền xanh */
-    color: white; /* Màu chữ trắng */
-    border: none; /* Không viền */
-    border-radius: 5px; /* Bo góc */
-    padding: 8px 12px; /* Khoảng cách bên trong */
-    cursor: pointer; /* Con trỏ chuột thành tay khi di chuột vào */
-    transition: background-color 0.3s, transform 0.2s; /* Hiệu ứng chuyển màu và hiệu ứng phóng to */
-}
-
-/* Hiệu ứng khi di chuột vào nút */
-#logoutBtn:hover {
-    background-color: #0056b3; /* Màu nền xanh đậm khi di chuột */
-    transform: scale(1.05); /* Phóng to một chút */
-}
-
-/* Hiệu ứng khi nút được nhấn */
-#logoutBtn:active {
-    transform: scale(0.95); /* Giảm kích thước một chút khi nhấn */
-}
-
-/* Header */
-header {
-    background-color: #ffffff; /* Màu nền */
-    color: white; /* Màu chữ */
-    padding: 0.1vw 1vw; /* Khoảng cách bên trong */
-    display: flex; /* Sử dụng flexbox */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    box-shadow: 0 0.1vw 1vw rgb(46, 45, 45); /* Đổ bóng */
-    z-index: 999; /* Đặt z-index cao */
-    position: sticky; /* Giữ ở đầu trang */
-    top: 0; /* Cách đầu trang 0 */
-    left: 0; /* Cách bên trái 0 */
-}
-
-header .logo {
-    display: flex; /* Sử dụng flexbox */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    flex: 1; /* Chiếm không gian còn lại */
-}
-
-header .logo a {
-    text-decoration: none; /* Không gạch chân */
-    color: #ff6419; /* Màu chữ */
-    display: flex; /* Sử dụng flexbox */
-}
-
-header nav ul {
-    list-style-type: none; /* Loại bỏ dấu chấm */
-    display: flex; /* Sử dụng flexbox */
-    gap: 15px; /* Khoảng cách giữa các mục */
-    margin-left: 20px; /* Khoảng cách bên trái */
-}
-
-header nav ul li {
-    display: flex; /* Sử dụng flexbox */
-    align-items: center; /* Căn giữa theo chiều dọc */
-}
-
-header nav ul li a {
-    color: white; /* Màu chữ */
-    text-decoration: none; /* Không gạch chân */
-    margin-left: 5px; /* Khoảng cách bên trái */
-    font-weight: bold; /* Chữ đậm */
-    padding: 1px 10px; /* Khoảng cách bên trong */
-    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
-}
-
-header nav ul li a:hover {
-    background-color: #555; /* Màu nền khi hover */
-    border-radius: 5px; /* Bo góc */
-}
-
-/* Search bar */
-header .search-bar {
-    display: flex; /* Sử dụng flexbox */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    gap: 10px; /* Khoảng cách giữa các phần tử */
-    flex: 2; /* Chiếm không gian giữa */
-    justify-content: flex-start; /* Căn trái */
-}
-
-header .search-bar input {
-    padding: 8px; /* Khoảng cách bên trong */
-    border-radius: 25px; /* Bo góc */
-    border: 1px solid #ccc; /* Đường viền */
-    outline: none; /* Không có viền khi focus */
-    width: 300px; /* Chiều rộng */
-    padding-left: 15px; /* Khoảng cách bên trái */
-    transition: border 0.3s ease; /* Hiệu ứng chuyển màu viền */
-}
-
-header .search-bar input:focus {
-    border: 1px solid #ff6419; /* Màu viền khi focus */
-}
-
-/* Button kính lúp */
-header .search-bar button {
-    background-color: transparent; /* Nền trong suốt */
-    border: none; /* Không có viền */
-    cursor: pointer; /* Con trỏ chuột thành tay */
-    font-size: 1.5rem; /* Kích thước chữ */
-    padding: 0.1vw; /* Khoảng cách bên trong */
-}
-
-/* Auth links */
-header .auth-links {
-    display: flex; /* Sử dụng flexbox */
-    gap: 15px; /* Khoảng cách giữa các mục */
-    flex: 1; /* Chiếm không gian bên phải */
-    justify-content: flex-end; /* Căn phải */
-}
-
-header .auth-links a {
-    color: rgb(0, 0, 0); /* Màu chữ */
-    font-weight: 700; /* Chữ đậm */
-    font-size: 18px; /* Kích thước chữ */
-    text-decoration: none; /* Không gạch chân */
-    padding: 1px 10px; /* Khoảng cách bên trong */
-    border-radius: 5px; /* Bo góc */
-    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
-}
-
-header .auth-links a:hover {
-    background-color: rgb(0, 0, 0); /* Màu nền khi hover */
-    color: #ffffff; /* Màu chữ khi hover */
+#searchInput:hover {
+    border-color: #888;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

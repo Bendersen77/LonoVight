@@ -1,7 +1,5 @@
-/* Chi-Tiet-Truyen.css */
-
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
@@ -16,31 +14,38 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
-    color: #333;
-}
-
-h1 {
-    font-size: 2em;
+.story-title {
+    text-align: center;
+    color: #ff5722; /* Màu sắc nổi bật cho tiêu đề */
+    font-size: 2.5em;
     margin-bottom: 10px;
 }
 
-h2 {
+.story-category, .story-description {
+    text-align: center;
+    color: #666;
+}
+
+.story-image {
+    display: block;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
+    color: #333;
     margin-top: 20px;
-    font-size: 1.5em;
-    border-bottom: 2px solid #e4e4e4;
+    font-size: 1.8em;
+    border-bottom: 2px solid #ff5722; /* Đường viền dưới màu nổi bật */
     padding-bottom: 10px;
 }
 
-p {
-    color: #666;
-    line-height: 1.6;
-}
-
-img {
-    display: block;
-    margin: 20px 0;
-    border-radius: 4px;
+.chapter-form {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 10px;
 }
 
 .form-group {
@@ -64,25 +69,25 @@ textarea {
     resize: none;
 }
 
-button {
+.submit-button {
     background-color: #28a745;
     color: white;
     border: none;
     padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.1em;
 }
 
-button:hover {
+.submit-button:hover {
     background-color: #218838;
 }
 
-#chapterList {
+.chapter-list {
     margin-top: 20px;
 }
 
-#chapterList div {
+.chapter-list div {
     background: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -90,12 +95,143 @@ button:hover {
     margin-bottom: 10px;
 }
 
-#chapterList h4 {
+.chapter-list h4 {
     margin: 0;
     color: #333;
 }
 
-#storyImageDetail {
-    margin: 0 auto; /* Căn giữa hình ảnh */
-    display: block; /* Chuyển hình ảnh thành block để căn giữa */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background: white;
+    margin: auto;
+    padding: 20px;
+    width: 300px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.full-content {
+    display: none;
+    padding: 10px;
+    border: 1px solid #ddd; /* Đường viền để phân biệt */
+    border-radius: 4px; /* Bo tròn góc */
+    background: #f9f9f9; /* Màu nền */
+    word-wrap: break-word; /* Ngắt dòng nếu cần thiết */
+    overflow: hidden; /* Ẩn bất kỳ nội dung nào tràn ra ngoài */
+}
+
+.content-box {
+    /* Đảm bảo rằng nội dung trong box không tràn ra ngoài */
+    max-width: 100%; /* Giới hạn chiều rộng */
+    overflow-wrap: break-word; /* Ngắt từ nếu cần */
+}
+.toggle-button, .edit-button, .delete-button {
+    background-color: #ff5722; /* Màu nền cam */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Bỏ viền */
+    padding: 10px 15px; /* Khoảng cách bên trong */
+    border-radius: 5px; /* Bo tròn góc */
+    cursor: pointer; /* Con trỏ khi di chuột */
+    transition: background-color 0.3s, transform 0.2s; /* Hiệu ứng chuyển màu và phóng to */
+    font-size: 1em; /* Kích thước chữ */
+    margin-right: 5px; /* Khoảng cách giữa các nút */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Bóng đổ */
+}
+
+.toggle-button:hover, .edit-button:hover, .delete-button:hover {
+    background-color: #e64a19; /* Màu tối hơn khi hover */
+    transform: scale(1.05); /* Phóng to nhẹ */
+}
+
+.toggle-button:active, .edit-button:active, .delete-button:active {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Giảm bóng khi nhấn */
+    transform: scale(0.95); /* Thu nhỏ khi nhấn */
+}
+#editChapterModal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Nền mờ tối hơn */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px; /* Tăng padding để nội dung không bị chật */
+    border-radius: 12px; /* Bo tròn các góc */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Bóng đổ mềm mại */
+    width: 90%;
+    max-width: 500px; /* Giới hạn chiều rộng tối đa */
+    animation: fadeIn 0.5s; /* Thêm hiệu ứng fade-in */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+label {
+    font-weight: bold;
+    color: #333; /* Màu sắc cho label */
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 12px; /* Tăng padding */
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Bo tròn góc cho input */
+    box-sizing: border-box;
+    resize: none; /* Ngăn ngừa resize cho textarea */
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between; /* Căn chỉnh nút */
+    margin-top: 20px; /* Khoảng cách với các input */
+}
+
+.modal-buttons button {
+    background-color: #ff5722; /* Màu nền cho nút */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px; /* Bo tròn góc */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.modal-buttons button:hover {
+    background-color: #e64a19; /* Màu tối hơn khi hover */
+}
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    resize: none; /* Ngăn ngừa resize của người dùng */
+    max-height: 300px; /* Giới hạn chiều cao tối đa */
+    overflow-y: auto; /* Thêm thanh cuộn dọc nếu nội dung vượt quá chiều cao */
 }
