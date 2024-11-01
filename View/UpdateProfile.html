@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Update Profile - LonoVight</title>
+    <link rel="stylesheet" href="../Css/Home.css">
+    <script type="module" src="../Js/firebase_auth.js"></script>
+    <link rel="stylesheet" href="../Css/UpdateProfile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section (reused from Home) -->
+    <header>
+        <div class="logo">
+            <a href="Home.html"><h2>LonoVight</h2></a>
+        </div>
+        <div class="search-bar">
+            <button id="searchBtn">
+                <i class="fas fa-search"></i>
+            </button>
+            <input class="field" id="searchInput" type="text" placeholder="Search..." />
+        </div>
+        <div class="auth-links">
+            <div id="authLinks">
+                <a href="SignUp.html" class="signup">Sign Up / Login</a>
+            </div> 
+        </div>
+        <div class="user-info" id="userInfo" style="display: none;">
+            <span id="userEmail"></span>
+            <div class="dropdown">
+                <button class="dropdown-btn">Account <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="profile.html">Profile</a>
+                    <a href="user-management.html" id="userManagementLink" style="display: none;">User Management</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="profile-container">
+        <!-- Avatar Preview at the top -->
+        <div class="avatar-preview">
+            <img id="avatarPreview" src="#" alt="Avatar Preview" style="display: none;">
+        </div>
+
+        <h2><strong>Thông tin cá nhân</strong></h2>
+        <form id="updateForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="avatar">Avatar:</label>
+            <input type="file" id="avatar" name="avatar" accept="image/*" onchange="previewAvatar(event)">
+
+            <button type="button" onclick="updateProfile()">Update</button>
+        </form>
+        <p id="message"></p>
+    </div>
+    <footer>
+        <p>&copy; 2024 LonoVight - All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+    <script src="../Js/UpdateProfile.js"></script>
+</body>
+</html>
