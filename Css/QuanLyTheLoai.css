@@ -1,0 +1,272 @@
+/* Đặt lại các thuộc tính mặc định */
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Bố cục của container */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(135deg, #444, #333);
+    color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar h2 {
+    color: #ff6600;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.sidebar .user-profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar .user-profile p {
+    font-weight: bold;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar nav ul li {
+    margin: 15px 0;
+}
+
+.sidebar nav ul li a {
+    display: block;
+    padding: 10px 15px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidebar nav ul li a:hover {
+    background-color: #ff6600;
+    color: #fff;
+}
+
+/* Nội dung chính */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fafafa;
+}
+
+.main-content header h1 {
+    color: #444;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Khu vực quản lý thể loại */
+.management-section h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Thêm thể loại */
+.add-genre, .existing-genres, .search-group {
+    margin-bottom: 25px; /* Khoảng cách giữa các phần */
+}
+
+.add-genre label, .existing-genres label, .search-group label {
+    display: block;
+    margin-bottom: 8px; /* Khoảng cách dưới của mỗi nhãn */
+    font-weight: bold;
+    color: #555;
+}
+
+.add-genre input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border 0.3s ease;
+    margin-bottom: 10px; /* Khoảng cách dưới của ô nhập liệu */
+}
+
+.add-genre input:focus {
+    border-color: #ff6600;
+    box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+}
+
+.add-genre button {
+    padding: 10px 20px;
+    display: block;
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.page-number.active {
+    font-weight: bold;
+    background-color: #0056b3;
+    color: white;
+}
+.action-button {
+    margin-left: 10px; /* Thay đổi giá trị để điều chỉnh khoảng cách */
+}
+
+
+/* Dropdown (Các thể loại đã có) */
+.existing-genres select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 8px; /* Khoảng cách trên của dropdown */
+}
+
+/* Bảng hiển thị danh sách */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    color: #444;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Modal sửa thể loại */
+#editModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    margin: 10% auto;
+}
+
+.modal-content button {
+    background-color: #ff5722;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #e64a19;
+}
+
+/* Phân trang */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#pagination button {
+    margin: 0 10px;
+    padding: 8px 12px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#pagination button:hover {
+    background-color: #0056b3;
+}
+
+.page-number.active {
+    font-weight: bold;
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Dropdown styling */
+.genre-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.genre-item:hover {
+    background-color: #e9e9e9;
+}
+
+.story-dropdown {
+    display: none; /* Ẩn danh sách truyện mặc định */
+    margin-left: 20px;
+    list-style-type: none;
+    padding: 0;
+}
+
+.story-dropdown li {
+    padding: 5px 0;
+    color: #333;
+}
+
+.genre-item.active .story-dropdown {
+    display: block; /* Hiển thị khi dòng thể loại được mở */
+}

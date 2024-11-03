@@ -110,7 +110,7 @@ if (loginForm) {
                                 console.log("User Role: ", role);
 
                                 if (role === 'Admin') {
-                                    window.location.href = "QuanLyTruyen.html";
+                                    window.location.href = "Home.html";
                                 } else {
                                     window.location.href = "Home.html";
                                 }
@@ -120,7 +120,6 @@ if (loginForm) {
                         }).catch((error) => {
                             console.error("Lỗi khi lấy vai trò người dùng:", error);
                         });
-                    // window.location.href = "Home.html"; // Thay "index.html" bằng trang chủ của bạn
                 }
             })
             .catch((error) => {
@@ -135,6 +134,7 @@ function checkUser() {
         const userEmailElement = document.getElementById('userEmail');
         const userInfoElement = document.getElementById('userInfo');
         const authLinksElement = document.getElementById('authLinks');
+        const manageStoryLink = document.getElementById('manageStoryLink');
 
         if (user) {
             // Người dùng đã đăng nhập
@@ -142,6 +142,22 @@ function checkUser() {
             if (userEmailElement) userEmailElement.textContent = user.email;
             if (userInfoElement) userInfoElement.style.display = 'flex'; // Hiện thông tin người dùng
             if (authLinksElement) authLinksElement.style.display = 'none'; // Ẩn liên kết đăng nhập
+
+            const roleRef = ref(database, 'Users/' + user.uid + '/role');
+                        get(roleRef).then((snapshot) => {
+                            if (snapshot.exists()) { // Sửa thành exists()
+                                const role = snapshot.val();
+                                console.log("User Role: ", role);
+
+                                if (role === 'Admin') {
+                                    manageStoryLink.style.display='flex';
+                                }
+                            } else {
+                                console.error("Không tìm thấy vai trò người dùng.");
+                            }
+                        }).catch((error) => {
+                            console.error("Lỗi khi lấy vai trò người dùng:", error);
+                        });
         } else {
             // Người dùng chưa đăng nhập
             console.log("User is not logged in"); // Log để kiểm tra user không tồn tại

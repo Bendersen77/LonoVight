@@ -1,0 +1,243 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Container layout */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar styles */
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    background-color: #444; /* Màu nền tối hơn */
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3); /* Thêm bóng cho sidebar */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+.sidebar h2 {
+    color: #ff6600; /* Đổi màu cho tiêu đề */
+    text-align: center; /* Căn giữa tiêu đề */
+    margin-bottom: 20px; /* Thêm khoảng cách dưới tiêu đề */
+    font-size: 24px; /* Đặt kích thước chữ cho tiêu đề */
+}
+
+.sidebar .user-profile {
+    margin-bottom: 20px;
+    text-align: center; /* Căn giữa nội dung người dùng */
+}
+
+.sidebar .user-profile p {
+    margin: 10px 0;
+    font-weight: bold; /* Làm đậm chữ người dùng */
+}
+
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    margin: 15px 0;
+}
+
+.sidebar nav ul li a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 10px 15px; /* Thêm khoảng cách xung quanh liên kết */
+    display: block; /* Để liên kết chiếm toàn bộ chiều rộng */
+    border-radius: 5px; /* Bo góc cho liên kết */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+.sidebar nav ul li a:hover {
+    color: #fff; /* Màu chữ khi hover */
+    background-color: rgba(255, 102, 0, 0.8); /* Nền khi hover */
+}
+
+
+/* Main Content styles */
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.management-section h2, .main-content header h1 {
+    color: #333;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Modal Dialog */
+#editModal {
+    position: fixed; /* Giữ modal ở vị trí cố định */
+    top: 0;
+    left: 0;
+    width: 100%; /* Chiều rộng 100% để bao phủ toàn bộ màn hình */
+    height: 100%; /* Chiều cao 100% để bao phủ toàn bộ màn hình */
+    background: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+    display: none; /* Sử dụng flexbox để căn giữa */
+    z-index: 1000; /* Đảm bảo modal nằm trên các phần tử khác */
+    overflow: auto;
+}
+
+.modal-content {
+    background: white; /* Màu nền cho modal */
+    padding: 20px; /* Khoảng cách bên trong modal */
+    width: 90%; /* Chiều rộng 90% cho tính phản hồi */
+    max-width: 500px; /* Chiều rộng tối đa cho modal */
+    border-radius: 10px; /* Bo góc cho modal */
+    margin: 10% auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Bóng đổ cho modal */
+}
+
+/* Nút trong modal */
+.modal-content button {
+    background-color: #ff5722; /* Màu nền của nút */
+    color: white; /* Màu chữ */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    border: none;
+    border-radius: 5px; /* Bo góc cho nút */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.modal-content button:hover {
+    background-color: #e64a19; /* Thay đổi màu khi hover */
+}
+
+/* Đường viền cho các label và input */
+.modal-content label {
+    font-weight: bold; /* Đậm chữ */
+}
+
+.modal-content input, .modal-content textarea, .modal-content select {
+    width: 100%; /* Chiều rộng 100% */
+    padding: 10px; /* Khoảng cách bên trong */
+    margin: 10px 0; /* Khoảng cách trên và dưới */
+    border: 1px solid #ccc; /* Đường viền */
+    border-radius: 5px; /* Bo góc */
+    box-sizing: border-box; /* Để padding không ảnh hưởng đến tổng chiều rộng */
+    resize: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Hiệu ứng hover cho hàng bảng */
+}
+
+img {
+    max-width: 100px; /* Đặt chiều rộng tối đa cho hình ảnh */
+    height: auto; /* Đảm bảo chiều cao tự động */
+}
+
+button {
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+}
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Center the pagination elements */
+    margin-top: 20px; /* Add space above the pagination */
+}
+
+#pagination button {
+    margin: 0 10px; /* Add some space between buttons */
+}
+.page-number.active {
+    font-weight: bold;
+    background-color: #0056b3; /* hoặc màu mà bạn muốn */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Kiểu dáng cho thanh tìm kiếm */
+.search-group {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Khoảng cách giữa label và ô tìm kiếm */
+    margin: 25px 0;
+    max-width: 450px;
+}
+
+.search-group label {
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+    white-space: nowrap; /* Giữ label trên một dòng */
+}
+
+#searchInput {
+    width: 100%;
+    padding: 12px 20px;
+    padding-left: 45px; /* Dành chỗ cho icon tìm kiếm */
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+#searchInput:focus {
+    border-color: #ff6600;
+    box-shadow: 0 4px 8px rgba(255, 102, 0, 0.3);
+    background-color: #fff;
+}
+
+#searchInput::placeholder {
+    color: #bbb;
+    font-style: italic;
+}
+
+#searchInput:hover {
+    border-color: #888;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

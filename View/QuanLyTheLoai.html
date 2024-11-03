@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Css/QuanLyTheLoai.css">
+    <title>Quản Lý Thể Loại</title>
+</head>
+<body>
+
+<div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2><a href="Home.html" style="text-decoration: none; color: #ff6600;">LonoVight</a></h2>
+        <div class="user-profile">
+            <p>Xin chào, <span id="userEmail">User</span></p>
+            <button id="logoutBtn">Đăng xuất</button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="QuanLyTruyen.html">Quản lý Truyện</a></li>
+                <li><a href="QuanLyTheLoai.html">Quản lý Thể Loại</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header>
+            <h1>Quản Lý Thể Loại</h1>
+        </header>
+
+        <section id="genre-management" class="management-section">
+            <!-- Thêm Thể Loại -->
+            <div class="add-genre">
+                <label for="genreName">Tên thể loại:</label>
+                <input type="text" id="genreName" required>
+                <button id="addGenreBtn">Thêm Thể Loại</button>
+            </div>
+
+            <!-- Bảng hiển thị danh sách thể loại -->
+            <h2>Danh Sách Thể Loại</h2>
+            <table id="genreTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên</th>
+                        <th>Số truyện</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="genreList"></tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<!-- Modal sửa thể loại -->
+<div id="editModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>Sửa Thể Loại</h3>
+        <label for="editGenreName">Tên thể loại:</label>
+        <input type="text" id="editGenreName" required>
+        <button id="saveEditBtn">Lưu</button>
+        <button id="closeEditBtn">Đóng</button>
+    </div>
+</div>
+
+<script type="module" src="../Js/QuanLyTheLoai.js"></script>
+</body>
+</html>

@@ -32,31 +32,11 @@
         </header>
 
         <section id="story-management" class="management-section">
-            <form id="storyForm">
-                <div class="form-group">
-                    <label for="storyName">Tên:</label>
-                    <input type="text" id="storyName" required>
-                </div>
-                <div class="form-group">
-                    <label for="storyCategory">Thể loại:</label>
-                    <select id="storyCategory"></select>
-                </div>
-                <div class="form-group">
-                    <label for="storyImage">Hình ảnh:</label>
-                    <input type="file" id="storyImage" accept="image/*" required>
-                </div>
-                <div class="form-group">
-                    <label for="storyDescription">Mô tả:</label>
-                    <textarea id="storyDescription" rows="4" required></textarea>
-                </div>
-                <button type="submit">Thêm Truyện</button>
-            </form>
-
             <h2>Danh Sách Truyện</h2>
-<div class="search-group">
-    <label for="searchInput">Tìm kiếm:</label>
-    <input type="text" id="searchInput" placeholder="Nhập tên truyện...">
-</div>
+                <div class="search-group">
+                    <label for="searchInput">Tìm kiếm:</label>
+                    <input type="text" id="searchInput" placeholder="Nhập tên truyện...">
+                </div>
 
 <!-- Table for displaying stories -->
 <table id="storyTable">
@@ -102,7 +82,7 @@
 </div>
 
 
-<script type="module" src="../Js/QuanLyTruyen.js"></script>
+<script type="module" src="../Js/ChiTietTheLoai.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>    

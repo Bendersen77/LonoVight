@@ -28,28 +28,11 @@ const database = getDatabase(app);
 const auth = getAuth(app); // Ở đâu đó trong mã của bạn, đảm bảo biến auth được định nghĩa.
 const storage = getStorage(app);
 
+const urlParams = new URLSearchParams(window.location.search);
+const genreName = urlParams.get("genreName")
+
 //Trỏ tới node Thể loại trên Firebase
 const categoriesRef = ref(database, 'Thể loại');
-
-//Chức năng hiển thị dữ liệu Thể loại từ Firebase
-async function loadCategories() {
-    const snapshot = await get(categoriesRef);
-    const categories = snapshot.val();
-    const categorySelect = document.getElementById('storyCategory');
-    categorySelect.innerHTML = ''; // Clear existing options
-
-    for (const key in categories) {
-        const option = document.createElement('option');
-        option.value = categories[key]; // Lưu giá trị là tên thể loại
-        option.textContent = categories[key];
-        categorySelect.appendChild(option);
-    }
-}
-
-// Chức năng tạo ID tự động
-function generateRandomId() {
-    return 'story_' + Math.random().toString(36).substr(2, 9); // Tạo ID ngẫu nhiên
-}
 
 let currentPage = 1;
 const storiesPerPage = 3;
@@ -62,17 +45,61 @@ document.getElementById('searchInput').addEventListener('input', () => {
     filterStories(searchTerm);
 });
 
-function filterStories(searchTerm) {
-    filteredStories = {}; // Reset filtered stories
+async function loadStoriesByGenre() {
+    const storiesRef = ref(database, 'Truyen');
+    const snapshot = await get(storiesRef);
+    stories = snapshot.val() || {};
     
+    // Lọc truyện theo thể loại
+    filteredStories = {};
     for (const id in stories) {
-        const story = stories[id];
-        if (story.name.toLowerCase().includes(searchTerm)) {
-            filteredStories[id] = story;
+        if (stories[id].category === genreName) {
+            filteredStories[id] = stories[id];
+        }
+    }
+    
+    // Đếm số chương cho mỗi truyện
+    for (const id in filteredStories) {
+        const chaptersRef = ref(database, `Truyen/${id}/Chuong`);
+        const chaptersSnapshot = await get(chaptersRef);
+        const chapters = chaptersSnapshot.val() || {};
+        filteredStories[id].chapterCount = Object.keys(chapters).length; // Lưu số chương vào truyện
+    }
+    
+    // Hiển thị truyện ngay khi load
+    loadFilteredStories();
+}
+
+function filterStories(searchTerm) {
+    const searchLower = searchTerm.toLowerCase(); // Chuyển đổi thành chữ thường
+
+    // Nếu ô tìm kiếm trống, khôi phục lại dữ liệu gốc
+    if (searchTerm.trim() === '') {
+        // Lọc lại filteredStories theo thể loại
+        filteredStories = {}; // Đặt lại filteredStories
+        for (const id in stories) {
+            if (stories[id].category === genreName) { // Kiểm tra thể loại
+                filteredStories[id] = stories[id];
+            }
+        }
+        
+        currentPage = 1; // Đặt lại trang hiện tại về 1
+        loadFilteredStories(); // Tải lại danh sách truyện
+        return; // Thoát hàm
+    }
+
+    const tempFilteredStories = {}; // Tạo một biến tạm để lưu các truyện đã lọc
+
+    // Lọc qua filteredStories thay vì stories
+    for (const id in filteredStories) {
+        const story = filteredStories[id];
+        if (story.name.toLowerCase().includes(searchLower)) {
+            tempFilteredStories[id] = story;
         }
     }
 
     currentPage = 1; // Đặt lại trang hiện tại về 1 khi tìm kiếm
+    filteredStories = tempFilteredStories; // Cập nhật lại filteredStories với kết quả tìm kiếm
     loadFilteredStories(); // Gọi hàm để load truyện đã lọc
 }
 
@@ -111,7 +138,6 @@ function loadFilteredStories() {
             });
                 // Thay đổi con trỏ chuột thành pointer khi trỏ vào hàng
     storyRow.style.cursor = 'pointer';
-        
             storyList.appendChild(storyRow);
         }
         
@@ -297,43 +323,10 @@ async function deleteStory(id) {
     }
 }
 
-// Upload story to Firebase
-document.getElementById('storyForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const storyName = document.getElementById('storyName').value;
-    const storyCategory = document.getElementById('storyCategory').value;
-    const storyImage = document.getElementById('storyImage').files[0];
-    const storyDescription = document.getElementById('storyDescription').value;
-
-    // Get next ID
-    const storyId = generateRandomId();
-
-    // Upload image to Firebase Storage
-    const imageRef = storageRef(storage, `images/${storyId}.jpg`); // Gán ID giống với ID của truyện
-    await uploadBytes(imageRef, storyImage);
-    
-    // Get the download URL of the image
-    const imageUrl = await getDownloadURL(imageRef);
-
-    // Save story data to Firebase Realtime Database
-    await set(ref(database, `Truyen/${storyId}`), {
-        name: storyName,
-        category: storyCategory,
-        imageUrl: imageUrl,
-        description: storyDescription
-    });
-
-    alert('Truyện đã được thêm thành công!');
-    document.getElementById('storyForm').reset();
-    loadStories(); // Reload the stories after adding a new one
-});
-
 // Khi tải trang, gọi loadStories
 window.onload = async () => {
-    await loadCategories();
-    await loadStories(); // Gọi hàm loadStories để tải dữ liệu
     await checkUser();
+    await loadStoriesByGenre(); // Tải truyện theo thể loại
 };
 
 function checkUser() {
