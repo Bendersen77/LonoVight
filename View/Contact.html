@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt - FUTA Bus Lines</title>
+    <link rel="stylesheet" href="../Css/Contact.css">
+</head>
+<body>
+     <!-- Header Section -->
+     <header>
+        <div class="logo">
+            <a href="Home.html"><h2>LonoVight</h2></a>
+        </div>
+        <div class="search-bar">
+            <button id="searchBtn">
+                <i class="fas fa-search"></i>
+            </button>
+            <input class="field" id="searchInput" type="text" placeholder="Search..." />
+        </div>
+        <div class = "contact">
+            <li><a href="Contact.html">Yêu cầu hỗ trợ</a></li>
+        </div>
+        <div class = "contact">
+            
+            <li><a href="Notification.html">Thông báo</a></li>
+        </div>
+        <div class = "contact">
+            
+            <li><a href="FavoriteStory.html">Danh sách yêu thích</a></li>
+        </div>
+        <div class="auth-links">
+            <div id="authLinks">
+                <a href="SignUp.html" class="signup">Sign Up / Login</a>
+            </div> 
+        </div>
+        <div class="user-info" id="userInfo" style="display: none;">
+            <span id="userEmail"></span>
+            <button id="logoutBtn">Đăng xuất</button>
+        </div>
+    </header>
+    
+
+    <section class="contact-section">
+        <h2>LIÊN HỆ HỖ TRỢ</h2>
+        <p>Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ, vui lòng điền vào biểu mẫu bên dưới và chúng tôi sẽ phản hồi bạn sớm nhất có thể.</p>
+
+        <form action="#" method="POST" class="contact-form">
+            <div class="form-group">
+                <label for="name">Họ Tên</label>
+                <input type="text" id="name" placeholder="Họ tên của bạn" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Thông tin</label>
+                <textarea id="message" placeholder="Viết thông tin của bạn..." rows="6" required></textarea>
+            </div>
+            <button type="Submit" class="btn">Gửi</button>
+        </form>
+        <div id="admin-reply-section" class="reply-section" style="display:none;">
+            <h3>Phản hồi từ Admin:</h3>
+            <p id="admin-reply"></p>
+        </div>
+    </section>
+    
+
+    
+
+
+    <!--  Footer Section -->
+    <footer>
+        <p>&copy; 2024 LonoVight - All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+    
+    <script src="../Js/Contact.js"></script>
+    <script src="../javascript/Home.js"></script>
+</body>
+</html>

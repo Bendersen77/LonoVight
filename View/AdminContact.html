@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Contact List</title>
+    <link rel="stylesheet" href="../Css/AdminContact.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="Home.html"><h2>LonoVight</h2></a>
+        </div>
+        <div class = "contact">
+            
+            <li><a href="AdminContact.html">Quản lý yêu cầu hỗ trợ</a></li>
+        </div>
+        <div class="auth-links">
+            <div id="authLinks">
+                <a href="SignUp.html" class="signup">Sign Up</a>
+                <a href="SignIn.html" class="signin">Sign In</a>
+            </div> 
+        </div>
+        <div class="user-info" id="userInfo" style="display: none;">
+          <span id="userEmail"></span>
+          <button id="logoutBtn">Đăng xuất</button>
+      </div>
+    </header>
+    
+
+    <section class="contact-list-section">
+        <h2>Danh sách liên hệ</h2>
+        <table id="contactTable">
+            <thead>
+                <tr>
+                    <th>Họ Tên</th>
+                    <th>Thông tin</th>
+                    <th>Trả lời</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Danh sách liên hệ sẽ được hiển thị tại đây -->
+            </tbody>
+        </table>
+    </section>
+
+    <script src="../Js/AdminContact.js"></script>
+    <script type="module" src="../Js/QuanLyTruyen.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>    
+</body>
+</html>

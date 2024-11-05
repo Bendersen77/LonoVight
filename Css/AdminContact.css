@@ -1,0 +1,236 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+}
+
+/* Header */
+header {
+    background-color: #ffffff; /* Màu nền */
+    color: white; /* Màu chữ */
+    padding: 0.1vw 1vw; /* Khoảng cách bên trong */
+    display: flex; /* Sử dụng flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    box-shadow: 0 0.1vw 1vw rgb(46, 45, 45); /* Đổ bóng */
+    z-index: 999; /* Đặt z-index cao */
+    position: sticky; /* Giữ ở đầu trang */
+    top: 0; /* Cách đầu trang 0 */
+    left: 0; /* Cách bên trái 0 */
+}
+
+header .logo {
+    display: flex; /* Sử dụng flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    flex: 1; /* Chiếm không gian còn lại */
+}
+
+header .logo a {
+    text-decoration: none; /* Không gạch chân */
+    color: #ff6419; /* Màu chữ */
+    display: flex; /* Sử dụng flexbox */
+}
+
+header nav ul {
+    list-style-type: none; /* Loại bỏ dấu chấm */
+    display: flex; /* Sử dụng flexbox */
+    gap: 15px; /* Khoảng cách giữa các mục */
+    margin-left: 20px; /* Khoảng cách bên trái */
+}
+
+header nav ul li {
+    display: flex; /* Sử dụng flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+header nav ul li a {
+    color: white; /* Màu chữ */
+    text-decoration: none; /* Không gạch chân */
+    margin-left: 5px; /* Khoảng cách bên trái */
+    font-weight: bold; /* Chữ đậm */
+    padding: 1px 10px; /* Khoảng cách bên trong */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+header nav ul li a:hover {
+    background-color: #555; /* Màu nền khi hover */
+    border-radius: 5px; /* Bo góc */
+}
+
+/* Search bar */
+header .search-bar {
+    display: flex; /* Sử dụng flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 10px; /* Khoảng cách giữa các phần tử */
+    flex: 2; /* Chiếm không gian giữa */
+    justify-content: flex-start; /* Căn trái */
+}
+
+header .search-bar input {
+    padding: 8px; /* Khoảng cách bên trong */
+    border-radius: 25px; /* Bo góc */
+    border: 1px solid #ccc; /* Đường viền */
+    outline: none; /* Không có viền khi focus */
+    width: 300px; /* Chiều rộng */
+    padding-left: 15px; /* Khoảng cách bên trái */
+    transition: border 0.3s ease; /* Hiệu ứng chuyển màu viền */
+}
+
+header .search-bar input:focus {
+    border: 1px solid #ff6419; /* Màu viền khi focus */
+}
+
+/* Button kính lúp */
+header .search-bar button {
+    background-color: transparent; /* Nền trong suốt */
+    border: none; /* Không có viền */
+    cursor: pointer; /* Con trỏ chuột thành tay */
+    font-size: 1.5rem; /* Kích thước chữ */
+    padding: 0.1vw; /* Khoảng cách bên trong */
+}
+
+/* Auth links */
+header .auth-links {
+    display: flex; /* Sử dụng flexbox */
+    gap: 15px; /* Khoảng cách giữa các mục */
+    flex: 1; /* Chiếm không gian bên phải */
+    justify-content: flex-end; /* Căn phải */
+}
+
+header .auth-links a {
+    color: rgb(0, 0, 0); /* Màu chữ */
+    font-weight: 700; /* Chữ đậm */
+    font-size: 18px; /* Kích thước chữ */
+    text-decoration: none; /* Không gạch chân */
+    padding: 1px 10px; /* Khoảng cách bên trong */
+    border-radius: 5px; /* Bo góc */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+header .auth-links a:hover {
+    background-color: rgb(0, 0, 0); /* Màu nền khi hover */
+    color: #ffffff; /* Màu chữ khi hover */
+}
+.user-info {
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: flex-end; /* Căn phải */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    background-color: #f0f0f0; /* Màu nền nhẹ */
+    border-radius: 8px; /* Bo góc */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    margin-right: 20px; /* Khoảng cách bên phải */
+}
+
+/* Phong cách cho email người dùng */
+#userEmail {
+    font-size: 16px; /* Kích thước chữ */
+    color: #333; /* Màu chữ */
+    margin-right: 15px; /* Khoảng cách bên phải */
+}
+
+/* Phong cách cho nút đăng xuất */
+#logoutBtn {
+    background-color: #007bff; /* Màu nền xanh */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Không viền */
+    border-radius: 5px; /* Bo góc */
+    padding: 8px 12px; /* Khoảng cách bên trong */
+    cursor: pointer; /* Con trỏ chuột thành tay khi di chuột vào */
+    transition: background-color 0.3s, transform 0.2s; /* Hiệu ứng chuyển màu và hiệu ứng phóng to */
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+#logoutBtn:hover {
+    background-color: #0056b3; /* Màu nền xanh đậm khi di chuột */
+    transform: scale(1.05); /* Phóng to một chút */
+}
+
+/* Hiệu ứng khi nút được nhấn */
+#logoutBtn:active {
+    transform: scale(0.95); /* Giảm kích thước một chút khi nhấn */
+}
+
+
+.contact-list-section {
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+th {
+    background-color: #07ed6f;
+    color : white;
+
+}
+
+button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+   
+}
+
+button:hover {
+    background-color: #c0392b;
+}
+.reply-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-left: 5px solid #e74c3c;
+}
+
+.reply-section h3 {
+    margin-bottom: 10px;
+}
+#contactTable th,
+#contactTable td{
+    text-align: center;
+    padding: 10px;
+}
+.contact-list-section h2 {
+    text-align: center;
+    font-size: 24px;  /* Bạn có thể tùy chỉnh kích thước chữ */
+    margin-top: 30px;
+    color:#0ff05a;
+}
+.contact {
+    display: inline-block;
+    margin: 10px;
+}
+
+.contact li {
+    list-style: none;
+}
+
+.contact a {
+    display: inline-block;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #15eb6e; /* Màu nền */
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact a:hover {
+    background-color: #038731; /* Màu nền khi di chuột */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
+}
