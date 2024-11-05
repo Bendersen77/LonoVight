@@ -15,7 +15,7 @@
             <a href="Home.html"><h2>LonoVight</h2></a>
         </div>
         <div class="search-bar">
-            <button id="searchBtn">
+            <button id="searchButton">
                 <i class="fas fa-search"></i>
             </button>
             <input class="field" id="searchInput" type="text" placeholder="Search..." />
@@ -30,7 +30,7 @@
         </div>
         <div class="auth-links">
             <div id="authLinks">
-                <a href="SignUp.html" class="signup">Sign Up / Login</a>
+                <a href="SignUp.html" id="signupBtn">Sign Up / Login</a>
             </div> 
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
@@ -39,9 +39,10 @@
                 <button class="dropdown-btn">Account <i class="fas fa-caret-down"></i></button>
                 <div class="dropdown-content">
                     <a href="UpdateProfile.html">Profile</a>
-                    <a href="QuanLyTruyen.html" id="manageStoryLink" style="display: none;">Manage Story</a>
+                    <a href="ReadLater.html">Library</a>
                     <a href="user-management.html" id="userManagementLink" style="display: none;">User Management</a>
                     <a href="#" id="logoutBtn">Logout</a>
+                    
                 </div>
             </div>
         </div>
@@ -57,10 +58,11 @@
     
     <section id="product1" class="section-p1">
         <h2>Featured Stories</h2>
-        <div class="wrapper" id="storyWrapper">
-            <!-- Story cards will be injected here -->
-        </div>
-        
+           <div id="storyContainer" class="story-container">
+        <!-- Stories will be loaded here dynamically -->
+    </div>
+    <div id="savedStoryContainer"></div>
+
     </section>
 
 
@@ -73,5 +75,8 @@
             <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
     </footer>
+
+    <script type="module" src="../Js/Home.js"></script>
+
 </body>
 </html>
