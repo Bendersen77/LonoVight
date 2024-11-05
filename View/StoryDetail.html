@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Chi Tiết Truyện</title>
+    <link rel="stylesheet" href="../Css/StoryDetail.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="Home.html"><h2>LonoVight</h2></a>
+        </div>
+        <div class="search-bar">
+            <button id="searchBtn">
+                <i class="fas fa-search"></i>
+            </button>
+            <input class="field" id="searchInput" type="text" placeholder="Search..." />
+        </div>
+        <div class = "contact">
+            <li><a href="Contact.html">Yêu cầu hỗ trợ</a></li>
+           
+        </div>
+        <div class = "contact">
+            
+            <li><a href="Notification.html">Thông báo</a></li>
+        </div>
+        <div class = "contact">
+            
+            <li><a href="FavoriteStory.html">Danh sách yêu thích</a></li>
+        </div>
+        <div class="auth-links">
+            <div id="authLinks">
+                <a href="SignUp.html" class="signup">Sign Up / Login</a>
+            </div> 
+        </div>
+        <div class="user-info" id="userInfo" style="display: none;">
+            <span id="userEmail"></span>
+            <button id="logoutBtn">Đăng xuất</button>
+        </div>
+    </header>
+  
+        <!-- Thông tin chi tiết truyện sẽ được hiển thị ở đây -->
+        <div class="story-detail-container">
+            <img id="storyImage" src="" alt="Ảnh truyện">
+            <h1 id="storyTitle">Tên truyện</h1>
+            
+            <h3 id="storyCategory">Thể loại</h3>
+            <p id="storyDescription">Mô tả chi tiết truyện...</p>
+            <a id="readButton" href="Read.html" class="read-button">Đọc Truyện</a>
+        </div>
+
+        
+    
+    
+    <div id="commentsSection">
+        <h2>Bình luận</h2>
+        <div id="commentsList"></div>
+
+        <textarea id="commentInput" placeholder="Nhập bình luận của bạn..."></textarea>
+        <button id="submitComment">Gửi Bình luận</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 LonoVight - All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+    <script type="module">
+        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDbH--EpZjimx-cc_HToTYyc69fOALCuA",
+            authDomain: "novolight-7dbfa.firebaseapp.com",
+            databaseURL: "https://novolight-7dbfa-default-rtdb.firebaseio.com",
+            projectId: "novolight-7dbfa",
+            storageBucket: "novolight-7dbfa.appspot.com",
+            messagingSenderId: "500138366341",
+            appId: "1:500138366341:web:21f3dd63f2b7a70f9aa0ec",
+            measurementId: "G-7PQF6N9T85"
+        };
+
+        // Khởi tạo Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Lấy ID truyện từ URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const storyId = urlParams.get('id');
+
+        // Lấy và hiển thị thông tin truyện từ Firebase
+        async function displayStoryDetails() {
+            if (!storyId) {
+                alert("Không tìm thấy ID truyện.");
+                return;
+            }
+
+            try {
+                const storyRef = ref(database, `Truyen/${storyId}`);
+                const snapshot = await get(storyRef);
+
+                if (snapshot.exists()) {
+                    const storyData = snapshot.val();
+                    document.getElementById('storyTitle').textContent = storyData.name;
+                    document.getElementById('storyImage').src = storyData.imageUrl;
+                    document.getElementById('storyCategory').textContent = `Thể loại: ${storyData.category}`;
+                    document.getElementById('storyDescription').textContent = storyData.description;
+                } else {
+                    alert("Truyện không tồn tại.");
+                }
+            } catch (error) {
+                console.error("Lỗi khi tải chi tiết truyện:", error);
+                alert("Không thể tải chi tiết truyện. Vui lòng thử lại sau.");
+            }
+        }
+
+        // Gọi hàm hiển thị chi tiết truyện khi tải trang
+        displayStoryDetails();
+    </script>
+    <script src="../Js/Comment.js"></script>
+    <script src="../Js/SignUp.js"></script>
+</body>
+</html>
