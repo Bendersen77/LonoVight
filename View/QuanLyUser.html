@@ -1,18 +1,37 @@
-<!DOCTYPE html>
+"<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management</title>
+    <title>Quản lý người dùng</title>
     <link rel="stylesheet" href="../Css/QuanLyUser.css">
+    <link rel="stylesheet" href="../Css/QuanLyTruyen.css">
 </head>
 <body>
     <div class="container">
+        <aside class="sidebar">
+            <h2><a href="Home.html" style="text-decoration: none; color: #ff6600;">LonoVight</a></h2>
+            <div class="user-profile">
+                <p>Xin chào, <span id="userEmail">User</span></p>
+                <button id="logoutBtn">Đăng xuất</button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="QuanLyTruyen.html">Quản lý Truyện</a></li>
+                    <li><a href="QuanLyTheLoai.html">Quản lý Thể Loại</a></li>
+                    <li><a href="QuanLyUser.html">Quản lý người dùng</a></li>
+                    <!-- Thêm các mục khác ở đây nếu cần -->
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
         <header>
             <h1>User Management</h1>
-            <input type="text" id="searchBar" placeholder="Search by email...">
         </header>
-
+        <div class="search-group">
+            <label for="searchInput">Search by email:</label>
+            <input type="text" id="searchBar" placeholder="Search by email...">
+        </div>
         <table id="userTable">
             <thead>
                 <tr>
@@ -25,7 +44,7 @@
             <tbody>
                 <!-- Rows will be dynamically inserted here -->
             </tbody>
-        </table>
+        </table></main>
     </div>
 
     <!-- Firebase Script Here -->
