@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông Báo - FUTA Bus Lines</title>
-    <link rel="stylesheet" href="../Css/Notification.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>NovoLight</title>
+    <link rel="stylesheet" href="../Css/ReadLater.css">
+    <script type="module" src="../Js/firebase_auth.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- Header Section -->
@@ -13,15 +15,14 @@
             <a href="Home.html"><h2>LonoVight</h2></a>
         </div>
         <div class="search-bar">
-            <button id="searchBtn">
+            <button id="searchButton">
                 <i class="fas fa-search"></i>
             </button>
             <input class="field" id="searchInput" type="text" placeholder="Search..." />
         </div>
-        
         <div class="auth-links">
             <div id="authLinks">
-                <a href="SignUp.html" class="signup">Sign Up / Login</a>
+                <a href="SignUp.html" id="signupBtn">Sign Up / Login</a>
             </div> 
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
@@ -40,16 +41,21 @@
                 </div>
             </div>
         </div>
+        
     </header>
 
+    <!-- Banner Section -->
+    <section id="product1" class="section-p1">
+        <h2>Your Favorite</h2>
+           <div id="readLaterContainer" class="story-container">
+        <!-- Stories will be loaded here dynamically -->
+    </div>
 
-    <section class="notification-section">
-        <h2>Thông Báo Mới Nhất</h2>
-        <div id="notification-list"></div>
     </section>
 
-     <!--  Footer Section -->
-     <footer>
+
+    <!--  Footer Section -->
+    <footer>
         <p>&copy; 2024 LonoVight - All Rights Reserved.</p>
         <div class="social-links">
             <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -58,7 +64,7 @@
         </div>
     </footer>
 
-    <script src="../Js/Notification.js"></script>
-    
+    <script type="module" src="../Js/Favorite.js"></script>
+
 </body>
 </html>

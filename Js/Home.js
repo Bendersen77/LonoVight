@@ -123,7 +123,7 @@ async function loadStories() {
                 await saveStoryToHistory(storyId);
 
                 // Redirect to the story details page
-                location.href = `chi-tiet-truyen.html?id=${storyId}`;
+                location.href = `StoryDetail.html?id=${storyId}`;
             });
         });
         // Attach event listeners to Read Later buttons

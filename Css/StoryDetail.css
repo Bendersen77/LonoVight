@@ -1,0 +1,423 @@
+/* Tổng thể */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background-color: #ffffff;
+    color: white;
+    padding:0.1vw 1vw;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0.1vw 1vw rgb(46, 45, 45);
+    z-index: 999;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    flex: 1; 
+    /* Chiếm không gian còn lại khi có */
+}
+
+header .logo a {
+    text-decoration: none;
+    color: #ff6419;
+    display: flex;
+}
+
+
+header nav ul {
+    list-style-type: none;
+    display: flex;
+    gap: 15px;
+    margin-left: 20px;
+}
+
+header nav ul li {
+    display: flex;
+    align-items: center;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 5px;
+    font-weight: bold;
+    padding: 1px 10px;
+    transition: background-color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+/* Điều chỉnh search bar nằm giữa */
+/* Định dạng search bar */
+header .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 2; /* Chiếm không gian giữa header */
+    justify-content: flex-start; /* Căn trái thanh tìm kiếm */
+}
+
+header .search-bar input {
+    padding: 8px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 300px;
+    padding-left: 15px;
+    transition: border 0.3s ease;
+}
+
+header .search-bar input:focus {
+    border: 1px solid #ff6419;
+}
+
+/* Nút kính lúp */
+header .search-bar button {
+    background-color: transparent;
+    border: none; /* Không có viền */
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0.1vw;
+}
+
+
+header .search-bar button i {
+    color: rgb(0, 0, 0); /* Màu mặc định của kính lúp */
+    transition: color 0.3s ease;
+}
+
+
+
+
+
+/* Định dạng cho Sign Up và Sign In */
+header .auth-links {
+    display: flex;
+    gap: 15px;
+    flex: 1; /* Chiếm không gian góc phải */
+    justify-content: flex-end; /* Đưa Sign In/Sign Up về phía bên phải */
+}
+
+header .auth-links a {
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    font-size: 18px;
+    text-decoration: none;
+    padding: 1px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+header .auth-links a:hover {
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+}
+
+/* Main */
+.story-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Story Image */
+.story-image img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Story Content */
+.story-content {
+    margin-top: 20px;
+    text-align: left;
+    width: 100%;
+}
+
+.story-content h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.story-content p {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #555;
+    margin: 10px 0;
+}
+
+.story-content p strong {
+    color: #4a90e2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .story-detail {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .story-content h2 {
+        font-size: 1.6em;
+    }
+
+    .story-content p {
+        font-size: 0.95em;
+    }
+}
+#commentsSection {
+    margin-top: 30px; /* Giảm khoảng cách giữa thông tin truyện và bình luận */
+    padding: 20px; /* Thêm padding cho phần bình luận */
+    border: 1px solid #ddd; /* Đường viền cho phần bình luận */
+    border-radius: 10px; /* Bo góc cho phần bình luận */
+    background-color: #fafafa; /* Nền sáng cho phần bình luận */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ */
+}
+
+#commentsSection h2 {
+    color: #4CAF50; /* Màu xanh lá cây cho tiêu đề */
+    margin-bottom: 15px; /* Thêm khoảng cách dưới tiêu đề bình luận */
+    font-family: 'Arial', sans-serif; /* Phông chữ tiêu đề */
+}
+
+#commentsList {
+    margin-top: 10px;
+    max-height: 300px; /* Chiều cao tối đa cho danh sách bình luận */
+    overflow-y: auto; /* Thêm cuộn dọc nếu danh sách quá dài */
+    padding: 10px;
+    background-color: #ffffff; /* Nền trắng cho danh sách bình luận */
+    border-radius: 8px; /* Bo góc cho danh sách bình luận */
+    border: 1px solid #ddd; /* Đường viền cho danh sách bình luận */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ */
+}
+
+.comment {
+    padding: 10px;
+    margin-bottom: 10px; /* Thêm khoảng cách giữa các bình luận */
+    border: 1px solid #ddd; /* Khung cho mỗi bình luận */
+    border-radius: 5px; /* Bo góc cho bình luận */
+    background-color: #f9f9f9; /* Nền sáng cho bình luận */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu khi hover */
+}
+
+.comment:hover {
+    background-color: #f1f1f1; /* Màu nền khi hover */
+}
+
+.comment p {
+    margin: 0; /* Xóa margin mặc định của paragraph */
+    color: #333; /* Màu chữ cho bình luận */
+    font-size: 14px; /* Kích thước chữ cho bình luận */
+}
+
+.comment span {
+    display: block; /* Để tên người dùng trên một dòng riêng */
+    font-weight: bold; /* In đậm tên người dùng */
+    color: #4CAF50; /* Màu xanh cho tên người dùng */
+    margin-bottom: 5px; /* Khoảng cách dưới tên người dùng */
+}
+
+textarea {
+    width: 100%;
+    height: 80px; /* Thay đổi chiều cao để tạo thêm không gian cho người dùng nhập bình luận */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    resize: none; /* Ngăn không cho người dùng thay đổi kích thước */
+    font-size: 14px; /* Kích thước chữ cho textarea */
+    font-family: 'Arial', sans-serif; /* Phông chữ cho textarea */
+}
+
+button {
+    background-color: #4CAF50; /* Màu nền của nút */
+    color: white; /* Màu chữ trên nút */
+    padding: 10px 15px; /* Padding cho nút */
+    border: none; /* Bỏ đường viền */
+    border-radius: 5px; /* Bo góc cho nút */
+    cursor: pointer; /* Con trỏ khi hover */
+    margin-top: 10px; /* Khoảng cách trên nút */
+    font-size: 16px; /* Kích thước chữ cho nút */
+    font-family: 'Arial', sans-serif; /* Phông chữ cho nút */
+}
+
+button:hover {
+    background-color: #45a049; /* Màu nền khi hover */
+}
+
+textarea:focus, button:focus {
+    outline: none; /* Bỏ viền khi focus */
+    border: 1px solid #4CAF50; /* Đường viền màu xanh khi focus */
+}
+.contact {
+    display: inline-block;
+    margin: 10px;
+}
+
+.contact li {
+    list-style: none;
+}
+
+.contact a {
+    display: inline-block;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #007bff; /* Màu nền */
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact a:hover {
+    background-color: #0056b3; /* Màu nền khi di chuột */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
+}
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+footer .social-links {
+    margin-top: 10px;
+}
+
+footer .social-links a {
+    margin: 0 10px;
+}
+
+footer .social-links img.social-icon {
+    width: 30px; /* Điều chỉnh kích thước logo */
+    height: auto;
+    vertical-align: middle;
+}
+/* StoryDetail.css */
+
+/* Bố cục tổng thể cho chi tiết truyện */
+.story-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+
+/* Ảnh truyện */
+.story-detail-container img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.story-detail-container img:hover {
+    transform: scale(1.05);
+}
+
+/* Tiêu đề truyện */
+#storyTitle {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+    text-align: center;
+}
+
+/* Thể loại */
+#storyCategory {
+    font-size: 18px;
+    font-weight: 500;
+    color: #777;
+    margin: 10px 0;
+    text-align: center;
+}
+
+/* Mô tả truyện */
+#storyDescription {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    text-align: justify;
+    margin: 15px 0;
+}
+
+/* Hiệu ứng Hover cho các phần tử văn bản */
+#storyTitle:hover, #storyCategory:hover, #storyDescription:hover {
+    color: #4CAF50;
+    transition: color 0.3s ease;
+}
+
+/* Hiệu ứng khi rê chuột vào container */
+.story-detail-container:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Phong cách cho các nút tương tác (nếu có) */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #388E3C;
+}
+.read-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF; /* Màu nền */
+    color: white; /* Màu chữ */
+    text-decoration: none; /* Không có gạch chân */
+    border-radius: 5px; /* Bo góc */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.read-button:hover {
+    background-color: #0056b3; /* Màu nền khi di chuột */
+}
+
+
+
+
+
+
