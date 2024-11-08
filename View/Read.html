@@ -1,208 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wattpad-like Chapter</title>
-    <link rel="stylesheet" href="../Css/Home.css">
+    <title>Đọc Truyện</title>
     <link rel="stylesheet" href="../Css/Read.css">
+    <script type="module" src="../Js/Read.js"></script>
+    <link rel="stylesheet" href="../Css/Home.css">
+    <script type="module" src="../Js/firebase_auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-     
 </head>
-<body>
-  <!-- Header Section -->
-  <header>
+<body class="home">
+ <!-- Header Section -->
+ <header>
     <div class="logo">
         <a href="Home.html"><h2>LonoVight</h2></a>
     </div>
     <div class="search-bar">
-        <button>
+        <button id="searchButton">
             <i class="fas fa-search"></i>
         </button>
-        <input class="field" type="text" placeholder="Search..."/>
+        <input class="field" id="searchInput" type="text" placeholder="Search..." />
     </div>
-    <div class="user-actions">
-        <div class="user-profile">
-            <img src="user-avatar.png" alt="User Avatar" class="user-avatar" />
-            <span class="user-name">Tên người dùng</span>
+    <div class = "contact">
+        <li><a href="Contact.html">Yêu cầu hỗ trợ</a></li>
+       
+    </div>
+    <div class = "contact">
+        
+        <li><a href="Notification.html">Thông báo</a></li>
+    </div>
+    <div class="auth-links">
+        <div id="authLinks">
+            <a href="SignUp.html" id="signupBtn">Sign Up / Login</a>
+        </div> 
+    </div>
+    <div class="user-info" id="userInfo" style="display: none;">
+        <span id="userEmail"></span>
+        <div class="dropdown">
+            <button class="dropdown-btn">Account <i class="fas fa-caret-down"></i></button>
+            <div class="dropdown-content">
+                <a href="UpdateProfile.html">Profile</a>
+                <a href="ReadLater.html">Library</a>
+                <a href="user-management.html" id="userManagementLink" style="display: none;">User Management</a>
+                <a href="#" id="logoutBtn">Logout</a>
+                
+            </div>
         </div>
     </div>
 </header>
-
-    <!-- Main Content -->
-    <main>
-        <div id="chapter-container">
-            <h1><strong >Bút ký phản công của nữ phụ pháo hôi</strong></h1>
-            <div class="nav-buttons">
-                <button id="prev-chapter1" disabled>Previous Chapter</button>
-                <button id="next-chapter1">Next Chapter</button>
-            </div>
-            <!-- Chapter 1 -->
-            <div class="chapter-info" id="chapter-1" style="display: block;">
-                <h1>Chương 1</h1>
-                <div class="stats">
-                    <span>👁️ 1.7K</span>
-                    <span>⭐ 31</span>
-                    <span>💬 1</span>
-                </div>
-                <p>Edit: Akito</p>
-            </div>
-            <article>
-                <h2>Chương 1</h2>
-                <p>Ninh Thư đứng bên cạnh giường bệnh, bác sĩ mặc áo blouse trắng từng bước từng bước đi xuyên qua thân thể của cô, cố cứu lấy cô gái nằm trên giường.</p>
-                <p>Ninh Thư cũng nhìn cô gái trên giường, khuôn mặt tái nhợt, trên đầu đã không còn tóc, thậm chí cả lông mày cũng không có, an tĩnh nằm ở trên giường.</p> 
-                <p>Người không có lông mày bộ dáng thật sự rất buồn cười.</p>
-                <p>Ninh Thư không ngờ lúc này lại cư nhiên lại rối rắm chuyện lông mày, có vẻ chết cũng phải đáng sợ cùng thống khổ như vậy ah, hiện tại Ninh Thư không cảm thấy bất luận thống khổ gì.</p>
-                <p>Đúng vậy, Ninh Thư chết rồi, cô đứng ở một bên nhìn thân thể của mình, tính toán một lần nữa trở lại trong thân thể, mặc dù bị ốm đau giày vò đến mức tàn phá thân thể thành từng mảnh, thế nhưng Ninh Thư vẫn là muốn sống.</p>
-                <p>Cảm giác lâng lâng như vậy lại khiến nội tâm Ninh Thư không nắm chức, thực không nỡ.</p> 
-                <p>Lúc này, cửa phòng bệnh mở ra, một đôi vợ chồng xông vào, liền chạy tới ôm thân thể Ninh Thư gào khóc thét lớn, hốc mắt đỏ bừng, phía sau còn có hai nam nhân, đây là anh trai Ninh Thư.</p> 
-                <p>Ninh Thư vươn tay muốn ôm mẹ mình, kết quả chính mình trực tiếp xuyên qua thân thể của đối phương.</p> 
-                <p>“Mẹ, mẹ không nên thương tâm như vậy, đây là em gái giải thoát rồi, em ấy là đi đến thế giới khác.” Anh cả Ninh Thư nâng bà ấy đứng dậy.</p> 
-                <p>Ninh Thư đứng bên cạnh quan sát họ, cô là giải thoát rồi, từ mười lăm tuổi bắt đầu nằm viện, mỗi tuần phải trị liệu bằng hóa chất hai lần, cái loại đau nhức thâm nhập tận xương tủy đã đi theo cô hơn mười năm.</p> 
-                <p>Giai đoạn đầu người trong nhà vô cùng tuyệt vọng, đối với cô vô cùng đau lòng, thế nhưng mà theo thời gian trôi qua, số lần bọn họ đến bệnh viện càng ngày càng ít, thậm chí đối với bệnh của cô đã chết lặng.</p> 
-                <p>Ninh Thư không có trách bọn họ, cô thậm chí cảm thấy mình may mắn khi sinh ra ở trong một gia đình giàu có, có thể cho cô tiếp nhận trị liệu, ở trên giường bệnh sống hơn mười năm cô cũng thỏa mãn rồi, chỉ là đời người có quá nhiều tiếc nuối.</p> 
-                <p>Linh hồn Ninh Thư nở nụ cười, cô cũng cảm kích người nhà của cô, cảm ơn mọi người.</p> 
-                <p>Hồn phách Ninh Thư bắt đầu càng nhẹ, thậm chí không chịu khống chế mà trôi nổi lên…, không bị chính mình khống chế, cũng không biết muốn trôi đi đến nơi nào đây.</p> 
-                <p>Đột nhiên Ninh Thư nghe được một thanh âm, âm thanh lãnh khốc lạnh như băng ở trong linh hồn của cô nổ vang.</p> 
-                <p>“Linh hồn đủ tư cách, trói lại không gian hệ thống.”</p> 
-                <p>Lập tức Ninh Thư cảm giác được một cỗ đồ vật lạnh buốc chảy vào trong linh hồn của cô, chính xác là linh hồn, cô cũng cảm thấy một lượng năng lượng lạnh buốt nổ tung ở trong linh hồn mình.</p> 
-                <p>Khi cỗ năng lượng này đánh xuống, Ninh Thư từ từ mà mất đi ý thức.</p>
-                <p>Trong giấc mơ, Ninh Thư cảm thấy có ánh sáng rực rỡ chiếu vào. Cô không còn đau đớn, mà cảm thấy nhẹ nhàng như đang bay lơ lửng.</p>
-                <p>Cô thấy một cánh cửa lớn mở ra, bên trong là một không gian đầy màu sắc và sống động.</p>
-                <p>Ninh Thư mỉm cười, dường như cô đã tìm thấy nơi mình thuộc về.</p>
-                <p>“Đây là thế giới mà tôi đã ước ao.” Cô thì thầm.</p>
-                <p>Ninh Thư khám phá những cảnh đẹp lạ lùng, từ những khu rừng huyền bí đến các lâu đài rực rỡ ánh sáng.</p>
-                <p>Cô gặp gỡ những người bạn mới, những sinh vật kỳ diệu không có ở thế giới thực.</p>
-                <p>“Tôi đã không còn là người bệnh tật. Tôi là Ninh Thư, người sống trong thế giới này.” Cô cảm thấy hạnh phúc hơn bao giờ hết.</p>
-            </article>
-
-            <!-- Chapter 2 -->
-            <div class="chapter-info" id="chapter-2" style="display: none;">
-                <h1 id="C2">Chương 2</h1>
-                <div class="stats">
-                    <span>👁️ 1.5K</span>
-                    <span>⭐ 28</span>
-                    <span>💬 2</span>
-                </div>
-                <p>Edit: Akito</p>
-            </div>
-
-            <article style="display: none;">
-                <h2>Chương 2</h2>
-                <p>Thế giới này có rất nhiều vị diện, mà nhiệm vụ của Ninh Thư là tiến vào bên trong mênh mông vô hạn nhiệm vụ, hoàn thành tâm nguyện người ủy thác, những…người ủy thác này dâng ra một thứ gì đó, cầu mong cuộc đời của mình có thể nghịch tập (thay đổi vận mệnh).</p>
-                <p>Nhiệm vụ giả vì thế mà xuất hiện.</p>
-                <p>Ninh Thư biết mình có thể tiến vào thân thể người khác, trong lòng thật cao hứng, thời điểm hoàn thành nhiệm vụ lại có thể đích thân thử một chút sinh hoạt của người khỏe mạnh, hoàn thành tiếc nuối đời trước của mình.</p>
-                <p>Bất quá đồ vật tự xưng là hệ thống đột nhiên giội nước lạnh, “Thời gian nhiệm vụ của cô chỉ có 5 năm, giá trị sinh mệnh của cô chỉ có 50, một chút điểm sinh mệnh là một năm, vượt quá điểm sinh mệnh cô sẽ hoàn toàn biến mất, đương nhiên, cô cũng có thể lựa chọn ở lại trong thế giới nhiệm vụ, trải qua hết cuộc đời của mình, sau đó…liền không có sau đó nữa.”</p>
-                <p>Ninh Thư gật gật đầu chứng tỏ chính mình minh bạch (hiểu rõ).</p>
-                <p>“Nhiệm vụ đầu tiên, hệ thống rút ra nhiệm vụ đơn giản nhất, thế giới vườn trường, hiện tại muốn mở ra nhiệm vụ hay không?” Thanh âm hệ thống cực kỳ lãnh khốc, cứng nhắc không chút tình cảm nào.</p>
-                <p>Mỗi lần nghe hệ thống phát ra tiếng, Ninh Thư đều có loại cảm giác cả người lạnh toát, vô cùng không thích thanh âm của nó, lập tức nói: “Mở ra nhiệm vụ.”</p>
-                <p>Ninh Thư vừa dứt lời, còn chưa kịp chuẩn bị, đầu thoáng cái liền lờ mờ, toàn thân giống như là bị nhét trong một cái bình giam cầm chật chội, không thể động đậy được khó chịu cơ hồ cũng như trải qua cái chết.</p>
-                <p>“Đánh chết cái này tiểu kỷ nữ, cũng không nhìn một chút xem chính mình là cái đức hạnh gì, lại dám đến gần vương tử.”</p>
-                <p>“Da mặt thật dày, lại còn coi mình như một đại tiểu thư, tiện nhân…” Đợi đến lúc Ninh Thư có cảm giác, chợt nghe được bên tai ong ong, rất nhiều người đều đang mắng chửi, không ngừng đá thân thể của cô, Ninh Thư cảm thấy những người này muốn đem xương cốt của mình hủy đi.</p>
-                <p>Đây là cái tình huống gì, không phải nói là nhiệm vụ đơn giản nhất sao? Như thế nào lại bị nhiều người đánh như vậy, đã nói đây là nhiệm vụ đơn giản nhất mà.</p>
-                <p>Ninh Thư mở to mắt, một vòng chung quanh đều là những đôi chân trắng thon dài, thỉnh thoảng lại duỗi chân ra đạp một cước lên người cô, Ninh Thư thậm chí còn có thể thấy quần lót lộ ra khi những người này nhấc chân.</p>
-                <p>Trên sàn một cỗ mùi tanh, còn có mùi hôi chỉ có trong toilet mới có, Ninh Thư thoáng cái liền hiểu cảnh ngộ của mình, chính mình là bị người vây đánh trong nhà cầu.</p>
-                <p>Hiện tại đầu của cô trống rỗng, căn bản không có thời gian tiếp thu nội dung của cái thế giới này, đối mặt với tình huống như vậy, Ninh Thư bỗng chốc có chút phát ngốc rồi.</p>
-                <p>Bỗng nhiên một bàn tay duỗi ra trước mặt Ninh Thư, bắt lấy cổ áo của cô đem cô lôi dậy, thân thể Ninh Thư không chịu khống chế mà đứng lên, mở to mắt, nhìn người phía trước.</p>
-                <p>Người đối diện bắt lấy cổ áo cô là một đứa con gái, trên người mặc đồng phục váy ngắn, ánh mắt nhìn Ninh Thư mang theo khinh thường cùng chán ghét, ngón tay chọc trên mặt Ninh Thư, móng tay thật dài cơ hồ muốn đâm vào bên trong da thịt của cô.</p>
-                <p>Thân thể Ninh Thư đau nhức, nhưng mà hơn mười năm dưới sự tra tấn giày vò của bệnh tật Ninh Thư đều nhịn được, chỉ là cỗ thân thể này không chịu được đau đớn, khiến cho Ninh Thư đau xót rên rỉ.</p>
-                <p>Nhìn ánh mắt đối phương lộ ra khoái ý, Ninh Thư trong lòng phát lạnh, đây là cừu hận lớn cỡ nào, có thể làm cho một cái tiểu cô nương lộ ra thần sắc như vậy.</p>
-                <p>Đây cũng không phải đơn giản là bạo lực vườn trường a.</p>
-                <p>Cô bé kia thấy khuôn mặt Ninh Thư dại ra, trực tiếp nắm lấy tóc của cô, túm tóc đem đầu cô đâm vào tường, nện tới vách tường vang lên tiếng bang bang.</p>
-                <p>Ninh Thư vốn đã phát ngốc rồi, hiện tại bị đối phương đem đầu đâm vào tường, đầu óc càng thêm mơ hồ, thậm chí cảm thấy linh hồn của mình muốn thoát khỏi cỗ thân thể này rồi, nội tâm Ninh Thư có chút kinh hoảng, không thể rời khỏi cỗ thân thể này, bằng không thì nhiệm vụ của cô làm sao bây giờ.</p>
-                <p>Không có chuyện làm nhiệm vụ lần đầu tiên liền thất bại như vậy, cô bản năng có thể cảm giác được, nếu cứ như thất bại như vậy, có khả năng cô sẽ biến mất, không còn tồn tại Ninh Thư người này.</p>
-                <p>Dựa vào một cỗ nghị lực, Ninh Thư chịu đựng thân thể đau đớn, có thể là thấy cô không có chống cự, cảm giác không thú vị, những…con nhóc này mới buông tha cô, lúc đi qua còn giẫm trên người cô, đau đến mức thân thể Ninh Thư thoáng cái co rút một phát.</p>
-                <p>Trong giây lát, đáy lòng Ninh Thư sinh ra hận ý cùng khuất nhục khó có thể kiềm chế, khiến Ninh Thư nhập vào cỗ thân thể này cũng run rẫy lên, hận hiện tại không thể tiến lên đem những người kia băm thây vạn đoạn, để cho bọn chúng nếm thử khuất nhục cùng đau đớn như vậy.</p>
-                <p>Ninh Thư bị phản ứng của cỗ thân thể này dọa sợ, hơn nửa ngày mới đem được cảm xúc này ngăn lại, từ trên mặt đất bò dậy, đi đến mở một buồng cửa vệ sinh, ngồi trên bồn cầu, cả người đều giống như mất hết sức lực.</p>
-                <p>Hiện tại khắp người Ninh Thư đều đau nhức, những…nha đầu chết tiệt kia ra tay cũng quá độc ác rồi, chờ đến lúc tâm tình hồi phục một ít, Ninh Thư mới bắt đầu tiếp thu nội dung thế giới này.</p>
-                <p>Ace là trường học quý tộc, có thể ở Ace đi học đều là những người không phú thì quý (không giàu thì là có quyền), là trường học của lớp con cháu thuộc gia đình nổi tiếng giàu có, ở nơi này tuyệt đối là chế độ đẳng cấp, trắng trợn đến mức hoàn toàn dựa vào tiền tài để quyết định địa vị của học sinh.</p>
-                <p>Nhưng rồi một ngày, cái nơi tất cả đều là thiên nga xinh đẹp này, xuất hiện một cái vịt con xấu xí, sự xuất hiện của cô ta giống như một vết nhơ trong bức họa trăm hoa, hoàn toàn chà đạp bức tranh xinh đẹp, cho nên, cái này vịt con xấu xí phải chịu đựng ác ý của mọi người, tầng tầng lớp lớp gây khó dễ cùng</p>
-            </article>
-
-            <!-- Chapter 3 -->
-            <div class="chapter-info" id="chapter-3" style="display: none;">
-                <h1 id="C3">Chương 3</h1>
-                <div class="stats">
-                    <span>👁️ 1.2K</span>
-                    <span>⭐ 25</span>
-                    <span>💬 3</span>
-                </div>
-                <p>Edit: Akito</p>
-            </div>
-
-            <article style="display: none;">
-                <h2>Chương 3</h2>
-                <p>Tu…chân giả?! (người tu chân) Ninh Thư há to miệng, không phải nói là thế giới đơn giản nhất sao? Như thế nào lại xuất hiện Tu Chân giả, Ninh Thư tất nhiên biết rõ Tu Chân giả là cái gì, trong mắt người bình thường chính là Thần Tiên ah.</p>
-    <p>Thế giới vườn trường như này lại xuất hiện nhân vật thuộc loại trâu bò.</p>
-    <p>Đối với nhiệm vụ lần này Ninh Thư đã không có hi vọng gì rồi, cô chỉ là người thường, đối phương lại là cái tồn tại mở bug, chơi đổ thạch, thành lập bang hội, chơi đùa thì toàn là hô mưa gọi gió, ở trường học là nữ thần được người người theo đuổi, bên ngoài trường lại là Ám Dạ Nữ Vương.</p>
-    <p>Cảm giác cái thế giới này sắp bị Lăng Tuyết chơi cho hư mất.</p>
-    <p>Hai bên chênh lệch quá nhiều, Ninh Thư thậm chí hoài nghi cái hệ thống lạnh như băng kia có hay không chỉnh mình, đây là nhiệm vụ đơn giản?</p>
-    <p>Lại nhìn tâm nguyện của nguyên chủ: đem Lăng Tuyết cao cao tại thượng đánh ném vào bãi rác, lại giúp Lãnh Ngạo người cô ấy thích không bị Lăng Tuyết thao túng đùa bỡn, còn có những người một mực giúp đỡ Lăng Tuyết bắt nạt cô, đều phải chịu trừng phạt.</p>
-    <p>Ninh Thư: …</p>
-    <p>Ninh Thư rõ ràng cảm nhận được nhiệm vụ không đúng, cực kỳ không đúng, tuy rằng cô là nhiệm vụ giả, nhưng ưu thế gì cũng đều không có, trước sức mạnh tuyệt đối, mọi thứ đều là mây bay, sức mạnh có thể phá hủy hết thảy.</p>
-    <p>Ninh Thư trong lòng thử kêu gào, xem có thể hay không liên hệ với hệ thống, tâm nguyện nguyên chủ thật sự quá khó khăn, cô nghịch tập không được.</p>
-    <p>Trong nội tâm Ninh Thư biết rõ mình có bao nhiêu cân lượng, cô phỏng chừng còn không có vọt tới trước mặt Lăng Tuyết, đã bị đánh cho đo ván nằm đất ăn hành rồi.</p>
-    <p>Cô thực là vô cùng quý trọng cái mạng nhỏ của mình.</p>
-    <p>Ninh Thư chỉ là thử một chút, thật sự không ngờ lại liên lạc được với hệ thống.</p>
-    <p>Bên kia vang lên một chút như là tiếng dòng điện, hệ thống mới cứng nhắc nói: “Cô như thế nào ở cái thế giới này?”</p>
-    <p>Ninh Thư hộc máu, làm sao cô biết như thế nào mình lại ở cái thế giới này.</p>
-    <p>“Đây là thế giới trung cấp, cô đến thế giới này làm cái gì, nhiệm vụ thế giới trung cấp cô làm không nổi, A…, hình như là truyền sai thế giới rồi, ừ, chương trình của tôi có chút vấn đề, tạm thời không thể đem cô truyền về, cô đã chiếm giữ thân phận người ủy thác, nhiệm vụ vẫn là phải tiếp tục đấy.”</p>
-    <p>Trong đầu vang lên âm thanh dòng điện xoẹt xoẹt, sau đó hệ thống biến mất, cả người Ninh Thư đều ngây dại, cho nên, nhiệm vụ của cô độ khó nâng lên n cấp?</p>
-    <p>Đột nhiên Ninh Thư nghĩ đến giá trị vận may của mình, giá trị may mắn có phải hay không là quá thấp? Mới có thể xảy ra tình huống như vậy, quả thực là muốn hố (gài bẫy) nàng ah.</p>
-    <p>Sự tình đã như vậy, Ninh Thư trái lại không sợ, không có đường lui Ninh Thư ngược lại sinh ra một cỗ lệ khí (tàn bạo), cô là người cũng đã chết qua rồi, lại sợ cái gì nữa, bây giờ có thể nhập vào một cơ thể khỏe mạnh như vậy, ngược lại Ninh Thư cảm thấy là mình được lợi.</p>
-    <p>Cái khác Ninh Thư không có, nhưng ẩn nhẫn cùng tính nhẫn nại thì cô chính là đứng đầu.</p>
-    <p>Về phần vừa rồi phát sinh sự việc bạo lực kia, là vì nguyên chủ chạy đến trước mặt Lãnh vương tử - Lãnh Ngạo nói Lăng Tuyết có quan hệ với lão đại xã hội đen.</p>
-    <p>Còn tự cho là mình làm đúng bảo Lãnh Ngạo tỉnh táo lại đừng để người ta lừa gạt, tóm lại nói xấu Lăng Tuyết rất nhiều.</p>
-    <p>Thực ra lời của nguyên chủ Lâm Giai Giai là sự thật, Lăng Tuyết có dính dáng tới xã hội đen, người có năng lực thành lập Hắc Sáp Hội chính là Lăng Tuyết, hơn nữa chân mệnh thiên tử của Lăng Tuyết là một lão đại bang hội.</p>
-    <p>Trưởng thành tàn nhẫn, vừa có thủ đoạn lại có khuôn mặt giống như Trương Thiên Thần mới là người Lăng Tuyết thích.</p>
-    <p>Trong trường học đối với được cái gì vương tử theo đuổi, ở trong mắt Lăng Tuyết chỉ là đám nhóc ấu trĩ, lúc nhàm chán thì cùng bọn hắn chơi đùa.</p>
-    <p>Nhưng hết lần này tới lần khác ba cái vương tử lại còn yêu thích điều này.</p>
-    <p>Lăng Tuyết biết nguyên chủ dám chạy tới trước mặt Lãnh Ngạo nói xấu mình, liền trực tiếp cho người giáo huấn nguyên chủ một chút, những người như vậy, Lăng Tuyết đều không cần động tay, mới có sự tình trong nhà cầu ban nãy.</p>
-    <p>Người vừa mới đánh Ninh Thư cũng là đối tượng báo thù của Lâm Giai Giai.</p>
-    <p>Ai, nhiệm vụ gánh thì nặng mà đường thì xa ah.</p>
-    <p>Hiện tại Ninh Thư không có biện pháp gì, mở cửa phòng vệ sinh, ra khỏi WC, đúng lúc này là thời gian vào học, nên không có ai lãng vãng trong sân trường.</p>
-    <p>Ninh Thư theo trong trí nhớ đi đến phòng Giáo Y, những vết thương trên người này liền phải xử lý, không có chuyện gì quan trọng hơn một thân thể khỏe mạnh, hơn nữa bây giờ cũng không làm được cái gì.</p>
-    <p>Giáo Y là một nam nhân hơn hai mươi tuổi, trên sóng mũi mang theo kính mắt, làm cho gương mặt anh tuấn của hắn thêm một tầng nho nhã ý nhị, áo blouse trắng mặc ở trên người hắn, lại mang theo hương vị nam tính gợi cảm.</p>
-    <p>Tóm lại là một nam nhân vô cùng có mị lực, chỉ là cái phòng này toàn là học sinh nữ bị đau, không phải đau bụng thì chính là đau chân, thậm chí dì cả đến còn bảo Giáo Y xoa xoa bụng nữa, như vậy liền có thể biết người nam nhân này rất được học sinh nữ hoan nghênh.</p>
-    <p>Ninh Thư mím môi, xếp vào hàng, nhìn phía trước nữ sinh trong mắt đều tỏa ra hoa đào, căn bản là nhìn không ra khó chịu ở chỗ nào, trong phòng này có lẽ chỉ có một mình cô là bị thương a, có thể hay không để cô lên trước.</p>
-</article>
-            </article>
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="nav-buttons">
-            <button id="prev-chapter" disabled>Previous Chapter</button>
-            <button id="next-chapter">Next Chapter</button>
-        </div>
-
-    </main>
-
-    <!-- Comment Section -->
-    <section id="comment-section">
-        <h3>Bình luận</h3>
-        <div class="comments">
-            <!-- Comment sẽ được thêm vào đây -->
-        </div>
-
-        <!-- Form để người dùng nhập tên và bình luận -->
-        <div class="comment-form">
-            <input type="text" id="name-input" placeholder="Nhập tên của bạn" />
-            <textarea id="comment-input" placeholder="Viết bình luận..."></textarea>
-            <button id="submit-comment">Gửi bình luận</button>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 LonoVight - All Rights Reserved.</p>
-        <div class="social-links">
-            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        </div>
-    </footer>
-    <script src="../Js/user.js"></script>
-    <script src="../Js/comments.js"></script>
-    <script src="../Js/Read.js"></script>
+</body>
+<body class="read">
+    <div id="story">
+        <h1 id="story-title"></h1> <!-- Tên truyện -->
+        <h2 id="chapter-title"></h2> <!-- Tiêu đề chương -->
+        <div id="navigation">
+        <!-- Nút điều hướng phía trên -->
+        <button id="prev-chapter-top" class="nav-button">Chương trước</button>
+        <button id="next-chapter-top" class="nav-button">Chương sau</button>
+    </div>
+        <p id="chapter-content"></p> <!-- Nội dung chương -->
+        <div id="navigation-bottom">
+        <!-- Nút điều hướng phía dưới -->
+        <button id="prev-chapter-bottom" class="nav-button">Chương trước</button>
+        <button id="next-chapter-bottom" class="nav-button">Chương sau</button>
+    </div>
+    </div>
+    
 </body>
 </html>

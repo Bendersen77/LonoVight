@@ -1,63 +1,91 @@
-let currentChapter = 1;
-const totalChapters = 3; // Cập nhật số lượng chương
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-// Hàm để điều hướng giữa các chương
-function navigateChapter(direction) {
-    // Ẩn chương hiện tại
-    document.getElementById(`chapter-${currentChapter}`).style.display = 'none';
-    document.querySelector(`article:nth-of-type(${currentChapter})`).style.display = 'none';
+// Firebase config
+const firebaseConfig = {
+    apiKey: "AIzaSyCDbH--EpZjimx-cc_HToTYyc69fOALCuA",
+    authDomain: "novolight-7dbfa.firebaseapp.com",
+    databaseURL: "https://novolight-7dbfa-default-rtdb.firebaseio.com",
+    projectId: "novolight-7dbfa",
+    storageBucket: "novolight-7dbfa.appspot.com",
+    messagingSenderId: "500138366341",
+    appId: "1:500138366341:web:21f3dd63f2b7a70f9aa0ec",
+    measurementId: "G-7PQF6N9T85"
+};
 
-    // Cập nhật chương hiện tại
-    currentChapter += direction;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const dbRef = ref(database, 'Truyen/story_e0vkrttwh/Chuong/');  // Đảm bảo đường dẫn đúng
 
-    // Đảm bảo chương hiện tại không vượt quá giới hạn
-    if (currentChapter < 1) {
-        currentChapter = 1; // Giữ lại chương đầu tiên
-    } else if (currentChapter > totalChapters) {
-        currentChapter = totalChapters; // Giữ lại chương cuối cùng
+let chapters = [];
+let currentChapterIndex = 0;
+
+// Load all chapters from Firebase
+get(dbRef).then((snapshot) => {
+    if (snapshot.exists()) {
+        chapters = snapshot.val();
+        console.log("Dữ liệu chương:", chapters);  // Kiểm tra dữ liệu lấy được từ Firebase
+        loadChapter(currentChapterIndex);  // Load chương đầu tiên
+    } else {
+        console.log("Không có dữ liệu");
     }
+}).catch((error) => {
+    console.error("Lỗi khi lấy dữ liệu: ", error);
+});
 
-    // Hiện chương mới
-    document.getElementById(`chapter-${currentChapter}`).style.display = 'block';
-    document.querySelector(`article:nth-of-type(${currentChapter})`).style.display = 'block';
+// Load a chapter
+function loadChapter(index) {
+    const chapter = chapters[`chapter_${index + 1}`];  // Lấy chương theo index
+    if (chapter) {
+        // Tên truyện có thể lấy từ Firebase nếu có
+        document.getElementById('story-title').innerText = "Bút Ký Phản Công Của Nữ Phụ Pháo Hôi";  // Hoặc lấy từ dữ liệu Firebase nếu có
+        document.getElementById('chapter-title').innerText = `Chương ${index + 1}: ${chapter.title}`;
+        document.getElementById('chapter-content').innerText = chapter.content;
 
-    // Cuộn lên đầu trang một cách mượt mà
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth' // Cuộn mượt mà
-    });
-
-    // Cập nhật trạng thái của nút
-    updateButtonState();
+        // Cuộn đến phần nội dung chương mà không cuộn lên đầu
+        const chapterContent = document.getElementById('chapter-content');
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Cuộn mượt mà
+        });
+    } else {
+        console.log("Chương không tồn tại");
+    }
 }
 
-// Hàm để cập nhật trạng thái của các nút
-function updateButtonState() {
-    document.getElementById('prev-chapter').disabled = currentChapter === 1;
-    document.getElementById('next-chapter').disabled = currentChapter === totalChapters;
-}
-
-// Thêm các sự kiện cho nút điều hướng
-document.getElementById('next-chapter').addEventListener('click', function() {
-    navigateChapter(1); // Đi tới chương tiếp theo
+// Handle next chapter
+document.getElementById('next-chapter-top').addEventListener('click', (event) => {
+    event.preventDefault();  // Ngừng hành động mặc định (tránh cuộn lên đầu trang)
+    if (currentChapterIndex < Object.keys(chapters).length - 1) {
+        currentChapterIndex++;
+        loadChapter(currentChapterIndex);
+    }
 });
 
-document.getElementById('prev-chapter').addEventListener('click', function() {
-    navigateChapter(-1); // Đi tới chương trước
-});
-// Hàm để cập nhật trạng thái của các nút
-function updateButtonState() {
-    document.getElementById('prev-chapter1').disabled = currentChapter === 1;
-    document.getElementById('next-chapter1').disabled = currentChapter === totalChapters;
-}
-
-// Thêm các sự kiện cho nút điều hướng
-document.getElementById('next-chapter1').addEventListener('click', function() {
-    navigateChapter(1); // Đi tới chương tiếp theo
+// Handle previous chapter
+document.getElementById('prev-chapter-top').addEventListener('click', (event) => {
+    event.preventDefault();  // Ngừng hành động mặc định
+    if (currentChapterIndex > 0) {
+        currentChapterIndex--;
+        loadChapter(currentChapterIndex);
+    }
 });
 
-document.getElementById('prev-chapter1').addEventListener('click', function() {
-    navigateChapter(-1); // Đi tới chương trước
+// Handle next chapter
+document.getElementById('next-chapter-bottom').addEventListener('click', (event) => {
+    event.preventDefault();  // Ngừng hành động mặc định
+    if (currentChapterIndex < Object.keys(chapters).length - 1) {
+        currentChapterIndex++;
+        loadChapter(currentChapterIndex);
+    }
 });
-// Gọi hàm cập nhật trạng thái ban đầu
-updateButtonState();
+
+// Handle previous chapter
+document.getElementById('prev-chapter-bottom').addEventListener('click', (event) => {
+    event.preventDefault();  // Ngừng hành động mặc định
+    if (currentChapterIndex > 0) {
+        currentChapterIndex--;
+        loadChapter(currentChapterIndex);
+    }
+});
