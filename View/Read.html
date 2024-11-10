@@ -10,6 +10,7 @@
     <script type="module" src="../Js/firebase_auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+<body>
 <body class="home">
  <!-- Header Section -->
  <header>
@@ -54,18 +55,27 @@
     <div id="story">
         <h1 id="story-title"></h1> <!-- Tên truyện -->
         <h2 id="chapter-title"></h2> <!-- Tiêu đề chương -->
+        
+        <!-- Điều hướng chương trên -->
         <div id="navigation">
-        <!-- Nút điều hướng phía trên -->
-        <button id="prev-chapter-top" class="nav-button">Chương trước</button>
-        <button id="next-chapter-top" class="nav-button">Chương sau</button>
-    </div>
-        <p id="chapter-content"></p> <!-- Nội dung chương -->
+            <button id="prev-chapter-top" class="nav-button">Chương trước</button>
+            <div class="chapter-select" id="chapterSelectContainer">
+                <select id="chapterSelect" class="chapter-select-box"></select>
+            </div>
+            <button id="next-chapter-top" class="nav-button">Chương sau</button>
+        </div>
+
+        <!-- Nội dung chương -->
+        <p id="chapter-content"></p>
+
+        <!-- Điều hướng chương dưới -->
         <div id="navigation-bottom">
-        <!-- Nút điều hướng phía dưới -->
-        <button id="prev-chapter-bottom" class="nav-button">Chương trước</button>
-        <button id="next-chapter-bottom" class="nav-button">Chương sau</button>
+            <button id="prev-chapter-bottom" class="nav-button">Chương trước</button>
+            <div class="chapter-select" id="chapterSelectContainerBottom">
+                <select id="chapterSelectBottom" class="chapter-select-box"></select>
+            </div>
+            <button id="next-chapter-bottom" class="nav-button">Chương sau</button>
+        </div>
     </div>
-    </div>
-    
 </body>
 </html>
