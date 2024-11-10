@@ -48,6 +48,7 @@
             <h3 id="storyCategory">Thể loại</h3>
             <p id="storyDescription">Mô tả chi tiết truyện...</p>
             <a id="readButton" href="Read.html" class="read-button">Đọc Truyện</a>
+
         </div>
 
         
@@ -110,6 +111,10 @@
                     document.getElementById('storyImage').src = storyData.imageUrl;
                     document.getElementById('storyCategory').textContent = `Thể loại: ${storyData.category}`;
                     document.getElementById('storyDescription').textContent = storyData.description;
+
+                    // Cập nhật liên kết Đọc Truyện với storyId
+            const readButton = document.getElementById('readButton');
+            readButton.href = `Read.html?id=${storyId}`;  // Thêm id vào URL của Read.html
                 } else {
                     alert("Truyện không tồn tại.");
                 }
