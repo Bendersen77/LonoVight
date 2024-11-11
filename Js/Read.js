@@ -1,7 +1,8 @@
+// Import Firebase functions at the top level
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
-
-// Firebase config
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCDbH--EpZjimx-cc_HToTYyc69fOALCuA",
     authDomain: "novolight-7dbfa.firebaseapp.com",
@@ -15,7 +16,75 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const database = getDatabase(app);
+
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const userEmailElement = document.getElementById('userEmail');
+    const userInfoElement = document.getElementById('userInfo');
+    const userManagementLink = document.getElementById('userManagementLink');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const signupBtn = document.getElementById('signupBtn'); 
+
+    // Check login status using Firebase Authentication
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, display user info
+            console.log("User logged in:", user.email);
+            if (userEmailElement && userInfoElement) {
+                userEmailElement.textContent = user.email;
+                userInfoElement.style.display = "block";
+            }
+
+            // Hide the "Sign Up" button when logged in
+            if (signupBtn) {
+                signupBtn.style.display = "none";
+            }
+
+            // Get the user's role from the Firebase Realtime Database
+            const roleRef = ref(database, `Users/${user.uid}/role`);
+            get(roleRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const role = snapshot.val();
+                    console.log("User Role:", role);
+
+                    if (userManagementLink) {
+                        if (role === 'Admin') {
+                            userManagementLink.style.display = "block";
+                        } else {
+                            userManagementLink.style.display = "none"; // Hide if not Admin
+                        }
+                    }
+
+                    // Load stories for all users
+                    loadStories();
+                } else {
+                    console.error("User role not found in the database.");
+                }
+            }).catch((error) => {
+                console.error("Error getting user role:", error);
+            });
+
+            // Logout event
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    signOut(auth).then(() => {
+                        console.log('User logged out');
+                        window.location.href = 'Home.html';
+                    }).catch((error) => {
+                        console.error("Error logging out:", error);
+                    });
+                });
+            }
+
+        } else {
+            // No user is signed in, redirect to SignUp or Login page
+            console.log("No user is logged in");
+        }
+    });
+});
+
 
 // Lấy ID truyện từ URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -134,4 +203,79 @@ if (!storyId) {
         .catch((error) => {
             console.error("Lỗi khi lấy dữ liệu: ", error);
         });
+        const searchInput = document.getElementById('searchInput');
+const suggestionsBox = document.getElementById('suggestionsBox');
+
+// Bắt sự kiện khi người dùng nhập vào ô tìm kiếm
+searchInput.addEventListener('input', async function() {
+    const query = searchInput.value.trim().toLowerCase();
+    if (query) {
+        await showSearchSuggestions(query);
+    } else {
+        suggestionsBox.innerHTML = ''; // Xóa gợi ý khi không có input
+    }
+});
+
+// Hiển thị gợi ý tìm kiếm
+async function showSearchSuggestions(query) {
+    try {
+        const storiesRef = ref(database, 'Truyen');
+        const snapshot = await get(storiesRef);
+        const stories = snapshot.val();
+        
+        suggestionsBox.innerHTML = ''; // Xóa các gợi ý cũ
+
+        // Duyệt qua danh sách truyện và lọc theo từ khóa ở bất kỳ vị trí nào
+        for (const id in stories) {
+            const story = stories[id];
+            if (story.name.toLowerCase().includes(query)) { // Tìm kiếm chuỗi ở bất kỳ vị trí nào
+                const suggestionItem = document.createElement('div');
+                suggestionItem.classList.add('suggestion-item');
+                suggestionItem.textContent = story.name;
+
+                // Thêm sự kiện click vào gợi ý
+                suggestionItem.addEventListener('click', () => {
+                    // Hiển thị tên truyện đã chọn trong ô input
+                    searchInput.value = story.name;
+                    
+                    // Xóa các gợi ý sau khi người dùng chọn
+                    suggestionsBox.innerHTML = '';
+                    
+                    // Điều hướng tới trang chi tiết truyện
+                    window.location.href = `StoryDetail.html?id=${id}`;
+                });
+
+                // Thêm sự kiện hover vào mục gợi ý
+                suggestionItem.addEventListener('mouseover', () => {
+                    suggestionItem.classList.add('selected');
+                });
+
+                suggestionItem.addEventListener('mouseout', () => {
+                    suggestionItem.classList.remove('selected');
+                });
+
+                suggestionsBox.appendChild(suggestionItem);
+            }
+        }
+
+        // Hiển thị thông báo không tìm thấy kết quả
+        if (suggestionsBox.innerHTML === '') {
+            const noResultItem = document.createElement('div');
+            noResultItem.classList.add('suggestion-item');
+            noResultItem.textContent = 'Không tìm thấy câu truyện nào';
+            suggestionsBox.appendChild(noResultItem);
+        }
+    } catch (error) {
+        console.error("Lỗi khi tìm kiếm gợi ý:", error);
+        alert("Không thể hiển thị gợi ý. Vui lòng thử lại sau.");
+    }
+}
+
+// Ẩn khung gợi ý khi người dùng nhấn ra ngoài
+document.addEventListener('click', function(event) {
+    if (!searchInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
+        suggestionsBox.innerHTML = '';
+    }
+});
+
 }
