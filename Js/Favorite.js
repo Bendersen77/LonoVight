@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
 
                     
-                    loadReadLaterStories(user.uid);
+                    loadFavoriteStories(user.uid);
                 } else {
                     console.error("User role not found in the database.");
                 }
@@ -86,20 +86,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 // Function to remove a story from the "Read Later" list
-function removeFromReadLater(storyId) {
+function removeFromFavorite(storyId) {
     // Get the current logged-in user
     const user = auth.currentUser;
     if (user) {
-        const readLaterRef = ref(database, `Users/${user.uid}/ReadLater/${storyId}`);
-        remove(readLaterRef)
+        const FavoriteRef = ref(database, `Users/${user.uid}/Favorite/${storyId}`);
+        remove(FavoriteRef)
             .then(() => {
-                console.log(`Story with ID ${storyId} removed from Read Later list.`);
+                console.log(`Story with ID ${storyId} removed from Favorite list.`);
                 alert("Story removed from Favorite.");
                 // Reload the Read Later stories after removal
-                loadReadLaterStories(user.uid);
+                loadFavoriteStories(user.uid);
             })
             .catch((error) => {
-                console.error("Error removing story from Read Later:", error);
+                console.error("Error removing story from Favorite:", error);
                 alert("Failed to remove the story. Please try again.");
             });
     } else {
@@ -107,22 +107,22 @@ function removeFromReadLater(storyId) {
     }
 }
 // Function to load user's Read Later stories
-async function loadReadLaterStories(userId) {
+async function loadFavoriteStories(userId) {
     try {
-        const readLaterRef = ref(database, `Users/${userId}/ReadLater`);
-        const snapshot = await get(readLaterRef);
-        const readLaterStories = snapshot.val();
+        const FavoriteRef = ref(database, `Users/${userId}/Favorite`);
+        const snapshot = await get(FavoriteRef);
+        const FavoriteStories = snapshot.val();
 
-        const readLaterContainer = document.getElementById('readLaterContainer');
-        readLaterContainer.innerHTML = '';
+        const FavoriteContainer = document.getElementById('FavoriteContainer');
+        FavoriteContainer.innerHTML = '';
 
-        if (!readLaterStories) {
-            readLaterContainer.innerHTML = '<p>No stories saved for Favorite Stories.</p>';
+        if (!FavoriteStories) {
+            FavoriteContainer.innerHTML = '<p>No stories saved for Favorite.</p>';
             return;
         }
 
-        for (const storyId in readLaterStories) {
-            const story = readLaterStories[storyId];
+        for (const storyId in FavoriteStories) {
+            const story = FavoriteStories[storyId];
 
             const storyDiv = document.createElement('div');
             storyDiv.classList.add('single-card');
@@ -139,12 +139,12 @@ async function loadReadLaterStories(userId) {
                 </div>
             `;
 
-            readLaterContainer.appendChild(storyDiv);
+            FavoriteContainer.appendChild(storyDiv);
 
             // Attach event listener for the "Remove" button
             const removeButton = document.getElementById(`removeBtn-${storyId}`);
             removeButton.addEventListener('click', () => {
-                removeFromReadLater(storyId);
+                removeFromFavorite(storyId);
             });
 
             // Attach event listener for the "Start reading" button
@@ -155,7 +155,7 @@ async function loadReadLaterStories(userId) {
         }
 
     } catch (error) {
-        console.error("Error loading Read Later stories:", error);
+        console.error("Error loading Favorite stories:", error);
         alert("Could not load your saved stories. Please try again later.");
     }
 }
