@@ -17,18 +17,7 @@
             </button>
             <input class="field" id="searchInput" type="text" placeholder="Search..." />
         </div>
-        <div class = "contact">
-            <li><a href="Contact.html">Yêu cầu hỗ trợ</a></li>
-           
-        </div>
-        <div class = "contact">
-            
-            <li><a href="Notification.html">Thông báo</a></li>
-        </div>
-        <div class = "contact">
-            
-            <li><a href="FavoriteStory.html">Danh sách yêu thích</a></li>
-        </div>
+       
         <div class="auth-links">
             <div id="authLinks">
                 <a href="SignUp.html" class="signup">Sign Up / Login</a>
@@ -93,6 +82,74 @@
         // Lấy ID truyện từ URL
         const urlParams = new URLSearchParams(window.location.search);
         const storyId = urlParams.get('id');
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const userEmailElement = document.getElementById('userEmail');
+    const userInfoElement = document.getElementById('userInfo');
+    const userManagementLink = document.getElementById('userManagementLink');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const signupBtn = document.getElementById('signupBtn'); 
+
+    // Check login status using Firebase Authentication
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, display user info
+            console.log("User logged in:", user.email);
+            if (userEmailElement && userInfoElement) {
+                userEmailElement.textContent = user.email;
+                userInfoElement.style.display = "block";
+            }
+
+            // Hide the "Sign Up" button when logged in
+            if (signupBtn) {
+                signupBtn.style.display = "none";
+            }
+
+            // Get the user's role from the Firebase Realtime Database
+            const roleRef = ref(database, `Users/${user.uid}/role`);
+            get(roleRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const role = snapshot.val();
+                    console.log("User Role:", role);
+
+                    if (userManagementLink) {
+                        if (role === 'Admin') {
+                            userManagementLink.style.display = "block";
+                        } else {
+                            userManagementLink.style.display = "none"; // Hide if not Admin
+                        }
+                    }
+
+                    
+                    displayStoryDetails(user.uid);
+                } else {
+                    console.error("User role not found in the database.");
+                }
+            }).catch((error) => {
+                console.error("Error getting user role:", error);
+            });
+
+            // Logout event
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    signOut(auth).then(() => {
+                        console.log('User logged out');
+                        window.location.href = 'Home.html';
+                    }).catch((error) => {
+                        console.error("Error logging out:", error);
+                    });
+                });
+            }
+
+        } else {
+            // No user is signed in, redirect to SignUp or Login page
+            console.log("No user is logged in");
+        }
+    });
+});
+
+
 
         // Lấy và hiển thị thông tin truyện từ Firebase
         async function displayStoryDetails() {

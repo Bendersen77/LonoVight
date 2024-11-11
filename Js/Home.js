@@ -109,6 +109,7 @@ async function loadStories() {
                         <h3 class="story-name">${story.name}</h3>
                         <button class="view-details" data-id="${id}">Start reading</button>
                         <button class="read-later" data-id="${id}">Read Later</button> <!-- Read Later button -->
+                        <button class="add-favorite" data-id="${id}">Add Your Favorite</button>
                     </div>
                 </div>
             `;
@@ -131,6 +132,12 @@ async function loadStories() {
             button.addEventListener('click', (event) => {
                 const storyId = event.target.getAttribute('data-id');
                 addStoryToReadLater(storyId);
+            });
+        });
+        document.querySelectorAll('.add-favorite').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const storyId = event.target.getAttribute('data-id');
+                addStoryToFavorite(storyId);
             });
         });
     } catch (error) {
@@ -240,6 +247,49 @@ async function addStoryToReadLater(storyId) {
     } catch (error) {
         console.error("Error adding story to Read Later:", error);
         alert("Could not add story to Read Later list. Please try again later.");
+    }
+}
+
+async function addStoryToFavorite(storyId) {
+    const user = auth.currentUser;
+
+    if (!user) {
+        alert("You must be logged in to save a story to your Favorite list.");
+        return;
+    }
+
+    try {
+        // Get the story data from the database
+        const storyRef = ref(database, `Truyen/${storyId}`);
+        const storySnapshot = await get(storyRef);
+        
+        if (!storySnapshot.exists()) {
+            alert("Story does not exist.");
+            return;
+        }
+
+        const storyData = storySnapshot.val();
+
+        // Reference to the user's Read Later list
+        const userFavoriteRef = ref(database, `Users/${user.uid}/Favorite/${storyId}`);
+        const userFavoriteSnapshot = await get(userFavoriteRef);
+
+        if (userFavoriteSnapshot.exists()) {
+            alert("This story is already in your Favorite.");
+        } else {
+            // Add the story to the user's Read Later list
+            await set(userFavoriteRef, {
+                name: storyData.name,
+                imageUrl: storyData.imageUrl,
+                category: storyData.category,   
+                description: storyData.description
+            });
+
+            alert("Story added to your Favorite list!");
+        }
+    } catch (error) {
+        console.error("Error adding story to Favorite:", error);
+        alert("Could not add story to Favorite list. Please try again later.");
     }
 }
 
