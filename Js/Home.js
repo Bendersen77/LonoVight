@@ -105,7 +105,7 @@ async function loadStories() {
 
             const currentUser = auth.currentUser;
             const readLaterButton = currentUser ? 
-                `<button class="read-later" data-id="${id}">Add to Library</button>` : 
+                `<button class="read-later" data-id="${id}">Read Later</button>` : 
                 '';
 
             storyDiv.innerHTML = `
@@ -113,10 +113,9 @@ async function loadStories() {
                     <img src="${story.imageUrl}" alt="${story.name}">
                     <div class="overlay">
                         <h3 class="story-name">${story.name}</h3>
-                        <button class="view-details" onclick="location.href='StoryDetail.html?id=${id}'">Start reading</button>
+                        <button class="view-details" data-id="${id}">Start reading</button>
                         ${readLaterButton}
-                        <button class="add-favorite" data-id="${id}">Add Your Favorite</button>
-
+                        <button class="add-favorite" data-id="${id}">Add to Favorite</button>
                     </div>
                 </div>
             `;
@@ -133,7 +132,7 @@ async function loadStories() {
                     await saveStoryToHistory(storyId);
                 }
 
-                location.href = `chi-tiet-truyen.html?id=${storyId}`;
+                location.href = `StoryDetail.html?id=${storyId}`;
             });
         });
 
@@ -200,10 +199,7 @@ async function searchStories(query) {
                         <img src="${story.imageUrl}" alt="${story.name}">
                         <div class="overlay">
                             <h3 class="story-name">${story.name}</h3>
-                            <button class="view-details" onclick="location.href='StoryDetail.html?id=${id}'">Start reading</button>
-                            <button class="read-later" data-id="${id}">Add to Library</button>
-                            <button class="add-favorite" data-id="${id}">Add Your Favorite</button>
-
+                            <button class="view-details" onclick="location.href='StoryDetails.html?id=${id}'">Start reading</button>
                         </div>
                     </div>
                 `;
@@ -215,33 +211,6 @@ async function searchStories(query) {
         if (storyContainer.innerHTML === '') {
             storyContainer.innerHTML = '<p>No stories found matching your search.</p>';
         }
-        // Attach event listeners to "Start Reading" buttons
-        document.querySelectorAll('.view-details').forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const storyId = event.target.getAttribute('data-id');
-                const currentUser = auth.currentUser;
-                
-                if (currentUser) {
-                    await saveStoryToHistory(storyId);
-                }
-
-                location.href = `chi-tiet-truyen.html?id=${storyId}`;
-            });
-        });
-
-        // Attach event listeners to Read Later buttons
-        document.querySelectorAll('.read-later').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const storyId = event.target.getAttribute('data-id');
-                addStoryToReadLater(storyId);
-            });
-        });
-        document.querySelectorAll('.add-favorite').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const storyId = event.target.getAttribute('data-id');
-                addStoryToFavorite(storyId);
-            });
-        });
     } catch (error) {
         console.error("Error searching stories:", error);
         alert("Could not search stories. Please try again later.");
@@ -344,6 +313,7 @@ async function saveStoryToHistory(storyId) {
         console.error("Error saving to history:", error);
     }
 }
+
 
 
 async function addStoryToFavorite(storyId) {

@@ -1,7 +1,7 @@
 // Import Firebase functions at the top level
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
-import { getDatabase, ref, get , remove} from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
 
-                    
                     loadReadLaterStories(user.uid);
+                    loadHistory(user.uid);
                 } else {
                     console.error("User role not found in the database.");
                 }
@@ -82,10 +82,12 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // No user is signed in, redirect to SignUp or Login page
             console.log("No user is logged in");
+            if (signupBtn) {
+                signupBtn.style.display = "block";
+            }
         }
     });
 });
-
 
 //Vertical navigation bar
 document.addEventListener('DOMContentLoaded', function() {
@@ -109,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Load user's reading history amd read later
+// Load user's reading history and read later
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         await loadReadLater(user.uid);
@@ -119,7 +121,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Keep original loadReadLater function
+// Load read later stories
 async function loadReadLater(userId) {
     try {
         const readLaterRef = ref(database, `Users/${userId}/ReadLater`);
@@ -184,9 +186,7 @@ async function loadReadLater(userId) {
     }
 }
 
-
-
-
+// Load user's reading history
 async function loadHistory(userId) {
     try {
         const historyRef = ref(database, `Users/${userId}/History`);
@@ -194,41 +194,30 @@ async function loadHistory(userId) {
         const historyContainer = document.getElementById('historyContainer');
         historyContainer.innerHTML = '';
 
-        // Add header
-        const headerDiv = document.createElement('div');
-        headerDiv.classList.add('history-header');
-        headerDiv.innerHTML = `
-            <div class="novel-title">Novel Title</div>
-            <div class="progress">Progress</div>
-            <div class="last-read">Last Read</div>
-        `;
-        historyContainer.appendChild(headerDiv);
-
         if (snapshot.exists()) {
             const histories = snapshot.val();
-            
+
             for (const [storyId, story] of Object.entries(histories)) {
-                // Get the chapters data for this story - update path to match your structure
-                const chaptersRef = ref(database, `Truyen/${storyId}/Chuong`);
+                const chaptersRef = ref(database, `Truyen/${storyId}/Chuong/`);
                 const chaptersSnapshot = await get(chaptersRef);
-                
-                // Calculate total chapters and progress
+                const lastReadChaptersRef = ref(database, `Users/${userId}/lastReadChapters`);
+
                 let totalChapters = 0;
                 let currentChapter = parseInt(story.currentChapter) || 1;
-                
+                const lastReadChapterSnapshot = await get(lastReadChaptersRef);
+                if (lastReadChapterSnapshot.exists()) {
+                    const lastReadChapters = lastReadChapterSnapshot.val();
+                    if (lastReadChapters && lastReadChapters[storyId]) {
+                        currentChapter = lastReadChapters[storyId].chapterIndex;
+                    }
+                }
                 if (chaptersSnapshot.exists()) {
-                    // Count actual chapters
                     totalChapters = Object.keys(chaptersSnapshot.val()).length;
                 } else {
-                    totalChapters = currentChapter; // Fallback if no chapters found
+                    totalChapters = currentChapter;
                 }
 
-                // Calculate progress percentage
-                const progress = totalChapters > 0 
-                    ? ((currentChapter / totalChapters) * 100).toFixed(1) 
-                    : 0;
-                
-                // Calculate time ago
+                const progress = totalChapters > 0 ? ((currentChapter / totalChapters) * 100).toFixed(1) : 0;
                 const lastReadDate = new Date(story.lastRead);
                 const timeAgo = getTimeAgo(lastReadDate);
 
@@ -252,21 +241,32 @@ async function loadHistory(userId) {
                     </div>
                     <div class="last-read-section">
                         <span class="time-ago">${timeAgo}</span>
-                        <a href="Read.html?id=${storyId}" class="chapter-info">
-                            Continue Chapter ${currentChapter}
+                        <a href="#" class="chapter-info" data-story-id="${storyId}" data-chapter-index="${currentChapter}">
+                            Continue Reading from Chapter ${currentChapter}
                         </a>
                     </div>
                 `;
+
+                // Add click event listener to chapter information
+                const chapterInfo = historyDiv.querySelector('.chapter-info');
+                chapterInfo.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const storyId = event.target.dataset.storyId;
+                    const chapterIndex = parseInt(event.target.dataset.chapterIndex);  // No need to subtract 1
+                    window.location.href = `Read.html?id=${storyId}&chapter=${chapterIndex}`;
+                });
+
                 historyContainer.appendChild(historyDiv);
             }
         } else {
-            historyContainer.innerHTML += '<p class="no-stories">No reading history yet.</p>';
+            console.error("User's history not found in the database.");
         }
     } catch (error) {
-        console.error("Error loading history:", error);
-        historyContainer.innerHTML = '<p class="error">Failed to load reading history. Please try again later.</p>';
+        console.error("Error loading user's history:", error);
     }
 }
+
+// Get time ago in a human-readable format
 function getTimeAgo(date) {
     const now = new Date();
     const diffInSeconds = Math.floor((now - date) / 1000);

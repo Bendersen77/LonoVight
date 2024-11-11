@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
 import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
 // Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCDbH--EpZjimx-cc_HToTYyc69fOALCuA",
@@ -19,30 +20,27 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // DOM Elements
     const userEmailElement = document.getElementById('userEmail');
     const userInfoElement = document.getElementById('userInfo');
     const userManagementLink = document.getElementById('userManagementLink');
     const logoutBtn = document.getElementById('logoutBtn');
-    const signupBtn = document.getElementById('signupBtn'); 
+    const signupBtn = document.getElementById('signupBtn');
 
     // Check login status using Firebase Authentication
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // User is signed in, display user info
             console.log("User logged in:", user.email);
             if (userEmailElement && userInfoElement) {
                 userEmailElement.textContent = user.email;
                 userInfoElement.style.display = "block";
             }
 
-            // Hide the "Sign Up" button when logged in
             if (signupBtn) {
                 signupBtn.style.display = "none";
             }
 
-            // Get the user's role from the Firebase Realtime Database
             const roleRef = ref(database, `Users/${user.uid}/role`);
             get(roleRef).then((snapshot) => {
                 if (snapshot.exists()) {
@@ -53,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (role === 'Admin') {
                             userManagementLink.style.display = "block";
                         } else {
-                            userManagementLink.style.display = "none"; // Hide if not Admin
+                            userManagementLink.style.display = "none";
                         }
                     }
 
@@ -66,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Error getting user role:", error);
             });
 
-            // Logout event
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', () => {
                     signOut(auth).then(() => {
@@ -79,12 +76,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
         } else {
-            // No user is signed in, redirect to SignUp or Login page
             console.log("No user is logged in");
         }
     });
 });
-
 
 // Lấy ID truyện từ URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -98,43 +93,59 @@ if (!storyId) {
     const storyRef = ref(database, `Truyen/${storyId}`);
     const chapterRef = ref(database, `Truyen/${storyId}/Chuong/`);
 
-    // Create a promise array to fetch both data at once
+    // Check for the last read chapter when user is logged in
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const lastReadRef = ref(database, `Users/${user.uid}/lastReadChapters/${storyId}`);
+            get(lastReadRef).then((lastReadSnapshot) => {
+                let lastReadChapterIndex = 0;
+                if (lastReadSnapshot.exists()) {
+                    lastReadChapterIndex = lastReadSnapshot.val().chapterIndex - 1;
+                }
+                loadStoryAndChapters(lastReadChapterIndex);
+            }).catch((error) => {
+                console.error("Error loading last read chapter:", error);
+                loadStoryAndChapters(0);  // Default to chapter 1 if error occurs
+            });
+        } else {
+            loadStoryAndChapters(0);  // Default to chapter 1 if no user is logged in
+        }
+    });
+
+    // Function to load the story and chapters
+function loadStoryAndChapters(startChapterIndex) {
     Promise.all([get(storyRef), get(chapterRef)])
         .then(([storySnapshot, chapterSnapshot]) => {
             if (storySnapshot.exists() && chapterSnapshot.exists()) {
                 const storyData = storySnapshot.val();
                 const chapters = chapterSnapshot.val();
 
-                // Display the story title
                 document.getElementById('story-title').innerText = storyData.name;
 
-                // Initialize chapter data
-                let currentChapterIndex = 0;
+                let currentChapterIndex = startChapterIndex;
                 loadChapter(currentChapterIndex, chapters);
-
-                // Populate chapter selection dropdowns
                 populateChapterSelect(chapters);
 
-                // Handle chapter navigation
+                // Sync dropdown after loading the chapter
+                syncChapterSelect();
+
                 document.getElementById('prev-chapter-top').addEventListener('click', () => goToPreviousChapter(chapters));
                 document.getElementById('next-chapter-top').addEventListener('click', () => goToNextChapter(chapters));
                 document.getElementById('prev-chapter-bottom').addEventListener('click', () => goToPreviousChapter(chapters));
                 document.getElementById('next-chapter-bottom').addEventListener('click', () => goToNextChapter(chapters));
 
-                // Update content display on dropdown change
                 document.getElementById('chapterSelect').addEventListener('change', (event) => {
                     currentChapterIndex = parseInt(event.target.value);
                     loadChapter(currentChapterIndex, chapters);
-                    document.getElementById('chapterSelectBottom').value = currentChapterIndex;
+                    syncChapterSelect();
                 });
 
                 document.getElementById('chapterSelectBottom').addEventListener('change', (event) => {
                     currentChapterIndex = parseInt(event.target.value);
                     loadChapter(currentChapterIndex, chapters);
-                    document.getElementById('chapterSelect').value = currentChapterIndex;
+                    syncChapterSelect();
                 });
 
-                // Update navigation button state when a chapter is loaded
                 function updateNavigationButtons(index, chapters) {
                     const prevDisabled = index === 0;
                     const nextDisabled = index === Object.keys(chapters).length - 1;
@@ -145,7 +156,6 @@ if (!storyId) {
                     document.getElementById('next-chapter-bottom').disabled = nextDisabled;
                 }
 
-                // Load chapter function
                 function loadChapter(index, chapters) {
                     const chapter = chapters[`chapter_${index + 1}`];
                     if (chapter) {
@@ -153,10 +163,27 @@ if (!storyId) {
                         document.getElementById('chapter-content').innerText = chapter.content;
                         updateNavigationButtons(index, chapters);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
+                        saveLastReadChapter(storyId, index, chapter.title);
                     }
                 }
 
-                // Go to previous chapter
+                function saveLastReadChapter(storyId, chapterIndex, chapterTitle) {
+                    const user = auth.currentUser;
+                    if (user) {
+                        const lastReadRef = ref(database, `Users/${user.uid}/lastReadChapters/${storyId}`);
+                        set(lastReadRef, {
+                            chapterIndex: chapterIndex + 1,
+                            chapterTitle: chapterTitle,
+                            storyId: storyId,
+                            timestamp: Date.now()
+                        }).then(() => {
+                            console.log('Last read chapter saved successfully.');
+                        }).catch((error) => {
+                            console.error('Error saving last read chapter:', error);
+                        });
+                    }
+                }
+
                 function goToPreviousChapter(chapters) {
                     if (currentChapterIndex > 0) {
                         currentChapterIndex--;
@@ -165,7 +192,6 @@ if (!storyId) {
                     }
                 }
 
-                // Go to next chapter
                 function goToNextChapter(chapters) {
                     if (currentChapterIndex < Object.keys(chapters).length - 1) {
                         currentChapterIndex++;
@@ -174,19 +200,17 @@ if (!storyId) {
                     }
                 }
 
-                // Synchronize chapter select dropdowns
                 function syncChapterSelect() {
                     document.getElementById('chapterSelect').value = currentChapterIndex;
                     document.getElementById('chapterSelectBottom').value = currentChapterIndex;
                 }
 
-                // Populate chapter selection dropdowns
                 function populateChapterSelect(chapters) {
                     const chapterSelect = document.getElementById('chapterSelect');
                     const chapterSelectBottom = document.getElementById('chapterSelectBottom');
 
                     [chapterSelect, chapterSelectBottom].forEach((select) => {
-                        select.innerHTML = '';  // Clear dropdowns
+                        select.innerHTML = '';
                         Object.keys(chapters).forEach((chapterKey, index) => {
                             const option = document.createElement('option');
                             option.value = index;
@@ -195,7 +219,6 @@ if (!storyId) {
                         });
                     });
                 }
-
             } else {
                 alert("Truyện không tồn tại.");
             }
@@ -203,79 +226,55 @@ if (!storyId) {
         .catch((error) => {
             console.error("Lỗi khi lấy dữ liệu: ", error);
         });
-        const searchInput = document.getElementById('searchInput');
+   }
+
+}
+
+// Search functionality
+const searchInput = document.getElementById('searchInput');
 const suggestionsBox = document.getElementById('suggestionsBox');
+let stories = [];
 
-// Bắt sự kiện khi người dùng nhập vào ô tìm kiếm
-searchInput.addEventListener('input', async function() {
-    const query = searchInput.value.trim().toLowerCase();
+// Fetch stories data for search functionality
+function loadStories() {
+    const storiesRef = ref(database, 'Truyen');
+    get(storiesRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            stories = Object.values(snapshot.val());
+            console.log('Fetched stories:', stories);
+        } else {
+            console.log('No stories found');
+        }
+    }).catch((error) => {
+        console.error('Error fetching stories:', error);
+    });
+}
+
+// Search input event listener
+searchInput.addEventListener('input', function () {
+    const query = searchInput.value.toLowerCase();
+    const filteredStories = stories.filter((story) => story.name.toLowerCase().includes(query));
+
+    suggestionsBox.innerHTML = '';
     if (query) {
-        await showSearchSuggestions(query);
+        filteredStories.forEach((story) => {
+            const suggestion = document.createElement('div');
+            suggestion.textContent = story.name;
+            suggestion.classList.add('suggestion');
+            suggestion.addEventListener('click', function () {
+                searchInput.value = story.name;
+                window.location.href = `DocTruyen.html?id=${story.id}`;
+            });
+            suggestionsBox.appendChild(suggestion);
+        });
+        suggestionsBox.style.display = 'block';
     } else {
-        suggestionsBox.innerHTML = ''; // Xóa gợi ý khi không có input
+        suggestionsBox.style.display = 'none';
     }
 });
 
-// Hiển thị gợi ý tìm kiếm
-async function showSearchSuggestions(query) {
-    try {
-        const storiesRef = ref(database, 'Truyen');
-        const snapshot = await get(storiesRef);
-        const stories = snapshot.val();
-        
-        suggestionsBox.innerHTML = ''; // Xóa các gợi ý cũ
-
-        // Duyệt qua danh sách truyện và lọc theo từ khóa ở bất kỳ vị trí nào
-        for (const id in stories) {
-            const story = stories[id];
-            if (story.name.toLowerCase().includes(query)) { // Tìm kiếm chuỗi ở bất kỳ vị trí nào
-                const suggestionItem = document.createElement('div');
-                suggestionItem.classList.add('suggestion-item');
-                suggestionItem.textContent = story.name;
-
-                // Thêm sự kiện click vào gợi ý
-                suggestionItem.addEventListener('click', () => {
-                    // Hiển thị tên truyện đã chọn trong ô input
-                    searchInput.value = story.name;
-                    
-                    // Xóa các gợi ý sau khi người dùng chọn
-                    suggestionsBox.innerHTML = '';
-                    
-                    // Điều hướng tới trang chi tiết truyện
-                    window.location.href = `StoryDetail.html?id=${id}`;
-                });
-
-                // Thêm sự kiện hover vào mục gợi ý
-                suggestionItem.addEventListener('mouseover', () => {
-                    suggestionItem.classList.add('selected');
-                });
-
-                suggestionItem.addEventListener('mouseout', () => {
-                    suggestionItem.classList.remove('selected');
-                });
-
-                suggestionsBox.appendChild(suggestionItem);
-            }
-        }
-
-        // Hiển thị thông báo không tìm thấy kết quả
-        if (suggestionsBox.innerHTML === '') {
-            const noResultItem = document.createElement('div');
-            noResultItem.classList.add('suggestion-item');
-            noResultItem.textContent = 'Không tìm thấy câu truyện nào';
-            suggestionsBox.appendChild(noResultItem);
-        }
-    } catch (error) {
-        console.error("Lỗi khi tìm kiếm gợi ý:", error);
-        alert("Không thể hiển thị gợi ý. Vui lòng thử lại sau.");
-    }
-}
-
-// Ẩn khung gợi ý khi người dùng nhấn ra ngoài
-document.addEventListener('click', function(event) {
-    if (!searchInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
-        suggestionsBox.innerHTML = '';
+document.addEventListener('click', function (event) {
+    if (!suggestionsBox.contains(event.target) && event.target !== searchInput) {
+        suggestionsBox.style.display = 'none';
     }
 });
-
-}
