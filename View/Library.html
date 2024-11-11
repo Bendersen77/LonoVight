@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovoLight</title>
-    <link rel="stylesheet" href="../Css/ReadLater.css">
+    <link rel="stylesheet" href="../Css/Library.css">
     <script type="module" src="../Js/firebase_auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -23,7 +23,7 @@
         <div class="auth-links">
             <div id="authLinks">
                 <a href="SignUp.html" id="signupBtn">Sign Up / Login</a>
-            </div> 
+            </div>
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
             <span id="userEmail"></span>
@@ -31,30 +31,36 @@
                 <button class="dropdown-btn">Account <i class="fas fa-caret-down"></i></button>
                 <div class="dropdown-content">
                     <a href="UpdateProfile.html">Profile</a>
-                    <a href="ReadLater.html">Library</a>
+                    <a href="Library.html">Library</a>
                     <a href="Contact.html">Contact</a>
                     <a href="Notification.html">Notification</a>
                     <a href="Favorite.html">Favorite</a>
-                    <a href="user-management.html" id="userManagementLink" style="display: none;">User Management</a>
+                    <a href="QuanLyTruyen.html" id="userManagementLink" style="display: none;">Admin Panel</a>
                     <a href="#" id="logoutBtn">Logout</a>
-                    
                 </div>
             </div>
         </div>
-        
     </header>
 
-    <!-- Banner Section -->
-    <section id="product1" class="section-p1">
-        <h2>Your Library</h2>
-           <div id="readLaterContainer" class="story-container">
-        <!-- Stories will be loaded here dynamically -->
-    </div>
+    <!-- Navigation Bar -->
+    <nav class="library-nav">
+        <div class="nav-container">
+            <button class="nav-link active" data-section="readLater">Library</button>
+            <button class="nav-link" data-section="history">History</button>
+        </div>
+    </nav>
 
+    <!-- Content Sections -->
+    <section id="product1" class="section-p1">
+        <div id="readLaterContainer" class="story-container content-section active library-flex">
+            <!-- Read Later stories will be loaded here -->
+        </div>
+        <div id="historyContainer" class="story-container content-section history-block">
+            <!-- History stories will be loaded here -->
+        </div>
     </section>
 
-
-    <!--  Footer Section -->
+    <!-- Footer Section -->
     <footer>
         <p>&copy; 2024 LonoVight - All Rights Reserved.</p>
         <div class="social-links">
@@ -63,8 +69,6 @@
             <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
     </footer>
-
-    <script type="module" src="../Js/ReadLater.js"></script>
-
+    <script type="module" src="../Js/Library.js"></script>
 </body>
 </html>

@@ -327,6 +327,25 @@ header .auth-links a:hover {
 	color: #fff;
 	border: none;
 }
+.add-favorite {
+	background-color: #fff;
+	color: #333;
+	padding: 10px 15px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	margin-bottom: 10px;
+
+}
+.add-favorite:hover {
+	background-color: orangered;
+	color: #fff;
+	border: none;
+}
 
  .read-later{
     background-color: #fff;

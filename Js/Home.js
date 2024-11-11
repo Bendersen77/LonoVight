@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
 import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
 // Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCDbH--EpZjimx-cc_HToTYyc69fOALCuA",
@@ -25,7 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const userInfoElement = document.getElementById('userInfo');
     const userManagementLink = document.getElementById('userManagementLink');
     const logoutBtn = document.getElementById('logoutBtn');
-    const signupBtn = document.getElementById('signupBtn'); 
+    const signupBtn = document.getElementById('signupBtn');
+
+    // Load stories immediately, regardless of auth status
+    loadStories();
 
     // Check login status using Firebase Authentication
     onAuthStateChanged(auth, (user) => {
@@ -53,12 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (role === 'Admin') {
                             userManagementLink.style.display = "block";
                         } else {
-                            userManagementLink.style.display = "none"; // Hide if not Admin
+                            userManagementLink.style.display = "none";
                         }
                     }
-
-                    // Load stories for all users
-                    loadStories();
                 } else {
                     console.error("User role not found in the database.");
                 }
@@ -77,16 +78,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
             }
-
         } else {
-            // No user is signed in, redirect to SignUp or Login page
+            // No user is signed in, handle UI accordingly
             console.log("No user is logged in");
+            if (userInfoElement) userInfoElement.style.display = "none";
+            if (userManagementLink) userManagementLink.style.display = "none";
+            if (signupBtn) signupBtn.style.display = "block";
         }
     });
 });
 
-
-// Function to load stories
+// Modified loadStories function to handle both logged-in and logged-out states
 async function loadStories() {
     try {
         const storiesRef = ref(database, 'Truyen');
@@ -98,35 +100,43 @@ async function loadStories() {
 
         for (const id in stories) {
             const story = stories[id];
-
             const storyDiv = document.createElement('div');
             storyDiv.classList.add('single-card');
+
+            const currentUser = auth.currentUser;
+            const readLaterButton = currentUser ? 
+                `<button class="read-later" data-id="${id}">Add to Library</button>` : 
+                '';
 
             storyDiv.innerHTML = `
                 <div class="img-area">
                     <img src="${story.imageUrl}" alt="${story.name}">
                     <div class="overlay">
                         <h3 class="story-name">${story.name}</h3>
-                        <button class="view-details" data-id="${id}">Start reading</button>
-                        <button class="read-later" data-id="${id}">Read Later</button> <!-- Read Later button -->
+                        <button class="view-details" onclick="location.href='StoryDetail.html?id=${id}'">Start reading</button>
+                        ${readLaterButton}
                         <button class="add-favorite" data-id="${id}">Add Your Favorite</button>
+
                     </div>
                 </div>
             `;
             storyContainer.appendChild(storyDiv);
         }
+
         // Attach event listeners to "Start Reading" buttons
         document.querySelectorAll('.view-details').forEach(button => {
             button.addEventListener('click', async (event) => {
                 const storyId = event.target.getAttribute('data-id');
+                const currentUser = auth.currentUser;
                 
-                // Save the story to the user's reading history
-                await saveStoryToHistory(storyId);
+                if (currentUser) {
+                    await saveStoryToHistory(storyId);
+                }
 
-                // Redirect to the story details page
-                location.href = `StoryDetail.html?id=${storyId}`;
+                location.href = `chi-tiet-truyen.html?id=${storyId}`;
             });
         });
+
         // Attach event listeners to Read Later buttons
         document.querySelectorAll('.read-later').forEach(button => {
             button.addEventListener('click', (event) => {
@@ -190,7 +200,10 @@ async function searchStories(query) {
                         <img src="${story.imageUrl}" alt="${story.name}">
                         <div class="overlay">
                             <h3 class="story-name">${story.name}</h3>
-                            <button class="view-details" onclick="location.href='chi-tiet-truyen.html?id=${id}'">Start reading</button>
+                            <button class="view-details" onclick="location.href='StoryDetail.html?id=${id}'">Start reading</button>
+                            <button class="read-later" data-id="${id}">Add to Library</button>
+                            <button class="add-favorite" data-id="${id}">Add Your Favorite</button>
+
                         </div>
                     </div>
                 `;
@@ -202,6 +215,33 @@ async function searchStories(query) {
         if (storyContainer.innerHTML === '') {
             storyContainer.innerHTML = '<p>No stories found matching your search.</p>';
         }
+        // Attach event listeners to "Start Reading" buttons
+        document.querySelectorAll('.view-details').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const storyId = event.target.getAttribute('data-id');
+                const currentUser = auth.currentUser;
+                
+                if (currentUser) {
+                    await saveStoryToHistory(storyId);
+                }
+
+                location.href = `chi-tiet-truyen.html?id=${storyId}`;
+            });
+        });
+
+        // Attach event listeners to Read Later buttons
+        document.querySelectorAll('.read-later').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const storyId = event.target.getAttribute('data-id');
+                addStoryToReadLater(storyId);
+            });
+        });
+        document.querySelectorAll('.add-favorite').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const storyId = event.target.getAttribute('data-id');
+                addStoryToFavorite(storyId);
+            });
+        });
     } catch (error) {
         console.error("Error searching stories:", error);
         alert("Could not search stories. Please try again later.");
@@ -247,49 +287,6 @@ async function addStoryToReadLater(storyId) {
     } catch (error) {
         console.error("Error adding story to Read Later:", error);
         alert("Could not add story to Read Later list. Please try again later.");
-    }
-}
-
-async function addStoryToFavorite(storyId) {
-    const user = auth.currentUser;
-
-    if (!user) {
-        alert("You must be logged in to save a story to your Favorite list.");
-        return;
-    }
-
-    try {
-        // Get the story data from the database
-        const storyRef = ref(database, `Truyen/${storyId}`);
-        const storySnapshot = await get(storyRef);
-        
-        if (!storySnapshot.exists()) {
-            alert("Story does not exist.");
-            return;
-        }
-
-        const storyData = storySnapshot.val();
-
-        // Reference to the user's Read Later list
-        const userFavoriteRef = ref(database, `Users/${user.uid}/Favorite/${storyId}`);
-        const userFavoriteSnapshot = await get(userFavoriteRef);
-
-        if (userFavoriteSnapshot.exists()) {
-            alert("This story is already in your Favorite.");
-        } else {
-            // Add the story to the user's Read Later list
-            await set(userFavoriteRef, {
-                name: storyData.name,
-                imageUrl: storyData.imageUrl,
-                category: storyData.category,   
-                description: storyData.description
-            });
-
-            alert("Story added to your Favorite list!");
-        }
-    } catch (error) {
-        console.error("Error adding story to Favorite:", error);
-        alert("Could not add story to Favorite list. Please try again later.");
     }
 }
 
@@ -348,3 +345,46 @@ async function saveStoryToHistory(storyId) {
     }
 }
 
+
+async function addStoryToFavorite(storyId) {
+    const user = auth.currentUser;
+
+    if (!user) {
+        alert("You must be logged in to save a story to your Favorite list.");
+        return;
+    }
+
+    try {
+        // Get the story data from the database
+        const storyRef = ref(database, `Truyen/${storyId}`);
+        const storySnapshot = await get(storyRef);
+        
+        if (!storySnapshot.exists()) {
+            alert("Story does not exist.");
+            return;
+        }
+
+        const storyData = storySnapshot.val();
+
+        // Reference to the user's Read Later list
+        const userFavoriteRef = ref(database, `Users/${user.uid}/Favorite/${storyId}`);
+        const userFavoriteSnapshot = await get(userFavoriteRef);
+
+        if (userFavoriteSnapshot.exists()) {
+            alert("This story is already in your Favorite.");
+        } else {
+            // Add the story to the user's Read Later list
+            await set(userFavoriteRef, {
+                name: storyData.name,
+                imageUrl: storyData.imageUrl,
+                category: storyData.category,   
+                description: storyData.description
+            });
+
+            alert("Story added to your Favorite list!");
+        }
+    } catch (error) {
+        console.error("Error adding story to Favorite:", error);
+        alert("Could not add story to Favorite list. Please try again later.");
+    }
+}
