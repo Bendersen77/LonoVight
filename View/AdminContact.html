@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Contact List</title>
     <link rel="stylesheet" href="../Css/AdminContact.css">
+    <link rel="stylesheet" href="../Css/QuanLyTruyen.css">
 </head>
 <body>
-    <header>
+    <!-- <header>
         <div class="logo">
             <a href="Home.html"><h2>LonoVight</h2></a>
         </div>
@@ -28,7 +29,7 @@
     </header>
     
 
-    <section class="contact-list-section">
+     <section class="contact-list-section">
         <h2>Danh sách liên hệ</h2>
         <table id="contactTable">
             <thead>
@@ -40,10 +41,45 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Danh sách liên hệ sẽ được hiển thị tại đây -->
-            </tbody>
-        </table>
-    </section>
+                <-- Danh sách liên hệ sẽ được hiển thị tại đây -->
+            <!-- </tbody>
+        </table> 
+    </section>  -->
+    <div class="container">
+        
+        <aside class="sidebar">
+            <h2><a href="Home.html" style="text-decoration: none; color: #ff6600;">LonoVight</a></h2>
+            <div class="user-profile">
+                <p>Xin chào, <span id="userEmail">User</span></p>
+                <button id="logoutBtn">Đăng xuất</button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="QuanLyTruyen.html">Quản lý Truyện</a></li>
+                    <li><a href="QuanLyTheLoai.html">Quản lý Thể Loại</a></li>
+                    <li><a href="QuanLyUser.html">Quản lý người dùng</a></li>
+                    <li><a href="AdminContact.html">Quản lý yêu cầu hỗ trợ</a></li>
+                    <!-- Thêm các mục khác ở đây nếu cần -->
+                </ul>
+            </nav>
+        </aside>
+
+        <section class="contact-list-section">
+            <h2>DANH SÁCH LIÊN HỆ</h2>
+            <table id="contactTable">
+                <thead>
+                    <tr>
+                        <th>Họ Tên</th>
+                        <th>Thông tin</th>
+                        <th>Trả lời</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                 </tbody>
+            </table> 
+        </section>
 
     <script src="../Js/AdminContact.js"></script>
     <script type="module" src="../Js/QuanLyTruyen.js"></script>
