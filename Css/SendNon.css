@@ -1,0 +1,80 @@
+
+
+/* Container */
+.notification-container {
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1300px;
+    text-align: center;
+}
+
+/* Tiêu đề */
+.notification-container h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Label */
+form label {
+    font-size: 14px;
+    color: #555555;
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Input và Textarea */
+form input[type="text"],
+form textarea {
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+/* Hiệu ứng focus */
+form input[type="text"]:focus,
+form textarea:focus {
+    border-color: #007bff;
+}
+
+/* Button */
+form button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hiệu ứng hover */
+form button:hover {
+    background-color: #0056b3;
+}
+
+/* Kết quả */
+#notificationResult {
+    margin-top: 10px;
+    font-size: 14px;
+    color: green;
+    font-weight: bold;
+}

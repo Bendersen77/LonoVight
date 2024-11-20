@@ -1,14 +1,16 @@
-"<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý người dùng</title>
-    <link rel="stylesheet" href="../Css/QuanLyUser.css">
+    <title>Gửi Thông Báo</title>
+    
     <link rel="stylesheet" href="../Css/QuanLyTruyen.css">
+    <link rel="stylesheet" href="../Css/SendNon.css">
 </head>
 <body>
     <div class="container">
+        
         <aside class="sidebar">
             <h2><a href="Home.html" style="text-decoration: none; color: #ff6600;">LonoVight</a></h2>
             <div class="user-profile">
@@ -26,30 +28,22 @@
                 </ul>
             </nav>
         </aside>
-        <main class="main-content">
-        <header>
-            <h1>User Management</h1>
-        </header>
-        <div class="search-group">
-            <label for="searchInput">Search by email:</label>
-            <input type="text" id="searchBar" placeholder="Search by email...">
-        </div>
-        <table id="userTable">
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>User UID</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows will be dynamically inserted here -->
-            </tbody>
-        </table></main>
+    
+    
+        <div class="notification-container">
+        <h1>Gửi Thông Báo</h1>
+        <form id="notificationForm">
+            <label for="title">Tiêu đề:</label>
+            <input type="text" id="title" name="title" placeholder="Nhập tiêu đề..." required>
+            
+            <label for="message">Nội dung:</label>
+            <textarea id="message" name="message" rows="5" placeholder="Nhập nội dung thông báo..." required></textarea>
+            
+            <button type="submit">Gửi Thông Báo</button>
+        </form>
+        <div id="notificationResult"></div>
     </div>
 
-    <!-- Firebase Script Here -->
-    <script type="module" src="../Js/QuanLyUser.js"></script>
+    <script src="../Js/SendNon.js"></script>
 </body>
 </html>
