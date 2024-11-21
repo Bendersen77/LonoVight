@@ -6,9 +6,9 @@
     <title>Đọc Truyện</title>
     <link rel="stylesheet" href="../Css/Read.css">
     <link rel="stylesheet" href="../Css/Home.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script type="module" src="../Js/firebase_auth.js"></script>
-<script type="module" src="../Js/Read.js"></script>
-
+    <script type="module" src="../Js/Read.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -52,7 +52,20 @@
     <div id="story">
         <h1 id="story-title"></h1> <!-- Tên truyện -->
         <h2 id="chapter-title"></h2> <!-- Tiêu đề chương -->
+        <div class="audio-controls">
+            <button id="play-btn" class="btn control-btn">
+                <span class="material-icons">play_arrow</span> Play
+            </button>
+            <button id="pause-btn" class="btn control-btn">
+                <span class="material-icons">pause</span> Pause
+            </button>
+            <button id="stop-btn" class="btn control-btn">
+                <span class="material-icons">stop</span> Stop
+            </button>
+            <div id="progress" class="progress-text">Ready</div>
+        </div>
         
+         
         <!-- Điều hướng chương trên -->
         <div id="navigation">
             <button id="prev-chapter-top" class="nav-button">Chương trước</button>

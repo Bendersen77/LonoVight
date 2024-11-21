@@ -35,7 +35,7 @@ h1, h2 {
 .nav-button {
     margin: 0 10px;           /* Khoảng cách giữa các nút */
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #302c2c;
     color: white;
     border: none;
     cursor: pointer;
@@ -100,4 +100,61 @@ button:disabled {
 .suggestion-item.selected {
     background-color: #e6f7ff;
     color: #007bff;
+}
+.highlighted {
+    background-color:  #302c2c; /* Highlight with yellow background */
+    border-radius: 3px;
+    padding: 2px;
+    color: white;
+}
+/* General Button Styles */
+.audio-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.control-btn {
+    background-color: #ff6419; /* Green background */
+    color: white; /* White text */
+    border: none;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.control-btn:hover {
+    background-color: #ff6419; /* Darker green */
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.control-btn:active {
+    background-color: #ff6419; /* Even darker green on click */
+    transform: scale(0.95); /* Slight shrink on click */
+}
+
+.control-btn:disabled {
+    background-color: #ddd; /* Gray background for disabled */
+    color: #aaa; /* Gray text for disabled */
+    cursor: not-allowed;
+}
+
+/* Progress Text */
+.progress-text {
+    font-size: 14px;
+    font-style: italic;
+    color: #555;
+}
+
+/* Material Icons */
+.material-icons {
+    font-size: 18px;
 }

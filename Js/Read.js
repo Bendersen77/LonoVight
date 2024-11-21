@@ -1,3 +1,4 @@
+// Import Firebase functions at the top level
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
 import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
@@ -88,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Lấy ID truyện từ URL
 const urlParams = new URLSearchParams(window.location.search);
 const storyId = urlParams.get('id');
-
+const chapterNumber = parseInt(urlParams.get('chapter')) || 1; // Default to 1 if `chapter` is missing
 // Kiểm tra nếu không có id truyện
 if (!storyId) {
     alert("Không tìm thấy ID truyện.");
@@ -96,7 +97,28 @@ if (!storyId) {
     // Get references for story and chapters
     const storyRef = ref(database, `Truyen/${storyId}`);
     const chapterRef = ref(database, `Truyen/${storyId}/Chuong/`);
-
+    const startChapterIndex = chapterNumber - 1;
+    // Check for the last read chapter when user is logged in
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const lastReadRef = ref(database, `Users/${user.uid}/lastReadChapters/${storyId}`);
+            get(lastReadRef).then((lastReadSnapshot) => {
+                let lastReadChapterIndex = 0;
+                if (lastReadSnapshot.exists()) {
+                    lastReadChapterIndex = lastReadSnapshot.val().chapterIndex - 1;
+                }
+                loadStoryAndChapters(lastReadChapterIndex);
+                loadStoryAndChapters(startChapterIndex);
+            }).catch((error) => {
+                console.error("Error loading last read chapter:", error);
+                loadStoryAndChapters(0);  // Default to chapter 1 if error occurs
+            });
+        } else {
+            loadStoryAndChapters(0);  // Default to chapter 1 if no user is logged in
+        }
+    });
+    // Function to load the story and chapters
+function loadStoryAndChapters(startChapterIndex) {
     // Create a promise array to fetch both data at once
     Promise.all([get(storyRef), get(chapterRef)])
         .then(([storySnapshot, chapterSnapshot]) => {
@@ -108,13 +130,15 @@ if (!storyId) {
                 document.getElementById('story-title').innerText = storyData.name;
 
                 // Initialize chapter data
-                let currentChapterIndex = 0;
+                let currentChapterIndex = startChapterIndex;
                 loadChapter(currentChapterIndex, chapters);
 
                 // Populate chapter selection dropdowns
                 populateChapterSelect(chapters);
 
                 // Handle chapter navigation
+                // Sync dropdown after loading the chapter
+                syncChapterSelect();
                 document.getElementById('prev-chapter-top').addEventListener('click', () => goToPreviousChapter(chapters));
                 document.getElementById('next-chapter-top').addEventListener('click', () => goToNextChapter(chapters));
                 document.getElementById('prev-chapter-bottom').addEventListener('click', () => goToPreviousChapter(chapters));
@@ -125,12 +149,14 @@ if (!storyId) {
                     currentChapterIndex = parseInt(event.target.value);
                     loadChapter(currentChapterIndex, chapters);
                     document.getElementById('chapterSelectBottom').value = currentChapterIndex;
+                    syncChapterSelect();
                 });
 
                 document.getElementById('chapterSelectBottom').addEventListener('change', (event) => {
                     currentChapterIndex = parseInt(event.target.value);
                     loadChapter(currentChapterIndex, chapters);
                     document.getElementById('chapterSelect').value = currentChapterIndex;
+                    syncChapterSelect();
                 });
 
                 // Update navigation button state when a chapter is loaded
@@ -152,9 +178,26 @@ if (!storyId) {
                         document.getElementById('chapter-content').innerText = chapter.content;
                         updateNavigationButtons(index, chapters);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
+                        saveLastReadChapter(storyId, index, chapter.title);
                     }
                 }
-
+                //save last read chapter
+                function saveLastReadChapter(storyId, chapterIndex, chapterTitle) {
+                    const user = auth.currentUser;
+                    if (user) {
+                        const lastReadRef = ref(database, `Users/${user.uid}/lastReadChapters/${storyId}`);
+                        set(lastReadRef, {
+                            chapterIndex: chapterIndex + 1,
+                            chapterTitle: chapterTitle,
+                            storyId: storyId,
+                            timestamp: Date.now()
+                        }).then(() => {
+                            console.log('Last read chapter saved successfully.');
+                        }).catch((error) => {
+                            console.error('Error saving last read chapter:', error);
+                        });
+                    }
+                }
                 // Go to previous chapter
                 function goToPreviousChapter(chapters) {
                     if (currentChapterIndex > 0) {
@@ -201,6 +244,7 @@ if (!storyId) {
         .catch((error) => {
             console.error("Lỗi khi lấy dữ liệu: ", error);
         });
+}
 }
 
 // Search functionality
@@ -249,3 +293,115 @@ async function showSearchSuggestions(query) {
         console.error("Error fetching stories for search:", error);
     }
 }
+let synth = window.speechSynthesis;
+let currentUtterance = null;
+let isPaused = false;
+let wordIndex = 0; // Tracks the current word index
+let words = []; // Holds the array of words from the chapter content
+let intervalId; // To handle continuous word highlighting during speech
+
+// Text-to-Speech with Highlighting
+function playAudioWithHighlighting(startIndex = 0) {
+    if (synth.speaking || synth.paused) {
+        synth.cancel();
+    }
+
+    const chapterContent = document.getElementById('chapter-content');
+    const storyText = chapterContent.innerText;
+
+    if (storyText.trim() !== '') {
+        // Split text by words and punctuation
+        words = storyText.match(/[\w]+|[.,!?;:"'()]+/g); // Capture words and punctuation
+        wordIndex = startIndex; // Use the startIndex passed in
+        highlightWord(wordIndex); // Highlight the clicked word
+
+        const textToSpeak = words.slice(wordIndex).join(' ');
+
+        currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
+        currentUtterance.voice = synth.getVoices()[0];
+        currentUtterance.rate = 1; // Set speech rate
+        currentUtterance.pitch = 1;
+
+        currentUtterance.onboundary = (event) => {
+            if (event.name === 'word') {
+                wordIndex += 1; // Increment wordIndex as each word is spoken
+                highlightWord(wordIndex); // Update highlight on spoken word
+            }
+        };
+
+        currentUtterance.onend = () => {
+            document.getElementById('progress').textContent = 'Finished';
+        };
+
+        currentUtterance.onerror = (event) => {
+            console.error('SpeechSynthesisUtterance.onerror', event);
+        };
+
+        synth.speak(currentUtterance);
+        document.getElementById('progress').textContent = 'Playing...';
+    }
+}
+
+
+
+// Highlight the current word or punctuation
+function highlightWord(index) {
+    const chapterContent = document.getElementById('chapter-content');
+    const originalHTML = chapterContent.innerText;
+
+    // Wrap words individually without altering formatting
+    let currentWordIndex = 0;
+
+    const highlightedHTML = originalHTML.replace(/[\w]+|[.,!?;:"'()]+/g, (match) => {
+        const wrappedWord = `<span class="${currentWordIndex === index ? 'highlighted' : ''}" data-index="${currentWordIndex}">${match}</span>`;
+        currentWordIndex++;
+        return wrappedWord;
+    });
+
+    chapterContent.innerHTML = highlightedHTML;
+
+    // Add click event listeners to each word
+    document.querySelectorAll('#chapter-content span').forEach((span) => {
+        span.addEventListener('click', (event) => {
+            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
+            stopAudio(); // Stop the previous speech
+            wordIndex = clickedIndex; // Update the starting word index
+            playAudioWithHighlighting(wordIndex); // Restart audio from the clicked word
+        });
+    });
+}
+
+
+
+
+
+
+
+// Pause the narration
+function pauseAudio() {
+    if (synth.speaking && !synth.paused) {
+        synth.pause();
+        isPaused = true;
+        document.getElementById('progress').textContent = 'Paused';
+    }
+}
+
+
+// Stop the narration
+function stopAudio() {
+    if (synth.speaking || synth.paused) {
+        synth.cancel(); // Stops speech synthesis
+        clearInterval(intervalId); // Clears any ongoing intervals
+        wordIndex = 0; // Reset word index to the start
+        document.querySelectorAll('.highlighted').forEach((el) => el.classList.remove('highlighted')); // Remove all highlights
+        document.getElementById('progress').textContent = 'Stopped';
+    }
+}
+
+
+
+
+// Attach event listeners to buttons
+document.getElementById('play-btn').addEventListener('click', () => playAudioWithHighlighting(wordIndex));
+document.getElementById('pause-btn').addEventListener('click', pauseAudio);
+document.getElementById('stop-btn').addEventListener('click', stopAudio);
