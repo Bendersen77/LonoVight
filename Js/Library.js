@@ -1,7 +1,7 @@
 // Import Firebase functions at the top level
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
-import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+import { getDatabase, ref, get, remove, onValue, onChildAdded } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -58,8 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
 
-                    loadReadLaterStories(user.uid);
-                    loadHistory(user.uid);
                 } else {
                     console.error("User role not found in the database.");
                 }
@@ -114,8 +112,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load user's reading history and read later
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        await loadReadLater(user.uid);
         await loadHistory(user.uid);
+        await loadReadLater(user.uid);
     } else {
         window.location.href = 'SignUp.html';
     }
@@ -127,64 +125,108 @@ async function loadReadLater(userId) {
         const readLaterRef = ref(database, `Users/${userId}/ReadLater`);
         const snapshot = await get(readLaterRef);
         const readLaterContainer = document.getElementById('readLaterContainer');
-        readLaterContainer.innerHTML = '';
+        readLaterContainer.innerHTML = ''; // Clear previous content
 
         if (snapshot.exists()) {
             const stories = snapshot.val();
 
-            for (const storyId in stories) {
-                const story = stories[storyId];
-                const storyDiv = document.createElement('div');
-                storyDiv.classList.add('single-card');
+            for (const [storyId, story] of Object.entries(stories)) {
+                const storyRef = ref(database, `Truyen/${storyId}/Chuong`);
+                const chaptersSnapshot = await get(storyRef);
 
-                storyDiv.innerHTML = `
-                    <div class="img-area">
-                        <img src="${story.imageUrl}" alt="${story.name}">
-                        <div class="overlay">
-                            <h3 class="story-name">${story.name}</h3>
-                            <button class="view-details" data-id="${storyId}">Start reading</button>
-                            <button class="remove-story" data-id="${storyId}">Remove</button>
-                        </div>
-                    </div>
-                `;
-
-                readLaterContainer.appendChild(storyDiv);
-            }
-
-            // Add event listeners for Start Reading buttons
-            document.querySelectorAll('.view-details').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const storyId = event.target.getAttribute('data-id');
-                    window.location.href = `StoryDetail.html?id=${storyId}`;
-                });
-            });
-
-            // Add event listeners for Remove buttons
-            document.querySelectorAll('.remove-story').forEach(button => {
-                button.addEventListener('click', async (event) => {
-                    const storyId = event.target.getAttribute('data-id');
-                    const user = auth.currentUser;
-                    if (user) {
-                        const storyRef = ref(database, `Users/${user.uid}/ReadLater/${storyId}`);
-                        try {
-                            await remove(storyRef);
-                            // Refresh the display after removal
-                            loadReadLater(user.uid);
-                        } catch (error) {
-                            console.error("Error removing story:", error);
-                            alert("Failed to remove story. Please try again.");
+                const chapterData = chaptersSnapshot.val();
+                const newChapters = [];
+                if (chapterData) {
+                    for (const [chapterId, chapter] of Object.entries(chapterData)) {
+                        if (new Date(chapter.createdAt) > new Date(story.lastChecked || 0)) {
+                            newChapters.push({ chapterId, ...chapter });
                         }
                     }
+                }
+
+                // Create story card
+                const storyCard = document.createElement('div');
+                storyCard.classList.add('read-later-card');
+                storyCard.innerHTML = `
+                        <div class="story-containar">
+    <div class="story-thumbnail">
+        <h3 class="story-title">${story.name}</h3>
+        <img src="${story.imageUrl}" alt="${story.name}">
+    </div>
+    <div class="story-details">
+        <div class="chapter-list-container">
+            ${newChapters.length > 0 
+                ? `<p class="chapters-available">${newChapters.length} new chapters available:</p>` 
+                : '<p class="chapters-available">No new chapters</p>'}
+            <ul class="chapter-list">
+                ${newChapters.map(chapter => `
+                    <li class="chapter-item">
+                        <a href="Read.html?id=${storyId}&chapter=${chapter.chapterId.replace('chapter_', '')}" 
+                        class="chapter-link" 
+                        data-story-id="${storyId}" 
+                        data-chapter-id="${chapter.chapterId}">
+                        <div class="chapter-info">
+                            <i class="fas fa-book"></i>
+                            <span>Chapter ${chapter.chapterId.replace('chapter_', '')}:</span> 
+                            <span class="chapter-title">${chapter.title}</span>
+                        </div>
+                        </a>
+                         <div class="chapter-meta">
+                            <span><i class="fas fa-clock"></i> ${getTimeAgo(new Date(chapter.createdAt))}</span>
+                        </div>
+                        
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+        <button class="remove-story" data-id="${storyId}"><i class="fas fa-trash-alt"></i> Remove</button>
+    </div>
+</div>
+
+
+`;
+
+
+                readLaterContainer.appendChild(storyCard);
+
+                // Add event listener to "Remove" button
+                storyCard.querySelector('.remove-story').addEventListener('click', async () => {
+                    await remove(ref(database, `Users/${userId}/ReadLater/${storyId}`));
+                    alert(`${story.name} has been removed from your Read Later list.`);
+                    loadReadLater(userId);
                 });
-            });
+
+                storyCard.querySelector('.chapter-link').addEventListener('click', (event) => {
+                    event.preventDefault();
+                
+                    const storyId = event.currentTarget.getAttribute('data-story-id');
+                    const chapterId = event.currentTarget.getAttribute('data-chapter-id');
+                
+                    if (storyId && chapterId) {
+                        const chapterNumber = chapterId.replace('chapter_', ''); // Extract numeric chapter ID
+                        const url = `Read.html?id=${storyId}&chapter=${chapterNumber}`;
+                        window.location.href = url;
+                    } else {
+                        console.error('Missing data attributes for story or chapter.');
+                    }
+                });
+                
+
+
+
+            }
         } else {
-            readLaterContainer.innerHTML = '<p class="no-stories">No stories in your library yet.</p>';
+            readLaterContainer.innerHTML = '<p class="no-stories">No stories in your Read Later list.</p>';
         }
     } catch (error) {
-        console.error("Error loading read later list:", error);
-        readLaterContainer.innerHTML = '<p class="error">Failed to load stories. Please try again later.</p>';
+        console.error('Error loading Read Later list:', error);
+        readLaterContainer.innerHTML = '<p class="error">Failed to load your Read Later list. Please try again later.</p>';
     }
 }
+
+
+
+
 
 // Load user's reading history
 async function loadHistory(userId) {
@@ -225,7 +267,7 @@ async function loadHistory(userId) {
                 historyDiv.classList.add('history-item');
                 historyDiv.innerHTML = `
                     <div class="story-info">
-                        <img src="${story.imageUrl}" alt="${story.name}" class="story-thumbnail">
+                        <img src="${story.imageUrl}" alt="${story.name}" class="storylib-thumbnail">
                         <div class="title-section">
                             <h3>${story.name}</h3>
                             <span class="rank">Rank ${story.rank || 'N/A'}</span>
@@ -247,7 +289,7 @@ async function loadHistory(userId) {
                     </div>
                 `;
 
-                // Add click event listener to chapter information
+                // Add click event listener to chapter
                 const chapterInfo = historyDiv.querySelector('.chapter-info');
                 chapterInfo.addEventListener('click', (event) => {
                     event.preventDefault();

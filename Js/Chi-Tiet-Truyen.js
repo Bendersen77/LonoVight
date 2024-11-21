@@ -43,22 +43,28 @@ async function loadChapters() {
     const chapters = snapshot.val() || {};
 
     const chapterList = document.getElementById('chapterList');
-    chapterList.innerHTML = ''; // Xóa danh sách hiện tại
+    chapterList.innerHTML = ''; // Clear current list
 
-    for (const chapterId in chapters) {
-        const chapter = chapters[chapterId];
+    // Sort chapters by `createdAt` if available
+    const sortedChapters = Object.entries(chapters).sort((a, b) => {
+        const createdA = new Date(a[1].createdAt || 0);
+        const createdB = new Date(b[1].createdAt || 0);
+        return createdB - createdA; // Sort descending by date
+    });
+
+    for (const [chapterId, chapter] of sortedChapters) {
         const chapterDiv = document.createElement('div');
-        
-        // Giới hạn nội dung ở 100 ký tự
+
         const contentPreview = chapter.content.length > 100 ? chapter.content.substring(0, 100) + '...' : chapter.content;
 
-        // Thay thế các ký tự xuống dòng bằng <br> để hiển thị đúng
-        const formattedContent = chapter.content.replace(/\n/g, '<br>');
+        const createdAt = chapter.createdAt
+            ? new Date(chapter.createdAt).toLocaleString()
+            : 'Unknown';
 
         chapterDiv.innerHTML = `
             <p style="text-align: left">Chương ${chapter.chapter} - ${chapter.title}</p>
             <p class="chapter-content" style="word-wrap: break-word; max-width: 800px; text-align: left">${contentPreview}</p>
-            <p class="full-content" style="display: none;">${formattedContent}</p>
+            <p><small>Thời gian tạo: ${createdAt}</small></p>
             <button class="toggle-button" onclick="toggleContent(this)">Xem thêm</button>
             <button class="edit-button" onclick="editChapter('${chapterId}')">Sửa</button>
             <button class="delete-button" onclick="deleteChapter('${chapterId}')">Xóa</button>
@@ -101,11 +107,15 @@ document.getElementById('chapterForm').addEventListener('submit', async (event) 
 
     const chapterId = `chapter_${chapterNumber}`;
 
-    // Lưu chương vào đúng node
+    // Get the current timestamp
+    const createdAt = new Date().toISOString();
+
+    // Save the chapter with a creation timestamp
     await set(ref(database, `Truyen/${storyId}/Chuong/${chapterId}`), {
         chapter: chapterNumber,
         title: chapterTitle,
-        content: chapterContent
+        content: chapterContent,
+        createdAt: createdAt
     });
 
     alert('Chương đã được thêm thành công!');
