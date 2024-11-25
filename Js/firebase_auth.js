@@ -134,7 +134,7 @@ function checkUser() {
         const userEmailElement = document.getElementById('userEmail');
         const userInfoElement = document.getElementById('userInfo');
         const authLinksElement = document.getElementById('authLinks');
-        const manageStoryLink = document.getElementById('manageStoryLink');
+        const manageStoryLink = document.getElementById('userManagementLink');
 
         if (user) {
             // Người dùng đã đăng nhập

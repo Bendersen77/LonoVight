@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thông Tin Chi Tiết Truyện</title>
     <link rel="stylesheet" href="../Css/StoryDetail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
+    <!-- Header Section -->
     <header>
         <div class="logo">
             <a href="Home.html"><h2>LonoVight</h2></a>
@@ -25,7 +28,19 @@
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
             <span id="userEmail"></span>
-            <button id="logoutBtn">Đăng xuất</button>
+            <div class="dropdown">
+                <button class="dropdown-btn">Account <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="UpdateProfile.html">Profile</a>
+                    <a href="ReadLater.html">Library</a>
+                    <a href="Contact.html">Contact</a>
+                    <a href="Notification.html">Notification</a>
+                    <a href="Favorite.html">Favorite</a>
+                    <a href="QuanLyTruyen.html" id="userManagementLink" style="display: none;">Admin Panel</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                    
+                </div>
+            </div>
         </div>
     </header>
   
@@ -185,6 +200,7 @@
         displayStoryDetails();
     </script>
     <script src="../Js/Comment.js"></script>
-    <script src="../Js/SignUp.js"></script>
+    <script type="module" src="../Js/firebase_auth.js"></script>
+    
 </body>
 </html>

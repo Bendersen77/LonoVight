@@ -1,4 +1,4 @@
-/* Tổng thể */
+/* Reset mặc định */
 * {
     margin: 0;
     padding: 0;
@@ -129,7 +129,90 @@ header .auth-links a:hover {
     background-color: rgb(0, 0, 0);
     color: #ffffff;
 }
+/* Dropdown styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+}
 
+.dropdown-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding:10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-btn:hover {
+    background-color: #3e8e41;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Container cho thông tin người dùng */
+.user-info {
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: flex-end; /* Căn phải */
+    padding: 0px 20px; /* Khoảng cách bên trong */
+    background-color: #f0f0f0; /* Màu nền nhẹ */
+    border-radius: 8px; /* Bo góc */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    margin-right: 20px; /* Khoảng cách bên phải */
+}
+
+/* Phong cách cho email người dùng */
+#userEmail {
+    font-size: 16px; /* Kích thước chữ */
+    color: #333; /* Màu chữ */
+    margin-right: 15px; /* Khoảng cách bên phải */
+}
+
+/* Phong cách cho nút đăng xuất */
+#logoutBtn {
+    background-color: #007bff; /* Màu nền xanh */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Không viền */
+    border-radius: 5px; /* Bo góc */
+    padding: 8px 12px; /* Khoảng cách bên trong */
+    cursor: pointer; /* Con trỏ chuột thành tay khi di chuột vào */
+    transition: background-color 0.3s, transform 0.2s; /* Hiệu ứng chuyển màu và hiệu ứng phóng to */
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+#logoutBtn:hover {
+    background-color: #0056b3; /* Màu nền xanh đậm khi di chuột */
+    transform: scale(1.05); /* Phóng to một chút */
+}
+
+/* Hiệu ứng khi nút được nhấn */
+#logoutBtn:active {
+    transform: scale(0.95); /* Giảm kích thước một chút khi nhấn */
+}
 /* Main */
 .story-detail {
     display: flex;
