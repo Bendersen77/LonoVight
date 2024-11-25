@@ -200,6 +200,9 @@ async function searchStories(query) {
                         <div class="overlay">
                             <h3 class="story-name">${story.name}</h3>
                             <button class="view-details" data-id="${id}">Start reading</button>
+                            <button class="read-later" data-id="${id}">Read Later</button>
+                            <button class="add-favorite" data-id="${id}">Add to Favorite</button>
+
                         </div>
                     </div>
                 `;
