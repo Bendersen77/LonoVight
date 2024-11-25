@@ -356,8 +356,15 @@ let wordIndex = 0; // Tracks the current word index
 let words = []; // Holds the array of words from the chapter content
 let intervalId; // To handle continuous word highlighting during speech
 
+// Function to get the available voices and find the appropriate one
+function getVoiceForLanguage(lang) {
+    const voices = synth.getVoices();
+    // Try to find a voice for the desired language
+    return voices.find(voice => voice.lang.startsWith(lang)) || voices[0]; // Default to first available voice if not found
+}
+
 // Text-to-Speech with Highlighting
-function playAudioWithHighlighting(startIndex = 0) {
+function playAudioWithHighlighting(startIndex = 0, lang = 'en') {
     if (synth.speaking || synth.paused) {
         synth.cancel();
     }
@@ -366,15 +373,17 @@ function playAudioWithHighlighting(startIndex = 0) {
     const storyText = chapterContent.innerText;
 
     if (storyText.trim() !== '') {
-        // Split text by words and punctuation
-        words = storyText.match(/[\w]+|[.,!?;:"'()]+/g); // Capture words and punctuation
+        // Modify the regex to capture words and punctuation, but exclude spaces
+        words = storyText.match(/[\w]+[.,!?;:"'()]*|\s+/g).filter(word => word.trim() !== ''); // Exclude spaces
         wordIndex = startIndex; // Use the startIndex passed in
         highlightWord(wordIndex); // Highlight the clicked word
 
         const textToSpeak = words.slice(wordIndex).join(' ');
 
         currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
-        currentUtterance.voice = synth.getVoices()[0];
+        const voice = getVoiceForLanguage(lang); // Get voice based on the language
+        currentUtterance.voice = voice;
+        currentUtterance.lang = lang; // Set the language for the utterance
         currentUtterance.rate = 1; // Set speech rate
         currentUtterance.pitch = 1;
 
@@ -398,8 +407,6 @@ function playAudioWithHighlighting(startIndex = 0) {
     }
 }
 
-
-
 // Highlight the current word or punctuation
 function highlightWord(index) {
     const chapterContent = document.getElementById('chapter-content');
@@ -408,7 +415,10 @@ function highlightWord(index) {
     // Wrap words individually without altering formatting
     let currentWordIndex = 0;
 
-    const highlightedHTML = originalHTML.replace(/[\w]+|[.,!?;:"'()]+/g, (match) => {
+    const highlightedHTML = originalHTML.replace(/[\w]+[.,!?;:"'()]*|\s+/g, (match) => {
+        if (match.trim() === '') {
+            return match; // Skip spaces, no need to wrap
+        }
         const wrappedWord = `<span class="${currentWordIndex === index ? 'highlighted' : ''}" data-index="${currentWordIndex}">${match}</span>`;
         currentWordIndex++;
         return wrappedWord;
@@ -427,12 +437,6 @@ function highlightWord(index) {
     });
 }
 
-
-
-
-
-
-
 // Pause the narration
 function pauseAudio() {
     if (synth.speaking && !synth.paused) {
@@ -441,7 +445,6 @@ function pauseAudio() {
         document.getElementById('progress').textContent = 'Paused';
     }
 }
-
 
 // Stop the narration
 function stopAudio() {
@@ -454,10 +457,7 @@ function stopAudio() {
     }
 }
 
-
-
-
 // Attach event listeners to buttons
-document.getElementById('play-btn').addEventListener('click', () => playAudioWithHighlighting(wordIndex));
+document.getElementById('play-btn').addEventListener('click', () => playAudioWithHighlighting(wordIndex, 'en')); // Default English
 document.getElementById('pause-btn').addEventListener('click', pauseAudio);
 document.getElementById('stop-btn').addEventListener('click', stopAudio);
