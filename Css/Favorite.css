@@ -9,7 +9,46 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
 }
+/* Style cho ô tìm kiếm */
+.search-bar {
+    position: relative;
+    padding: 8px;
+    width: 300px;
+    padding-left: 15px;
+}
 
+/* Style cho khung gợi ý */
+.suggestions-box {
+    position: absolute;
+    top: 40px; /* Đẩy khung gợi ý thấp hơn khung tìm kiếm */
+    background-color: #fff;
+    border: 0px solid #ccc;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Style cho từng mục gợi ý */
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Màu nền khi hover */
+.suggestion-item:hover {
+    background-color: #f0f8ff;
+}
+
+/* Màu nền khi được chọn */
+.suggestion-item.selected {
+    background-color: #e6f7ff;
+    color: #007bff;
+}
 /* Header */
 header {
     background-color: #ffffff;

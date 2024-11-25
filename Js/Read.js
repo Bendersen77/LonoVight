@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Lấy ID truyện từ URL
+if (window.location.pathname.includes("Read.html")) {
 const urlParams = new URLSearchParams(window.location.search);
 const storyId = urlParams.get('id');
 const chapterNumber = parseInt(urlParams.get('chapter')) || 1; // Default to 1 if `chapter` is missing
@@ -247,6 +248,7 @@ function loadStoryAndChapters(startChapterIndex) {
         .catch((error) => {
             console.error("Lỗi khi lấy dữ liệu: ", error);
         });
+}
 }
 }
 // Function to save story to reading history with date and time

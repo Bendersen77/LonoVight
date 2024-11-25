@@ -23,14 +23,12 @@
             <a href="Home.html"><h2>LonoVight</h2></a>
         </div>
         <div class="search-bar">
-            <button id="searchBtn">
-                <i class="fas fa-search"></i>
-            </button>
             <input class="field" id="searchInput" type="text" placeholder="Search..." />
-        </div>
+        <div id="suggestionsBox" class="suggestions-box"></div>
+    </div>
         <div class="auth-links">
             <div id="authLinks">
-                <a href="SignUp.html" class="signup">Sign Up / Login</a>
+                <a href="SignUp.html" id="signupBtn">Sign Up / Login</a>
             </div> 
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
@@ -45,9 +43,11 @@
                     <a href="Favorite.html">Favorite</a>
                     <a href="QuanLyTruyen.html" id="userManagementLink" style="display: none;">Admin Panel</a>
                     <a href="#" id="logoutBtn">Logout</a>
+                    
                 </div>
             </div>
         </div>
+        
     </header>
     
     <div class="profile-container">
@@ -88,6 +88,6 @@
     window.previewAvatar = previewAvatar;
 </script>
 <script type="module" src="../Js/UpdateProfile.js"></script>
-
+<script type="module" src="../Js/Read.js"></script>
 </body>
 </html>

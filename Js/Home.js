@@ -179,15 +179,15 @@ searchInput.addEventListener('keydown', function(event) {
         }
     }
 });
-
 async function searchStories(query) {
     try {
         const storiesRef = ref(database, 'Truyen');
         const snapshot = await get(storiesRef);
         const stories = snapshot.val();
         const storyContainer = document.getElementById('storyContainer');
-        storyContainer.innerHTML = '';
+        storyContainer.innerHTML = '';  // Clear the container
 
+        // Duyệt qua các câu chuyện
         for (const id in stories) {
             const story = stories[id];
             if (story.name.toLowerCase().includes(query)) {
@@ -199,7 +199,7 @@ async function searchStories(query) {
                         <img src="${story.imageUrl}" alt="${story.name}">
                         <div class="overlay">
                             <h3 class="story-name">${story.name}</h3>
-                            <button class="view-details" onclick="location.href='StoryDetails.html?id=${id}'">Start reading</button>
+                            <button class="view-details" data-id="${id}">Start reading</button>
                         </div>
                     </div>
                 `;
@@ -208,14 +208,31 @@ async function searchStories(query) {
             }
         }
 
+        // Gán event listener cho tất cả các nút "Start reading" sau khi tất cả câu chuyện đã được thêm vào trang
+        document.querySelectorAll('.view-details').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const storyId = event.target.getAttribute('data-id');
+                const currentUser = auth.currentUser;
+                
+                if (currentUser) {
+                    await saveStoryToHistory(storyId); // Lưu câu chuyện vào lịch sử đọc của người dùng
+                }
+        
+                location.href = `StoryDetail.html?id=${storyId}`;  // Chuyển hướng đến trang chi tiết câu chuyện
+            });
+        });
+
+        // Nếu không tìm thấy câu chuyện nào, hiển thị thông báo
         if (storyContainer.innerHTML === '') {
             storyContainer.innerHTML = '<p>No stories found matching your search.</p>';
         }
+
     } catch (error) {
         console.error("Error searching stories:", error);
         alert("Could not search stories. Please try again later.");
     }
 }
+
 async function addStoryToReadLater(storyId) {
     const user = auth.currentUser;
 
