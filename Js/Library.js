@@ -1,7 +1,7 @@
 // Import Firebase functions at the top level
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
-import { getDatabase, ref, get, remove, onValue, onChildAdded } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+import { getDatabase, ref, get, remove, onValue, onChildAdded,update } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -160,21 +160,17 @@ async function loadReadLater(userId) {
                 : '<p class="chapters-available">No new chapters</p>'}
             <ul class="chapter-list">
                 ${newChapters.map(chapter => `
-                    <li class="chapter-item">
-                        <a href="Read.html?id=${storyId}&chapter=${chapter.chapterId.replace('chapter_', '')}" 
-                        class="chapter-link" 
-                        data-story-id="${storyId}" 
-                        data-chapter-id="${chapter.chapterId}">
-                        <div class="chapter-info">
-                            <i class="fas fa-book"></i>
-                            <span>Chapter ${chapter.chapterId.replace('chapter_', '')}:</span> 
-                            <span class="chapter-title">${chapter.title}</span>
-                        </div>
+                    <li class="chapter-item" data-story-id="${storyId}" data-chapter-id="${chapter.chapterId}" data-read="${chapter.read || false}">
+                        <a href="Read.html?id=${storyId}&chapter=${chapter.chapterId.replace('chapter_', '')}" class="chapter-link">
+                            <div class="chapter-info">
+                                <i class="chapter-read-status fas ${chapter.read ? 'fa-eye-slash' : 'fa-eye'}" title="${chapter.read ? 'Marked as read' : 'Mark as unread'}"></i>
+                                <span>Chapter ${chapter.chapterId.replace('chapter_', '')}:</span>
+                                <span class="chapter-title">${chapter.title}</span>
+                            </div>
                         </a>
-                         <div class="chapter-meta">
+                        <div class="chapter-meta">
                             <span><i class="fas fa-clock"></i> ${getTimeAgo(new Date(chapter.createdAt))}</span>
                         </div>
-                        
                     </li>
                 `).join('')}
             </ul>
@@ -196,20 +192,38 @@ async function loadReadLater(userId) {
                     loadReadLater(userId);
                 });
 
-                storyCard.querySelector('.chapter-link').addEventListener('click', (event) => {
-                    event.preventDefault();
+                // Set up event listener for chapter items
+                storyCard.querySelectorAll('.chapter-item').forEach(item => {
+                    const readStatusIcon = item.querySelector('.chapter-read-status');
+                    const chapterId = item.getAttribute('data-chapter-id');
+                    const storyId = item.getAttribute('data-story-id');
                 
-                    const storyId = event.currentTarget.getAttribute('data-story-id');
-                    const chapterId = event.currentTarget.getAttribute('data-chapter-id');
-                
-                    if (storyId && chapterId) {
+                    // On click, mark as read and navigate to the chapter
+                    item.addEventListener('click', async (event) => {
+                        event.preventDefault(); // Prevent default behavior (which would be navigation if it's a link)
+                        
                         const chapterNumber = chapterId.replace('chapter_', ''); // Extract numeric chapter ID
                         const url = `Read.html?id=${storyId}&chapter=${chapterNumber}`;
-                        window.location.href = url;
-                    } else {
-                        console.error('Missing data attributes for story or chapter.');
-                    }
+                        
+                        // Update the database
+                        try {
+                            const chapterRef = ref(database, `Truyen/${storyId}/Chuong/${chapterId}`);
+                            await update(chapterRef, { read: true });
+                
+                            // Update the UI: Change the eye icon to eye-slash
+                            readStatusIcon.classList.remove('fa-eye');
+                            readStatusIcon.classList.add('fa-eye-slash');
+                            readStatusIcon.title = 'Marked as read';
+                
+                            // Redirect to the chapter page after updating
+                            window.location.href = url;
+                        } catch (error) {
+                            console.error('Failed to update read status:', error);
+                            alert('Failed to update read status. Please try again later.');
+                        }
+                    });
                 });
+                
                 
 
 

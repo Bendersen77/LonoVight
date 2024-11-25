@@ -57,9 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             userManagementLink.style.display = "none"; // Hide if not Admin
                         }
                     }
-
-                    // Load stories for all users
-                    loadStories();
                 } else {
                     console.error("User role not found in the database.");
                 }
@@ -198,23 +195,29 @@ function loadStoryAndChapters(startChapterIndex) {
                         });
                     }
                 }
-                // Go to previous chapter
-                function goToPreviousChapter(chapters) {
-                    if (currentChapterIndex > 0) {
-                        currentChapterIndex--;
-                        loadChapter(currentChapterIndex, chapters);
-                        syncChapterSelect();
-                    }
-                }
+                // Go to the previous chapter
+                        function goToPreviousChapter(chapters) {
+                            if (currentChapterIndex > 0) {
+                                currentChapterIndex--;
+                                loadChapter(currentChapterIndex, chapters);
+                                syncChapterSelect();
 
-                // Go to next chapter
-                function goToNextChapter(chapters) {
-                    if (currentChapterIndex < Object.keys(chapters).length - 1) {
-                        currentChapterIndex++;
-                        loadChapter(currentChapterIndex, chapters);
-                        syncChapterSelect();
-                    }
-                }
+                                // Save the story to reading history
+                                saveStoryToHistory(storyId);  // Pass the current storyId
+                            }
+                        }
+
+                        // Go to the next chapter
+                        function goToNextChapter(chapters) {
+                            if (currentChapterIndex < Object.keys(chapters).length - 1) {
+                                currentChapterIndex++;
+                                loadChapter(currentChapterIndex, chapters);
+                                syncChapterSelect();
+
+                                // Save the story to reading history
+                                saveStoryToHistory(storyId);  // Pass the current storyId
+                            }
+                        }
 
                 // Synchronize chapter select dropdowns
                 function syncChapterSelect() {
@@ -246,7 +249,58 @@ function loadStoryAndChapters(startChapterIndex) {
         });
 }
 }
+// Function to save story to reading history with date and time
+async function saveStoryToHistory(storyId) {
+    const user = auth.currentUser;
 
+    if (!user) {
+        return;
+    }
+
+    try {
+        // Get the current date and time
+        const currentDateTime = new Date().toISOString();
+
+        // Reference to the story's data in the database
+        const storyRef = ref(database, `Truyen/${storyId}`);
+        const storySnapshot = await get(storyRef);
+
+        if (!storySnapshot.exists()) {
+            return;
+        }
+
+        // Get the story's data
+        const storyData = storySnapshot.val();
+
+        // Reference to the user's reading history for the specific story
+        const userHistoryRef = ref(database, `Users/${user.uid}/History/${storyId}`);
+        const userHistorySnapshot = await get(userHistoryRef);
+
+        // If history for the story doesn't exist, create it with the current timestamp and story data
+        if (!userHistorySnapshot.exists()) {
+            await set(userHistoryRef, {
+                name: storyData.name,
+                imageUrl: storyData.imageUrl,
+                category: storyData.category,   
+                description: storyData.description,
+                lastRead: currentDateTime  // Save the timestamp when the story was last read
+            });
+        } else {
+            // Update the timestamp if history already exists
+            await set(userHistoryRef, {
+                name: storyData.name,
+                imageUrl: storyData.imageUrl,
+                category: storyData.category,   
+                description: storyData.description,
+                lastRead: currentDateTime   // Update the timestamp
+            });
+        }
+
+
+    } catch (error) {
+        console.error("Error saving to history:", error);
+    }
+}
 // Search functionality
 const searchInput = document.getElementById('searchInput');
 const suggestionsBox = document.getElementById('suggestionsBox');

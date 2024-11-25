@@ -56,3 +56,4 @@ window.onload = function() {
     loadStoryDetail(); // Gọi hàm load chi tiết truyện (nếu có)
     displayComments(); // Hiển thị bình luận đã lưu
 };
+
