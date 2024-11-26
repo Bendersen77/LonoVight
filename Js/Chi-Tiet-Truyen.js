@@ -56,20 +56,22 @@ async function loadChapters() {
         const chapterDiv = document.createElement('div');
 
         const contentPreview = chapter.content.length > 100 ? chapter.content.substring(0, 100) + '...' : chapter.content;
-
+        const formattedContent = chapter.content.replace(/\n/g, '<br>');
         const createdAt = chapter.createdAt
             ? new Date(chapter.createdAt).toLocaleString()
             : 'Unknown';
 
-        chapterDiv.innerHTML = `
+            chapterDiv.innerHTML = `
             <p style="text-align: left">Chương ${chapter.chapter} - ${chapter.title}</p>
             <p class="chapter-content" style="word-wrap: break-word; max-width: 800px; text-align: left">${contentPreview}</p>
+            <p class="full-content" style="display: none;">${formattedContent}</p>
             <p><small>Thời gian tạo: ${createdAt}</small></p>
             <button class="toggle-button" onclick="toggleContent(this)">Xem thêm</button>
             <button class="edit-button" onclick="editChapter('${chapterId}')">Sửa</button>
             <button class="delete-button" onclick="deleteChapter('${chapterId}')">Xóa</button>
-            <hr style="border: 1px solid #ccc; margin: 10px 0;"> <!-- Đường gạch ngang -->
+            <hr style="border: 1px solid #ccc; margin: 10px 0;">
         `;
+        
 
         chapterList.appendChild(chapterDiv);
     }
@@ -83,16 +85,21 @@ window.toggleContent = function(button) {
     const chapterContent = chapterDiv.querySelector('.chapter-content');
     const fullContent = chapterDiv.querySelector('.full-content');
 
-    if (fullContent.style.display === 'none' || !fullContent.style.display) {
-        fullContent.style.display = 'block'; // Hiển thị nội dung đầy đủ
-        chapterContent.style.display = 'none'; // Ẩn nội dung giới hạn
-        button.textContent = 'Thu gọn'; // Đổi văn bản nút
+    if (fullContent && chapterContent) {
+        if (fullContent.style.display === 'none' || !fullContent.style.display) {
+            fullContent.style.display = 'block'; // Show full content
+            chapterContent.style.display = 'none'; // Hide preview
+            button.textContent = 'Thu gọn'; // Change button text
+        } else {
+            fullContent.style.display = 'none'; // Hide full content
+            chapterContent.style.display = 'block'; // Show preview
+            button.textContent = 'Xem thêm'; // Change button text
+        }
     } else {
-        fullContent.style.display = 'none'; // Ẩn nội dung đầy đủ
-        chapterContent.style.display = 'block'; // Hiển thị nội dung giới hạn
-        button.textContent = 'Xem thêm'; // Đổi văn bản nút
+        console.error("Content elements not found.");
     }
 };
+
 
 
 
