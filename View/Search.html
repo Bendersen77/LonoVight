@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>NovoLight</title>
-    <link rel="stylesheet" href="../Css/Favorite.css">
+    <title>Tìm kiếm câu chuyện</title>
+    <link rel="stylesheet" href="../Css/Search.css">
     <script type="module" src="../Js/firebase_auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -14,15 +14,6 @@
         <div class="logo">
             <a href="Home.html"><h2>LonoVight</h2></a>
         </div>
-        <div class="search-bar">
-            <input class="field" id="searchInput" type="text" placeholder="Search..." />
-        <div id="suggestionsBox" class="suggestions-box"></div>
-        <div class="search-icon">
-            <a href="search.html">
-                <i class="fas fa-search"></i>
-            </a>
-        </div>
-    </div>
         <div class="auth-links">
             <div id="authLinks">
                 <a href="SignUp.html" id="signupBtn">Sign Up / Login</a>
@@ -46,17 +37,22 @@
         </div>
         
     </header>
+</body>
+<body>
+    <div class="container">
+<h1>Tìm kiếm câu chuyện</h1>
 
-    <!-- Banner Section -->
-    <section id="product1" class="section-p1">
-        <h2>Your Favorite</h2>
-           <div id="FavoriteContainer" class="story-container">
-        <!-- Stories will be loaded here dynamically -->
+
+        <div class="search-group">
+            <label for="searchInput">Tìm kiếm câu chuyện:</label>
+            <input type="text" id="searchInput" placeholder="Nhập tên câu chuyện...">
+            <button id="searchButton">Tìm kiếm</button>
+        </div>
+
+        <div id="storyContainer"></div> <!-- Chỗ chứa kết quả tìm kiếm -->
+
     </div>
-
-    </section>
-
-
+    
     <!--  Footer Section -->
     <footer>
         <p>&copy; 2024 LonoVight - All Rights Reserved.</p>
@@ -67,7 +63,6 @@
         </div>
     </footer>
 
-    <script type="module" src="../Js/Favorite.js"></script>
-    <script type="module" src="../Js/Read.js"></script>
+    <script type="module" src="../Js/Search.js"></script>
 </body>
 </html>

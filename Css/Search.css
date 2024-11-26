@@ -1,3 +1,141 @@
+
+
+/* Container for the content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Search Input and Button */
+.search-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.search-group label {
+    font-size: 1rem;
+    color: #333;
+    align-self: center;
+}
+
+.search-group input {
+    width: 300px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.search-group input:focus {
+    border-color: #ff6600;
+    outline: none;
+}
+
+.search-group button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #ff6600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.search-group button:hover {
+    background-color: #e65c00;
+}
+
+/* Story container */
+#storyContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+/* Individual story card */
+.single-card {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.single-card:hover {
+    transform: translateY(-10px);
+}
+
+/* Image and overlay */
+.img-area {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.img-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.single-card:hover .overlay {
+    opacity: 1;
+}
+
+.story-name {
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 0;
+}
+
+.view-details {
+    background-color: #ff6600;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.view-details:hover {
+    background-color: #e65c00;
+}
+
+/* Empty state for no results */
+#storyContainer p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+}
+
 /* Reset mặc định */
 * {
     margin: 0;
@@ -64,86 +202,7 @@ header nav ul li a:hover {
     border-radius: 5px;
 }
 
-/* Điều chỉnh search bar nằm giữa */
-/* Định dạng search bar */
-header .search-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 2; /* Chiếm không gian giữa header */
-    justify-content: flex-start; /* Căn trái thanh tìm kiếm */
-}
 
-header .search-bar input {
-    padding: 8px;
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    outline: none;
-    width: 300px;
-    padding-left: 15px;
-    transition: border 0.3s ease;
-}
-
-header .search-bar input:focus {
-    border: 1px solid #ff6419;
-}
-
-/* Nút kính lúp */
-header .search-bar button {
-    background-color: transparent;
-    border: none; /* Không có viền */
-    cursor: pointer;
-    font-size: 1.5rem;
-    padding: 0.1vw;
-}
-
-
-header .search-bar button i {
-    color: rgb(0, 0, 0); /* Màu mặc định của kính lúp */
-    transition: color 0.3s ease;
-}
-
-
-/* Style cho ô tìm kiếm */
-.search-bar {
-    position: relative;
-    padding: 8px;
-    width: 300px;
-    padding-left: 15px;
-}
-
-/* Style cho khung gợi ý */
-.suggestions-box {
-    position: absolute;
-    top: 40px; /* Đẩy khung gợi ý thấp hơn khung tìm kiếm */
-    background-color: #fff;
-    border: 0px solid #ccc;
-    border-radius: 5px;
-    max-height: 200px;
-    overflow-y: auto;
-    width: 100%;
-    z-index: 100;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Style cho từng mục gợi ý */
-.suggestion-item {
-    padding: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #333;
-}
-
-/* Màu nền khi hover */
-.suggestion-item:hover {
-    background-color: #f0f8ff;
-}
-
-/* Màu nền khi được chọn */
-.suggestion-item.selected {
-    background-color: #e6f7ff;
-    color: #007bff;
-}
 
 
 /* Định dạng cho Sign Up và Sign In */
